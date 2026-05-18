@@ -1,24 +1,34 @@
+import { Button } from "@/components/ui/button";
+import Container from "@/components/ui/Container";
+import Section from "@/components/ui/Section";
+
 export default function Hero() {
   return (
-    <section className="mx-auto flex max-w-7xl flex-col items-center px-6 py-24 text-center">
-      <h1 className="max-w-4xl text-5xl font-bold leading-tight">
-        Build Your Career With Industry Ready Internships
-      </h1>
+    <Section className="relative overflow-hidden">
+      <Container className="flex flex-col items-center text-center">
+        <span className="rounded-full border px-4 py-1 text-sm font-medium">
+          #1 Internship Platform
+        </span>
 
-      <p className="mt-6 max-w-2xl text-lg text-gray-600">
-        Learn real-world skills, work on projects, and get certified with
-        expert-led internship programs.
-      </p>
+        <h1 className="mt-6 max-w-5xl text-4xl md:text-6xl font-bold leading-tight tracking-tight">
+          Build Real Skills With Industry Ready Internships
+        </h1>
 
-      <div className="mt-8 flex gap-4">
-        <button className="rounded-lg bg-black px-6 py-3 text-white">
-          Explore Programs
-        </button>
+        <p className="mt-6 max-w-2xl text-lg text-gray-600">
+          Learn from experts, work on real-world projects, and accelerate your
+          career with practical internship programs.
+        </p>
 
-        <button className="rounded-lg border px-6 py-3">
-          Learn More
-        </button>
-      </div>
-    </section>
+        <div className="mt-10 flex flex-wrap items-center justify-center gap-4">
+          <Button size="lg">
+            Explore Programs
+          </Button>
+
+          <Button variant="outline" size="lg">
+            Watch Demo
+          </Button>
+        </div>
+      </Container>
+    </Section>
   );
 }
