@@ -1,4 +1,10 @@
 import "./globals.css";
+import { ThemeProvider } from "@/components/components/theme-provider";
+export const metadata = {
+  title: "Mindfull Methods",
+  description:
+    "Premium Internship Platform",
+};
 
 export default function RootLayout({
   children,
@@ -11,7 +17,9 @@ export default function RootLayout({
       suppressHydrationWarning
     >
       <body>
-        {children}
+        <ThemeProvider>
+          {children}
+        </ThemeProvider>
       </body>
     </html>
   );

@@ -39,61 +39,103 @@ export default function Sidebar() {
   ];
    
   return (
-    <aside className="flex min-h-screen w-72 flex-col border-r border-black/10 bg-white p-6">
+  <aside className="sticky top-0 flex h-screen w-80 flex-col border-r border-white/20 bg-white/70 p-8 shadow-2xl backdrop-blur-2xl">
 
-      <div className="mb-10">
-        <h1 className="text-3xl font-black">
-          Unified
-        </h1>
+    <div className="mb-14">
 
-        <p className="mt-2 text-sm text-gray-500">
-          Internship Platform
-        </p>
+      <div className="flex items-center gap-4">
+
+        <div className="flex h-14 w-14 items-center justify-center rounded-3xl bg-black text-2xl font-black text-white shadow-xl">
+          M
+        </div>
+
+        <div>
+
+          <h1 className="text-3xl font-black tracking-tight">
+            Mindfull Methods
+          </h1>
+
+          <p className="text-sm font-medium text-gray-400">
+            Internship Platform
+          </p>
+
+        </div>
+
       </div>
 
-      <nav className="flex flex-1 flex-col gap-3">
+    </div>
 
-        {links.map((link) => {
-          const Icon = link.icon;
+    <nav className="flex flex-1 flex-col gap-4">
 
-          const active =
-            pathname === link.href;
+      {links.map((link) => {
+        const Icon = link.icon;
 
-          return (
-            <Link
-              key={link.href}
-              href={link.href}
-              className={`flex items-center gap-3 rounded-2xl px-5 py-4 transition ${
-                active
-                  ? "bg-black text-white"
-                  : "hover:bg-gray-100"
-              }`}
-            >
+        const active =
+          pathname === link.href;
 
-              <Icon size={20} />
+        return (
+          <Link
+            key={link.href}
+            href={link.href}
+            className={`group relative overflow-hidden rounded-3xl px-6 py-5 transition-all duration-300 ${
+              active
+                ? "bg-black text-white shadow-2xl"
+                : "bg-white/40 hover:bg-white/80"
+            }`}
+          >
 
-              <span className="font-medium">
+            <div className="relative z-10 flex items-center gap-4">
+
+              <div
+                className={`rounded-2xl p-3 transition ${
+                  active
+                    ? "bg-white/20"
+                    : "bg-black/5 group-hover:bg-black/10"
+                }`}
+              >
+                <Icon size={22} />
+              </div>
+
+              <span className="text-lg font-semibold">
                 {link.label}
               </span>
 
-            </Link>
-          );
-        })}
+            </div>
 
-      </nav>
+          </Link>
+        );
+      })}
 
-      <button
-        onClick={handleLogout}
-        className="mt-6 flex items-center gap-3 rounded-2xl border border-red-200 px-5 py-4 text-red-500 transition hover:bg-red-50"
-      >
+    </nav>
 
-        <LogOut size={20} />
+    <div className="mt-10 rounded-[32px] border border-black/5 bg-gradient-to-br from-black to-gray-700 p-6 text-white shadow-2xl">
 
-        <span className="font-medium">
-          Logout
-        </span>
+      <p className="text-sm text-gray-300">
+        Current Status
+      </p>
 
-      </button>
-    </aside>
-  );
+      <h2 className="mt-3 text-2xl font-black">
+        MVP Completed 🚀
+      </h2>
+
+      <p className="mt-3 text-sm leading-7 text-gray-300">
+        Your internship platform is now
+        entering premium SaaS stage.
+      </p>
+
+    </div>
+
+    <button
+      onClick={handleLogout}
+      className="mt-8 flex items-center justify-center gap-3 rounded-3xl border border-red-200 bg-red-50 py-5 text-lg font-semibold text-red-500 transition duration-300 hover:scale-[1.02] hover:bg-red-100"
+    >
+
+      <LogOut size={22} />
+
+      Logout
+
+    </button>
+
+  </aside>
+);
 }
