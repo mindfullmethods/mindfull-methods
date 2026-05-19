@@ -1,22 +1,38 @@
-import { Bell } from "lucide-react";
+"use client";
+
+import { Bell, Search } from "lucide-react";
 
 export default function Topbar() {
   return (
-    <header className="flex flex-wrap items-center justify-between gap-4 border-b border-black/5 bg-white/70 px-8 py-5 backdrop-blur-xl dark:border-white/10 dark:bg-zinc-950/70">
-      
+    <header className="flex items-center justify-between border-b border-black/10 bg-white px-8 py-5">
+
       <div>
-        <h1 className="text-2xl font-black tracking-tight">
+        <h1 className="text-2xl font-bold">
           Dashboard
         </h1>
 
-        <p className="mt-1 text-sm text-gray-500">
+        <p className="text-sm text-gray-500">
           Welcome back, Rajiv 👋
         </p>
       </div>
 
-      <button className="rounded-2xl border border-black/10 p-3 transition hover:bg-black hover:text-white dark:border-white/10 dark:hover:bg-white dark:hover:text-black">
-        <Bell size={20} />
-      </button>
+      <div className="flex items-center gap-4">
+
+        <div className="flex items-center gap-2 rounded-2xl border border-black/10 px-4 py-2">
+          <Search size={18} />
+
+          <input
+            type="text"
+            placeholder="Search internships..."
+            className="outline-none"
+          />
+        </div>
+
+        <button className="rounded-2xl border border-black/10 p-3 transition hover:bg-gray-100">
+          <Bell size={20} />
+        </button>
+
+      </div>
     </header>
   );
 }

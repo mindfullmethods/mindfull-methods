@@ -12,7 +12,7 @@ export default function Navbar() {
           <div className="h-10 w-10 rounded-2xl bg-black" />
 
           <h1 className="text-xl font-black tracking-tight md:text-2xl">
-            Unified Clone
+            Mindfull Methods
           </h1>
         </div>
 

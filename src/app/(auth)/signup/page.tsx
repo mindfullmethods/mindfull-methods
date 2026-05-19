@@ -1,99 +1,144 @@
-export default function SignupPage() {
-  return (
-    <main className="relative flex min-h-screen overflow-hidden bg-white dark:bg-black">
-      
-      {/* Background Blur */}
-      <div className="absolute right-0 top-0 h-[500px] w-[500px] rounded-full bg-black/5 blur-3xl dark:bg-white/10" />
+"use client";
 
-      {/* Left Section */}
-      <div className="hidden flex-1 flex-col justify-between border-r border-black/5 bg-gray-50 p-12 dark:border-white/10 dark:bg-zinc-950 lg:flex">
+import { useState } from "react";
+import Link from "next/link";
+import { supabase } from "@/lib/supabase";
+
+export default function SignupPage() {
+  const [fullName, setFullName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
+
+  const handleSignup = async (
+    e: React.FormEvent
+  ) => {
+    e.preventDefault();
+
+    setLoading(true);
+
+    const {
+      data,
+      error,
+    } = await supabase.auth.signUp({
+      email,
+      password,
+      options: {
+        data: {
+          full_name: fullName,
+        },
+      },
+    });
+
+    if (error) {
+      setLoading(false);
+
+      alert(error.message);
+      return;
+    }
+
+    const user = data.user;
+
+    if (user) {
+      await supabase.from("profiles").insert({
+        id: user.id,
+        full_name: fullName,
+        email: email,
+      });
+    }
+
+    setLoading(false);
+
+    alert(
+      "Signup successful! Check your email."
+    );
+  };
+
+  return (
+    <main className="flex min-h-screen items-center justify-center bg-white px-6 dark:bg-black">
+      <div className="w-full max-w-md rounded-3xl border border-black/10 bg-white p-8 shadow-2xl dark:border-white/10 dark:bg-zinc-950">
         
         <div>
-          <h1 className="text-3xl font-black tracking-tight">
-            Unified Clone
+          <h1 className="text-4xl font-black tracking-tight">
+            Create Account
           </h1>
-        </div>
 
-        <div>
-          <h2 className="max-w-md text-5xl font-black leading-tight tracking-tight">
-            Start Building Your Future With Real-World Skills.
-          </h2>
-
-          <p className="mt-6 max-w-md text-lg leading-relaxed text-gray-600 dark:text-gray-400">
-            Join thousands of students learning through practical internships and industry-focused projects.
+          <p className="mt-2 text-gray-500">
+            Begin your learning journey today.
           </p>
         </div>
 
-        <p className="text-sm text-gray-500">
-          © 2026 Unified Clone
-        </p>
-      </div>
-
-      {/* Right Section */}
-      <div className="relative flex flex-1 items-center justify-center px-6 py-12">
-        
-        <div className="w-full max-w-md rounded-[2rem] border border-black/5 bg-white/70 p-10 shadow-2xl backdrop-blur-xl dark:border-white/10 dark:bg-zinc-900/70">
-          
-          {/* Header */}
+        <form
+          onSubmit={handleSignup}
+          className="mt-10 space-y-6"
+        >
           <div>
-            <h1 className="text-4xl font-black tracking-tight">
-              Create Account
-            </h1>
+            <label className="mb-2 block text-sm font-medium">
+              Full Name
+            </label>
 
-            <p className="mt-3 text-gray-600 dark:text-gray-400">
-              Begin your learning journey today.
-            </p>
+            <input
+              type="text"
+              placeholder="Enter your full name"
+              value={fullName}
+              onChange={(e) =>
+                setFullName(e.target.value)
+              }
+              className="w-full rounded-2xl border border-black/10 bg-white/50 px-5 py-4 outline-none backdrop-blur-sm transition focus:border-black dark:border-white/10 dark:bg-white/5 dark:focus:border-white"
+            />
           </div>
 
-          {/* Form */}
-          <form className="mt-10 space-y-6">
-            
-            <div>
-              <label className="mb-2 block text-sm font-medium">
-                Full Name
-              </label>
+          <div>
+            <label className="mb-2 block text-sm font-medium">
+              Email
+            </label>
 
-              <input
-                type="text"
-                placeholder="Enter your full name"
-                className="w-full rounded-2xl border border-black/10 bg-white/50 px-5 py-4 outline-none backdrop-blur-sm transition focus:border-black dark:border-white/10 dark:bg-white/5 dark:focus:border-white"
-              />
-            </div>
+            <input
+              type="email"
+              placeholder="Enter your email"
+              value={email}
+              onChange={(e) =>
+                setEmail(e.target.value)
+              }
+              className="w-full rounded-2xl border border-black/10 bg-white/50 px-5 py-4 outline-none backdrop-blur-sm transition focus:border-black dark:border-white/10 dark:bg-white/5 dark:focus:border-white"
+            />
+          </div>
 
-            <div>
-              <label className="mb-2 block text-sm font-medium">
-                Email
-              </label>
+          <div>
+            <label className="mb-2 block text-sm font-medium">
+              Password
+            </label>
 
-              <input
-                type="email"
-                placeholder="Enter your email"
-                className="w-full rounded-2xl border border-black/10 bg-white/50 px-5 py-4 outline-none backdrop-blur-sm transition focus:border-black dark:border-white/10 dark:bg-white/5 dark:focus:border-white"
-              />
-            </div>
+            <input
+              type="password"
+              placeholder="Create a password"
+              value={password}
+              onChange={(e) =>
+                setPassword(e.target.value)
+              }
+              className="w-full rounded-2xl border border-black/10 bg-white/50 px-5 py-4 outline-none backdrop-blur-sm transition focus:border-black dark:border-white/10 dark:bg-white/5 dark:focus:border-white"
+            />
+          </div>
 
-            <div>
-              <label className="mb-2 block text-sm font-medium">
-                Password
-              </label>
+          <button
+            disabled={loading}
+            className="w-full rounded-2xl bg-black py-4 font-medium text-white transition hover:scale-[1.02] hover:bg-gray-800 disabled:opacity-50 dark:bg-white dark:text-black"
+          >
+            {loading
+              ? "Creating..."
+              : "Create Account"}
+          </button>
+        </form>
 
-              <input
-                type="password"
-                placeholder="Create a password"
-                className="w-full rounded-2xl border border-black/10 bg-white/50 px-5 py-4 outline-none backdrop-blur-sm transition focus:border-black dark:border-white/10 dark:bg-white/5 dark:focus:border-white"
-              />
-            </div>
-
-            <button className="w-full rounded-2xl bg-black py-4 font-medium text-white transition hover:scale-[1.02] hover:bg-gray-800 dark:bg-white dark:text-black">
-              Create Account
-            </button>
-          </form>
-
-          {/* Footer */}
-          <p className="mt-8 text-center text-sm text-gray-500">
-            Already have an account? Login
-          </p>
-        </div>
+        <p className="mt-8 text-center text-sm text-gray-500">
+          Already have an account?{" "}
+          <Link
+            href="/login"
+            className="font-medium text-black dark:text-white"
+          >
+            Login
+          </Link>
+        </p>
       </div>
     </main>
   );

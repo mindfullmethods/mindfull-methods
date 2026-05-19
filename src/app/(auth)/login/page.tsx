@@ -1,4 +1,38 @@
+"use client";
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { supabase } from "@/lib/supabase";
+
 export default function LoginPage() {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
+
+  const router = useRouter();
+  const handleLogin = async (
+  e: React.FormEvent
+) => {
+  e.preventDefault();
+
+  setLoading(true);
+
+  const { error } =
+    await supabase.auth.signInWithPassword({
+      email,
+      password,
+    });
+
+  setLoading(false);
+
+  if (error) {
+    alert(error.message);
+    return;
+  }
+
+  alert("Login successful!");
+
+  router.push("/dashboard");
+};
   return (
     <main className="relative flex min-h-screen overflow-hidden bg-white dark:bg-black">
       
@@ -46,36 +80,49 @@ export default function LoginPage() {
           </div>
 
           {/* Form */}
-          <form className="mt-10 space-y-6">
-            
-            <div>
-              <label className="mb-2 block text-sm font-medium">
-                Email
-              </label>
+          <form
+  onSubmit={handleLogin}
+  className="mt-10 space-y-6"
+>
+  <div>
+    <label className="mb-2 block text-sm font-medium">
+      Email
+    </label>
 
-              <input
-                type="email"
-                placeholder="Enter your email"
-                className="w-full rounded-2xl border border-black/10 bg-white/50 px-5 py-4 outline-none backdrop-blur-sm transition focus:border-black dark:border-white/10 dark:bg-white/5 dark:focus:border-white"
-              />
-            </div>
+    <input
+      type="email"
+      placeholder="Enter your email"
+      value={email}
+      onChange={(e) =>
+        setEmail(e.target.value)
+      }
+      className="w-full rounded-2xl border border-black/10 bg-white/50 px-5 py-4 outline-none backdrop-blur-sm transition focus:border-black dark:border-white/10 dark:bg-white/5 dark:focus:border-white"
+    />
+  </div>
 
-            <div>
-              <label className="mb-2 block text-sm font-medium">
-                Password
-              </label>
+  <div>
+    <label className="mb-2 block text-sm font-medium">
+      Password
+    </label>
 
-              <input
-                type="password"
-                placeholder="Enter your password"
-                className="w-full rounded-2xl border border-black/10 bg-white/50 px-5 py-4 outline-none backdrop-blur-sm transition focus:border-black dark:border-white/10 dark:bg-white/5 dark:focus:border-white"
-              />
-            </div>
+    <input
+      type="password"
+      placeholder="Enter your password"
+      value={password}
+      onChange={(e) =>
+        setPassword(e.target.value)
+      }
+      className="w-full rounded-2xl border border-black/10 bg-white/50 px-5 py-4 outline-none backdrop-blur-sm transition focus:border-black dark:border-white/10 dark:bg-white/5 dark:focus:border-white"
+    />
+  </div>
 
-            <button className="w-full rounded-2xl bg-black py-4 font-medium text-white transition hover:scale-[1.02] hover:bg-gray-800 dark:bg-white dark:text-black">
-              Login
-            </button>
-          </form>
+  <button
+    disabled={loading}
+    className="w-full rounded-2xl bg-black py-4 font-medium text-white transition hover:scale-[1.02] hover:bg-gray-800 disabled:opacity-50 dark:bg-white dark:text-black"
+  >
+    {loading ? "Logging in..." : "Login"}
+  </button>
+</form>
 
           {/* Footer */}
           <p className="mt-8 text-center text-sm text-gray-500">
