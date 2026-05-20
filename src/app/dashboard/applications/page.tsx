@@ -70,7 +70,9 @@ export default function ApplicationsPage() {
             >
 
               <img
-                src={internship.image_url}
+                src={internship.image_url || 
+                  "https://images.unsplash.com/photo-1498050108023-c5249f4df085"
+                }
                 alt={internship.title}
                 className="h-52 w-full object-cover"
               />

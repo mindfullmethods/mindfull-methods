@@ -20,27 +20,30 @@ export default async function InternshipDetailsPage({
   }
 
   return (
-    <main className="p-8">
+    <main className="px-5 py-8 sm:px-8 xl:px-12">
 
-      <div className="overflow-hidden rounded-3xl border border-black/10 bg-white shadow-xl">
+      <div className="overflow-hidden rounded-3xl border border-black/10 bg-white shadow-xl transition duration-500 dark:border-white/10 dark:bg-zinc-900">
 
         <img
-          src={internship.image_url}
+          src={
+            internship.image_url ||
+               "https://images.unsplash.com/photo-1498050108023-c5249f4df085"
+          }
           alt={internship.title}
-          className="h-[420px] w-full object-cover"
+          className="h-[280px] sm:h-[400px] xl:h-[500px] w-full object-cover"
         />
 
-        <div className="p-10">
+        <div className="px-5 py-8 sm:px-8 xl:px-12">
 
           <div className="flex items-start justify-between">
 
             <div>
 
-              <h1 className="text-5xl font-black">
+              <h1 className="text-3xl font-black text-zinc-900 dark:text-white sm:text-4xl xl:text-5xl">
                 {internship.title}
               </h1>
 
-              <p className="mt-4 text-2xl text-gray-500">
+              <p className="mt-4 text-2xl text-gray-500 dark:text-gray-400">
                 {internship.company}
               </p>
 
@@ -60,7 +63,7 @@ export default async function InternshipDetailsPage({
 
           </div>
 
-          <div className="mt-10 grid gap-8 lg:grid-cols-3">
+          <div className="mt-10 grid gap-8 lg:grid-cols-2">
 
             <div className="lg:col-span-2">
 
@@ -68,19 +71,19 @@ export default async function InternshipDetailsPage({
                 About Internship
               </h2>
 
-              <p className="mt-6 text-lg leading-8 text-gray-600">
+              <p className="mt-6 text-base sm:text-lg leading-8 text-gray-600 dark:text-gray-400">
                 {internship.description}
               </p>
 
             </div>
 
-            <div className="rounded-3xl border border-black/10 p-8">
+            <div className="rounded-3xl border border-black/10 p-5 transition duration-500 dark:border-white/10 sm:p-8">
 
-              <h2 className="text-2xl font-bold">
+              <h2 className="text-2xl font-bold text-zinc-900 dark:text-white">
                 Stipend
               </h2>
 
-              <p className="mt-4 text-4xl font-black">
+              <p className="mt-4 text-3xl font-black text-zinc-900 dark:text-white sm:text-4xl">
                 {internship.stipend}
               </p>
 

@@ -49,9 +49,9 @@ export default function InternshipCard({
         >
 
         <img
-          src={image}
+          src={image || "https://images.unsplash.com/photo-1498050108023-c5249f4df085"}
           alt={title}
-          className="h-56 w-full object-cover transition duration-700 group-hover:scale-110"
+          className="h-48 sm:h-56 w-full object-cover transition duration-700 group-hover:scale-110"
         />
 
         <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
@@ -66,13 +66,13 @@ export default function InternshipCard({
 
       
 
-      <div className="space-y-6 p-7">
+      <div className="space-y-6 p-5 sm:p-7">
 
         <div className="flex items-start justify-between gap-4">
 
           <div>
 
-            <h2 className="text-2xl font-black tracking-tight text-zinc-900 dark:text-white">
+            <h2 className="text-xl sm:text-2xl font-black tracking-tight text-zinc-900 dark:text-white">
               {title}
             </h2>
 
@@ -84,7 +84,7 @@ export default function InternshipCard({
 
         </div>
 
-        <p className="mt-5 line-clamp-3 text-sm leading-7 text-gray-600 dark:text-gray-600 dark:text-gray-400">
+        <p className="mt-5 line-clamp-3 text-sm leading-6 sm:leading-7 text-gray-600 dark:text-gray-600 dark:text-gray-400">
           {description}
         </p>
 
@@ -96,7 +96,7 @@ export default function InternshipCard({
               Stipend
             </p>
 
-            <h3 className="mt-1 text-xl font-black text-zinc-900 dark:text-white">
+            <h3 className="mt-1 text-lg sm:text-xl font-black text-zinc-900 dark:text-white">
               {stipend}
             </h3>
 
@@ -107,7 +107,7 @@ export default function InternshipCard({
               e.preventDefault();
               applyToInternship(id);
             }}
-            className="rounded-2xl bg-black px-6 py-3 text-sm font-semibold text-white transition duration-300 hover:scale-105 dark:bg-white dark:text-black"
+            className="rounded-2xl bg-black px-4 py-2.5 sm:px-5 sm:py-3 text-sm font-semibold text-white transition duration-300 hover:scale-105 dark:bg-white dark:text-black"
           >
             Apply
           </button>

@@ -66,11 +66,11 @@ export default function Sidebar() {
     <aside
       className={`
         fixed left-0 top-0 z-40
-        h-screen w-80
+        h-screen w-[85vw] max-w-80
         flex flex-col
         border-r border-white/20
         bg-white/70
-        p-8
+        p-6 sm:p-8
         shadow-2xl
         backdrop-blur-2xl
         transition-transform duration-300
@@ -91,7 +91,7 @@ export default function Sidebar() {
 
           <div>
 
-            <h1 className="text-3xl font-black tracking-tight text-zinc-900 dark:text-white">
+            <h1 className="text-2xl sm:text-3xl font-black tracking-tight text-zinc-900 dark:text-white">
               Mindfull Methods
             </h1>
 
@@ -125,7 +125,7 @@ export default function Sidebar() {
               key={link.href}
               href={link.href}
               onClick={() => closeSidebar()}
-              className={`group relative overflow-hidden rounded-3xl px-6 py-5 transition-all duration-300 ${
+              className={`group relative overflow-hidden rounded-3xl px-5 py-4 sm:px-6 sm:py-5 transition-all duration-300 ${
                 active
                   ? "bg-black text-white shadow-2xl"
                   : "bg-white/40 hover:bg-white/80 dark:bg-white/5 dark:hover:bg-white/10"
@@ -175,7 +175,7 @@ export default function Sidebar() {
 
       <button
         onClick={handleLogout}
-        className="mt-8 flex items-center justify-center gap-3 rounded-3xl border border-red-200 bg-red-50 py-5 text-lg font-semibold text-red-500 transition duration-300 hover:scale-[1.02] hover:bg-red-100 dark:border-red-500/20 dark:bg-red-500/10 dark:text-red-400 dark:hover:bg-red-500/20"
+        className="mt-8 flex items-center justify-center gap-3 rounded-3xl border border-red-200 bg-red-50 py-4 text-base sm:py-5 sm:text-lg font-semibold text-red-500 transition duration-300 hover:scale-[1.02] hover:bg-red-100 dark:border-red-500/20 dark:bg-red-500/10 dark:text-red-400 dark:hover:bg-red-500/20"
       >
 
         <LogOut size={22} />
