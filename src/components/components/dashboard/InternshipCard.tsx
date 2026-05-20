@@ -44,7 +44,7 @@ export default function InternshipCard({
         whileHover={{
           y: -8,
         }}
-        className="group overflow-hidden rounded-[32px] border border-white/20 bg-white/70 shadow-xl backdrop-blur-xl transition duration-500 hover:-translate-y-2 hover:shadow-2xl"
+        className="group overflow-hidden rounded-[32px] border border-white/20 bg-white/70 shadow-2xl backdrop-blur-xl transition duration-500 hover:-translate-y-2 hover:shadow-[0_25px_80px_rgba(0,0,0,0.25)] dark:border-white/10 dark:bg-zinc-900/80"
         
         >
 
@@ -58,7 +58,7 @@ export default function InternshipCard({
 
         <div className="absolute bottom-4 left-4">
 
-          <span className="rounded-full bg-white/20 px-4 py-2 text-sm font-medium text-white backdrop-blur-md">
+          <span className="rounded-full bg-white/20 px-4 py-2 text-sm font-medium text-zinc-900 dark:text-white backdrop-blur-md">
             {duration}
           </span>
 
@@ -66,17 +66,17 @@ export default function InternshipCard({
 
       
 
-      <div className="p-6">
+      <div className="space-y-6 p-7">
 
         <div className="flex items-start justify-between gap-4">
 
           <div>
 
-            <h2 className="text-2xl font-black tracking-tight text-black">
+            <h2 className="text-2xl font-black tracking-tight text-zinc-900 dark:text-white">
               {title}
             </h2>
 
-            <p className="mt-2 text-sm font-medium text-gray-500">
+            <p className="mt-2 text-sm font-medium text-gray-500 dark:text-gray-600 dark:text-gray-300">
               {company}
             </p>
 
@@ -84,7 +84,7 @@ export default function InternshipCard({
 
         </div>
 
-        <p className="mt-5 line-clamp-3 text-sm leading-7 text-gray-600">
+        <p className="mt-5 line-clamp-3 text-sm leading-7 text-gray-600 dark:text-gray-600 dark:text-gray-400">
           {description}
         </p>
 
@@ -92,11 +92,11 @@ export default function InternshipCard({
 
           <div>
 
-            <p className="text-xs uppercase tracking-widest text-gray-400">
+            <p className="text-xs uppercase tracking-widest text-gray-500 dark:text-gray-400">
               Stipend
             </p>
 
-            <h3 className="mt-1 text-xl font-black">
+            <h3 className="mt-1 text-xl font-black text-zinc-900 dark:text-white">
               {stipend}
             </h3>
 
@@ -107,7 +107,7 @@ export default function InternshipCard({
               e.preventDefault();
               applyToInternship(id);
             }}
-            className="rounded-2xl bg-black px-6 py-3 text-sm font-semibold text-white transition duration-300 hover:scale-105 hover:bg-gray-800"
+            className="rounded-2xl bg-black px-6 py-3 text-sm font-semibold text-white transition duration-300 hover:scale-105 dark:bg-white dark:text-black"
           >
             Apply
           </button>
