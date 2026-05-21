@@ -44,7 +44,7 @@ export default function LoginPage() {
         
         <div>
           <h1 className="text-3xl font-black tracking-tight">
-            Unified Clone
+            Mindfull Methoods
           </h1>
         </div>
 
@@ -59,7 +59,7 @@ export default function LoginPage() {
         </div>
 
         <p className="text-sm text-gray-500">
-          © 2026 Unified Clone
+          © 2026 Mindfull Methods
         </p>
       </div>
 
