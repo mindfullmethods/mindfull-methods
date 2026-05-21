@@ -6,7 +6,10 @@ export async function getInternships() {
     .select("*");
 
   if (error) {
-    console.error(error);
+    console.error(
+  "Supabase Error:",
+  error.message
+);
     return [];
   }
 

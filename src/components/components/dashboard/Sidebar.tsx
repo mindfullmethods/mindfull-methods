@@ -66,7 +66,7 @@ export default function Sidebar() {
     <aside
       className={`
         fixed left-0 top-0 z-40
-        h-screen w-[85vw] max-w-80
+        h-screen overflow-y-auto scrollbar-thin w-[85vw] max-w-80
         flex flex-col
         border-r border-white/20
         bg-white/70
