@@ -23,7 +23,7 @@ export default function DashboardLayout({
       } = await supabase.auth.getSession();
 
       if (!session) {
-        router.push("/login");
+        router.push("/sign-in");
       }
 
     }
