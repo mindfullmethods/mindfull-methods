@@ -1,3 +1,4 @@
+import { Analytics } from "@vercel/analytics/react";
 import "./globals.css";
 import { ThemeProvider } from "@/components/components/theme-provider";
 export const metadata = {
@@ -20,6 +21,7 @@ export default function RootLayout({
         <ThemeProvider>
           {children}
         </ThemeProvider>
+      <Analytics/>
       </body>
     </html>
   );
