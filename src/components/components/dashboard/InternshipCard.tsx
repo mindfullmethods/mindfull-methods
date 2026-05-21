@@ -49,7 +49,10 @@ export default function InternshipCard({
         >
 
         <img
-          src={image || "https://images.unsplash.com/photo-1498050108023-c5249f4df085"}
+          src={
+            image || 
+            "https://images.unsplash.com/photo-1498050108023-c5249f4df085"
+          }
           alt={title}
           className="h-48 sm:h-56 w-full object-cover transition duration-700 group-hover:scale-110"
         />

@@ -1,6 +1,7 @@
 import AnalyticsChart from "@/components/components/dashboard/AnalyticsChart";
 import { getMyApplications } from "@/Services/applications";
 import InternshipCard from "@/components/components/dashboard/InternshipCard";
+import InternshipList from "@/components/components/dashboard/InternshipList";
 import { getInternships } from "@/Services/Internships";
 import ModeToggle from "@/components/components/mode-toggle";
 
@@ -116,20 +117,11 @@ export default async function DashboardPage() {
   </div>
 
 </div>
-    <div className="grid gap-10 sm:grid-cols-2 2xl:grid-cols-3">
+    
+      <InternshipList
+        internships={internships}
+      />
 
-      {internships.map((internship) => (
-        <InternshipCard
-          key={internship.id}
-          id={internship.id}
-          title={internship.title}
-          company={internship.company}
-          description={internship.description}
-          duration={internship.duration}
-          stipend={internship.stipend}
-          image={internship.image_url}
-        />
-      ))}
       <div className="mt-16 grid gap-8 xl:grid-cols-[1.5fr_1fr]">
 
   <div className="rounded-[32px] border border-white/20 bg-white/70 p-8 shadow-2xl backdrop-blur-xl transition duration-500 dark:border-white/10 dark:bg-white/5">
@@ -266,7 +258,7 @@ export default async function DashboardPage() {
 
 </div>
 
-    </div>
+
 
   </main>
 );
