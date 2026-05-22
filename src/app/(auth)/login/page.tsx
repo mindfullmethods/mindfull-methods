@@ -16,30 +16,24 @@ export default function LoginPage() {
 
   setLoading(true);
 
-  const { error } =
+  const { data, error } =
     await supabase.auth.signInWithPassword({
       email,
       password,
     });
 
-    const {
-      data: { session },
-    } = await supabase.auth.getSession();
-
-  console.log(session);
-
-
-  setLoading(false);
-
+    
   if (error) {
     alert(error.message);
+    setLoading(false);
     return;
   }
 
-  alert("Login successful!");
-
-  window.location.href =
-  "/dashboard";
+  // Wait briefly for session cookies
+  setTimeout(() => {
+    window.location.href =
+      "/dashboard";
+  }, 1000);
 };
   return (
     <main className="relative flex min-h-screen overflow-hidden bg-white dark:bg-black">
