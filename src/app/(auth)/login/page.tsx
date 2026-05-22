@@ -31,7 +31,8 @@ export default function LoginPage() {
 
   alert("Login successful!");
 
-  router.push("/dashboard");
+  window.location.href =
+  "/dashboard";
 };
   return (
     <main className="relative flex min-h-screen overflow-hidden bg-white dark:bg-black">
