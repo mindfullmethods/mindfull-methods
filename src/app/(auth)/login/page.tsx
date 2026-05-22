@@ -22,6 +22,13 @@ export default function LoginPage() {
       password,
     });
 
+    const {
+      data: { session },
+    } = await supabase.auth.getSession();
+
+  console.log(session);
+
+
   setLoading(false);
 
   if (error) {
