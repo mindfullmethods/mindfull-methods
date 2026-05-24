@@ -1,4 +1,5 @@
 "use client";
+import Link from "next/link";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { supabase } from "@/lib/supabase";
@@ -127,9 +128,17 @@ export default function LoginPage() {
 </form>
 
           {/* Footer */}
-          <p className="mt-8 text-center text-sm text-gray-500">
-            Don’t have an account? Sign up
-          </p>
+          <p className="text-center text-sm text-zinc-500 dark:text-zinc-400">
+  Don’t have an account?{" "}
+  
+  <Link
+    href="/signup"
+    className="font-semibold text-zinc-900 transition hover:text-black dark:text-white"
+  >
+    Sign up
+  </Link>
+
+</p>
         </div>
       </div>
     </main>
