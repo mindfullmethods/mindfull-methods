@@ -31,7 +31,7 @@ export default function Hero() {
           className="mt-8 max-w-5xl text-4xl font-black leading-tight tracking-tight md:text-7xl"
         >
           Launch Your Career With
-          <span className="bg-gradient-to-r from-black to-gray-500 bg-clip-text text-transparent">
+          <span className="bg-gradient-to-r from-zinc-900 to-zinc-500 bg-clip-text text-transparent dark:from-white dark:to-zinc-400">
             {" "}
             Industry Ready Internships
           </span>

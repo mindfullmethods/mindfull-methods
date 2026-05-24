@@ -71,7 +71,7 @@ export default function Navbar() {
             <ModeToggle />
         
         <Link href="/login">
-          <button className="rounded-3xl bg-black px-8 py-4 text-lg font-semibold text-white shadow-xl transition duration-300 hover:scale-[1.03] hover:bg-gray-800 dark:bg-white dark:text-black">
+          <button className="rounded-2xl bg-black px-6 py-3 text-white shadow-xl transition duration-300 hover:scale-105 dark:bg-white dark:text-black">
              Get Started
           </button>
         </Link>

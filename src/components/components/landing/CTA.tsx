@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { Button } from "@/components/ui/button";
 
 export default function CTA() {
@@ -18,12 +19,12 @@ export default function CTA() {
         </p>
 
         <div className="mt-10">
-          <Button
-            size="lg"
-            className="rounded-2xl bg-white px-8 py-6 text-base text-black hover:bg-gray-200"
+          <Link
+            href="/dashboard"
+            className="rounded-3xl bg-white px-10 py-5 text-lg font-semibold text-black shadow-2xl transition duration-300 hover:scale-105 dark:bg-white dark:text-black"
           >
             Get Started Today
-          </Button>
+          </Link>
         </div>
       </div>
     </section>

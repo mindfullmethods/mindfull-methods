@@ -1,6 +1,6 @@
 export default function Stats() {
   return (
-    <section className="border-y bg-gray-50">
+    <section className="border-y bg-gray-50 dark:bg-black">
       <div className="mx-auto grid max-w-7xl grid-cols-2 gap-8 px-6 py-16 md:grid-cols-4">
         <div>
           <h2 className="text-4xl font-bold text-zinc-900 dark:text-white">10K+</h2>
