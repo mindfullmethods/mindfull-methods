@@ -1,3 +1,5 @@
+"use client";
+
 import Footer from "@/components/components/landing/Footer.tsx/Footer";
 import Hero from "@/components/components/landing/Hero.tsx/Hero";
 import Internships from "@/components/components/landing/Internships";

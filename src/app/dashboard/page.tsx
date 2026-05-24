@@ -14,20 +14,20 @@ export default async function DashboardPage() {
   await getMyApplications();
 
   return (
-  <main className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-gray-100 pt-24 px-5 py-8 sm:px-8 xl:px-12 lg:pt-10 transition-colors duration-500 dark:from-black dark:via-zinc-950 dark:to-zinc-900">
+  <main className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-gray-100 pt-24 px-5 py-8 sm:px-8 xl:px-12 lg:pt-10 lg:pl-24 transition-colors duration-500 dark:from-black dark:via-zinc-950 dark:to-zinc-900">
 
     <div className="mb-14 flex flex-col gap-8 xl:flex-row xl:items-end xl:justify-between">
-
-      <div>
-
-        
+    
+      <div className="pl-20 lg:pl-0">
 
         
-          <p className="mb-3 text-sm font-semibold uppercase tracking-[0.3em] text-gray-400">
+
+        
+          <p className="mb-3 ml-12 text-sm font-semibold uppercase tracking-[0.3em] text-gray-400">
             Mindfull Methods Platform
           </p>
 
-          <h1 className="text-6xl font-black tracking-tight text-black dark:text-white sm:text-5xl xl:text-6xl">
+          <h1 className="ml-12 text-6xl font-black tracking-tight text-black dark:text-white sm:text-5xl xl:text-6xl">
              Explore{" "}
              <span className="ml-4 bg-gradient-to-r from-zinc-900 to-gray-500 bg-clip-text text-transparent dark:from-white dark:to-gray-400">
                   Internships
@@ -35,7 +35,7 @@ export default async function DashboardPage() {
           </h1>
         
 
-        <p className="mt-6 max-w-2xl text-base sm:text-lg leading-8 text-gray-500 dark:text-gray-400">
+        <p className="mt-6 ml-12 max-w-2xl text-base sm:text-lg leading-8 text-gray-500 dark:text-gray-400">
           Discover curated premium internship
           opportunities from top companies
           around the world.
@@ -67,11 +67,11 @@ export default async function DashboardPage() {
 
   <div className="rounded-[32px] border border-white/20 bg-gradient-to-br from-black to-gray-800 p-8 text-white shadow-2xl">
 
-    <p className="text-sm uppercase tracking-[0.3em] text-gray-400">
+    <p className="text-sm uppercase tracking-[0.3em] text-gray-400 dark:text-gray-400">
       Total Internships
     </p>
 
-    <h2 className="mt-4 text-6xl font-black text-black dark:text-white">
+    <h2 className="mt-4 text-6xl font-black text-white">
       {internships.length}
     </h2>
 
@@ -92,7 +92,7 @@ export default async function DashboardPage() {
       Live
     </h2>
 
-    <p className="mt-4 text-sm leading-7 text-gray-500 dark:text-gray-400">
+    <p className="mt-4 text-sm leading-7 text-gray-600 dark:text-gray-400">
       Real-time applications and
       internship management system.
     </p>

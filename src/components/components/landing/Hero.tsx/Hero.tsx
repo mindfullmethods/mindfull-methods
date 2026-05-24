@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import Container from "@/components/ui/Container";
@@ -54,41 +55,44 @@ export default function Hero() {
           transition={{ duration: 1.2 }}
           className="mt-10 flex flex-wrap items-center justify-center gap-4"
         >
-          <Button
-            size="lg"
-            className="rounded-2xl px-8 py-6 text-base shadow-lg transition hover:scale-105"
-          >
-            Explore Programs
-          </Button>
+          <Link href="/dashboard">
+  <button className="rounded-3xl bg-black px-10 py-5 text-lg font-semibold text-white shadow-2xl transition hover:scale-[1.03]">
+    Explore Programs
+  </button>
+</Link>
 
-          <Button
-            variant="outline"
-            size="lg"
-            className="rounded-2xl px-8 py-6 text-base backdrop-blur-sm"
-          >
-            Watch Demo
-          </Button>
+       <button
+  onClick={() =>
+    window.scrollTo({
+      top: 1200,
+      behavior: "smooth",
+    })
+  }
+  className="rounded-3xl border border-black/10 bg-white px-10 py-5 text-lg font-semibold shadow-xl transition hover:scale-[1.03] dark:bg-white/10 dark:text-white"
+>
+  Watch Demo
+</button>   
         </motion.div>
 
         {/* Stats Cards */}
         <div className="mt-20 grid gap-6 md:grid-cols-3">
-          <div className="rounded-3xl border border-black/5 bg-white/70 p-6 shadow-xl backdrop-blur-md transition hover:-translate-y-2">
-            <h3 className="text-2xl font-bold">500+</h3>
-            <p className="mt-2 text-gray-600">
+          <div className="rounded-3xl border border-black/5 bg-white/70 dark:bg-zinc-900 p-6 shadow-xl backdrop-blur-md transition hover:-translate-y-2 dark:border-white/10 dark:bg-zinc-900">
+            <h3 className="text-2xl font-bold text-zinc-900 dark:text-white">500+</h3>
+            <p className="mt-2 text-gray-600 dark:text-zinc-400">
               Industry Projects
             </p>
           </div>
 
-          <div className="rounded-3xl border border-black/5 bg-white/70 p-6 shadow-xl backdrop-blur-md transition hover:-translate-y-2">
-            <h3 className="text-2xl font-bold">95%</h3>
-            <p className="mt-2 text-gray-600">
+          <div className="rounded-3xl border border-black/5 bg-white/70 dark:bg-zinc-900 p-6 shadow-xl backdrop-blur-md transition hover:-translate-y-2 dark:border-white/10 dark:bg-zinc-900">
+            <h3 className="text-2xl font-bold text-zinc-900 dark:text-white">95%</h3>
+            <p className="mt-2 text-gray-600 dark:text-zinc-400">
               Completion Rate
             </p>
           </div>
 
-          <div className="rounded-3xl border border-black/5 bg-white/70 p-6 shadow-xl backdrop-blur-md transition hover:-translate-y-2">
-            <h3 className="text-2xl font-bold">10K+</h3>
-            <p className="mt-2 text-gray-600">
+          <div className="rounded-3xl border border-black/5 bg-white/70 dark:bg-zinc-900 p-6 shadow-xl backdrop-blur-md transition hover:-translate-y-2 dark:border-white/10 dark:bg-zinc-900">
+            <h3 className="text-2xl font-bold text-zinc-900 dark:text-white">10K+</h3>
+            <p className="mt-2 text-gray-600 dark:text-zinc-400">
               Students Enrolled
             </p>
           </div>

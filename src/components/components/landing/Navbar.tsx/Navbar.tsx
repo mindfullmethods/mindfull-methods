@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import Container from "@/components/ui/Container";
 import { ModeToggle } from "@/components/components/ui/mode-toggle";
@@ -8,13 +9,31 @@ export default function Navbar() {
       <Container className="flex items-center justify-between py-5">
         
         {/* Logo */}
-        <div className="flex items-center gap-3">
-          <div className="h-10 w-10 rounded-2xl bg-black" />
+        <div className="flex items-center gap-4">
 
-          <h1 className="text-xl font-black tracking-tight md:text-2xl">
-            Mindfull Methods
-          </h1>
-        </div>
+  <div className="relative flex h-14 w-14 items-center justify-center rounded-2xl bg-black shadow-2xl">
+
+    <span className="text-3xl font-black text-white">
+      M
+    </span>
+
+    <div className="absolute inset-0 rounded-2xl border border-white/10" />
+
+  </div>
+
+  <div>
+
+    <h1 className="text-3xl font-black tracking-tight text-black dark:text-white">
+      Mindfull Methods
+    </h1>
+
+    <p className="text-sm font-medium tracking-[0.2em] text-gray-500 dark:text-gray-400">
+      INTERNSHIP PLATFORM
+    </p>
+
+  </div>
+
+</div>
 
         {/* Navigation */}
         <div className="hidden items-center gap-10 md:flex">
@@ -51,9 +70,11 @@ export default function Navbar() {
         <div className="flex items-center gap-3">
             <ModeToggle />
         
-        <Button className="rounded-xl px-5 shadow-md transition hover:scale-105">
-          Get Started
-        </Button>
+        <Link href="/login">
+          <button className="rounded-3xl bg-black px-8 py-4 text-lg font-semibold text-white shadow-xl transition duration-300 hover:scale-[1.03] hover:bg-gray-800 dark:bg-white dark:text-black">
+             Get Started
+          </button>
+        </Link>
     </div>
       </Container>
     </nav>

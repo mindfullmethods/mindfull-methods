@@ -16,7 +16,7 @@ import { supabase } from "@/lib/supabase";
 
 export default function Sidebar() {
   const [open, setOpen] =
-     useState(false);
+     useState(true);
   const pathname = usePathname();
 
   async function handleLogout() {
@@ -49,19 +49,16 @@ export default function Sidebar() {
    return (
   <>
 
-    <button
-      onClick={() => setOpen(!open)}
-      className="fixed left-5 top-5 z-50 flex h-14 w-14 items-center justify-center rounded-2xl bg-black text-white shadow-2xl lg:hidden"
-    >
-      <Menu size={24} />
-    </button>
+    
+{!open && (
+  <button
+    onClick={() => setOpen(true)}
+    className="fixed left-5 top-5 z-50 flex h-14 w-14 items-center justify-center rounded-2xl bg-black text-white shadow-2xl"
+  >
+    <Menu size={24} />
+  </button>
+)}
 
-    {open && (
-      <div
-        onClick={() => setOpen(false)}
-        className="fixed inset-0 z-40 bg-black/60 backdrop-blur-sm lg:hidden"
-      />
-    )}
 
     <aside
       className={`
@@ -77,7 +74,7 @@ export default function Sidebar() {
         dark:border-white/10
         dark:bg-zinc-950/80
         ${open ? "translate-x-0" : "-translate-x-full"}
-        lg:translate-x-0
+
         `}
     >
 
@@ -105,7 +102,7 @@ export default function Sidebar() {
 
         <button
           onClick={() => setOpen(false)}
-          className="lg:hidden"
+          className="rounded-xl p-2 hover:bg-white/10 transition"
         >
           <X size={28} />
         </button>

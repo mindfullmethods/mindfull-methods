@@ -102,12 +102,12 @@ export default function InternshipList({
 
         <input
           type="text"
-          placeholder="Search internships or companies..."
+          placeholder="Search internships or companies... "
           value={search}
           onChange={(e) =>
             setSearch(e.target.value)
           }
-          className="flex-1 rounded-3xl border border-black/10 bg-white/70 px-6 py-5 text-lg outline-none backdrop-blur-xl transition focus:border-black focus:ring-4 focus:ring-black/5 dark:border-white/10 dark:bg-white/5 dark:text-white"
+          className="flex-1 rounded-3xl border border-black/10 bg-white/70 px-6 py-5 text-lg text-black placeholder:text-gray-500 outline-none backdrop-blur-xl transition focus:border-black focus:ring-4 focus:ring-black/5 dark:border-white/10 dark:bg-white/5 dark:text-white dark:placeholder:text-gray-400"
         />
 
         <select
