@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
@@ -15,6 +15,20 @@ import {
 import { supabase } from "@/lib/supabase";
 
 export default function Sidebar() {
+  const [userEmail, setUserEmail] = useState("");
+
+  useEffect(() => {
+  async function getUser() {
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
+
+    setUserEmail(user?.email || "");
+  }
+
+  getUser();
+}, []);
+
   const [open, setOpen] =
      useState(true);
   const pathname = usePathname();
@@ -46,6 +60,7 @@ export default function Sidebar() {
   function closeSidebar(){
     setOpen(false);
   }
+
    return (
   <>
 
@@ -53,7 +68,7 @@ export default function Sidebar() {
 {!open && (
   <button
     onClick={() => setOpen(true)}
-    className="fixed left-5 top-5 z-50 flex h-14 w-14 items-center justify-center rounded-2xl bg-black text-white shadow-2xl"
+    className="fixed left-3 top-5 z-50 flex h-14 w-14 items-center justify-center rounded-2xl bg-black text-white shadow-2xl"
   >
     <Menu size={24} />
   </button>
@@ -121,7 +136,11 @@ export default function Sidebar() {
             <Link
               key={link.href}
               href={link.href}
-              onClick={() => closeSidebar()}
+              onClick={() => {
+               if (window.innerWidth < 1024) {
+                  closeSidebar();
+                }
+              }}
               className={`group relative overflow-hidden rounded-3xl px-5 py-4 sm:px-6 sm:py-5 transition-all duration-300 ${
                 active
                   ? "bg-black text-white shadow-2xl"

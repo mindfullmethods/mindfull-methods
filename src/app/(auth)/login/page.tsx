@@ -31,10 +31,9 @@ export default function LoginPage() {
   }
 
   // Wait briefly for session cookies
-  setTimeout(() => {
-    window.location.href =
-      "/dashboard";
-  }, 1000);
+  setLoading(false);
+
+  router.replace("/dashboard");
 };
   return (
     <main className="relative flex min-h-screen overflow-hidden bg-white dark:bg-black">

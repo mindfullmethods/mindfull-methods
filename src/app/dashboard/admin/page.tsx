@@ -3,13 +3,15 @@ import { getInternships } from "@/Services/Internships";
 import { createInternship } from "@/actions/createInternships";
 import Link from "next/link";
 
-export default async function AdminPage()  {
+export default async function AdminPage() {
+  
   const internships =
     await getInternships();
 
   return (
     <main className="min-h-screen px-5 py-8 sm:px-8 xl:px-12">
 
+      {/* Header */}
       <div className="mb-12">
 
         <p className="text-sm font-semibold uppercase tracking-[0.3em] text-gray-400">
@@ -27,17 +29,18 @@ export default async function AdminPage()  {
 
       </div>
 
+      {/* Create Internship */}
       <div className="rounded-[32px] border border-white/20 bg-white/80 p-6 shadow-2xl backdrop-blur-xl transition duration-500 dark:border-white/10 dark:bg-white/5 sm:p-8">
 
-        <form 
-        action={createInternship}
-        className="grid gap-6"
+        <form
+          action={createInternship}
+          className="grid gap-6"
         >
 
           <div>
 
             <label className="mb-3 block text-sm font-semibold text-gray-600 dark:text-gray-300">
-              
+           
               Internship Title
             </label>
 
@@ -53,7 +56,7 @@ export default async function AdminPage()  {
           <div>
 
             <label className="mb-3 block text-sm font-semibold text-gray-600 dark:text-gray-300">
-              
+           
               Company Name
             </label>
 
@@ -86,7 +89,7 @@ export default async function AdminPage()  {
             <div>
 
               <label className="mb-3 block text-sm font-semibold text-gray-600 dark:text-gray-300">
-                
+             
                 Duration
               </label>
 
@@ -102,7 +105,7 @@ export default async function AdminPage()  {
             <div>
 
               <label className="mb-3 block text-sm font-semibold text-gray-600 dark:text-gray-300">
-                
+              
                 Stipend
               </label>
 
@@ -140,91 +143,93 @@ export default async function AdminPage()  {
           </button>
 
         </form>
+
+        {/* Existing Internships */}
         <div className="mt-16 rounded-[32px] border border-white/20 bg-white/70 p-6 shadow-2xl backdrop-blur-xl transition duration-500 dark:border-white/10 dark:bg-white/5 sm:p-8">
 
-  <div className="mb-10 flex items-center justify-between">
+          <div className="mb-10 flex items-center justify-between">
 
-    <div>
+            <div>
 
-      <p className="text-sm uppercase tracking-[0.3em] text-gray-400">
-        Internship Management
-      </p>
+              <p className="text-sm uppercase tracking-[0.3em] text-gray-400">
+                Internship Management
+              </p>
 
-      <h2 className="mt-3 text-3xl font-black text-black dark:text-white">
-        Manage Existing Internships
-      </h2>
+              <h2 className="mt-3 text-3xl font-black text-black dark:text-white">
+                Manage Existing Internships
+              </h2>
 
-    </div>
+            </div>
 
-    <div className="rounded-2xl bg-black px-5 py-3 text-white dark:bg-white dark:text-black">
-      {internships.length}
-    </div>
+            <div className="rounded-2xl bg-black px-5 py-3 text-white dark:bg-white dark:text-black">
+              {internships.length}
+            </div>
 
-  </div>
+          </div>
 
-  <div className="space-y-5">
+          <div className="space-y-5">
 
-    {internships.map((internship: any) => (
+            {internships.map((internship: any) => (
 
-      <div
-        key={internship.id}
-        className="flex flex-col gap-5 rounded-3xl border border-black/5 bg-black/[0.02] p-6 transition duration-300 dark:border-white/10 dark:bg-white/[0.03] xl:flex-row xl:items-center xl:justify-between"
-      >
+              <div
+                key={internship.id}
+                className="flex flex-col gap-5 rounded-3xl border border-black/5 bg-black/[0.02] p-6 transition duration-300 dark:border-white/10 dark:bg-white/[0.03] xl:flex-row xl:items-center xl:justify-between"
+              >
 
-        <div>
+                <div>
 
-          <h3 className="text-2xl font-black text-black dark:text-white">
-            {internship.title}
-          </h3>
+                  <h3 className="text-2xl font-black text-black dark:text-white">
+                    {internship.title}
+                  </h3>
 
-          <p className="mt-2 text-gray-500 dark:text-gray-400">
-            {internship.company}
-          </p>
+                  <p className="mt-2 text-gray-500 dark:text-gray-400">
+                    {internship.company}
+                  </p>
 
-          <p className="mt-4 text-sm text-gray-500 dark:text-gray-400">
-            {internship.duration} • {internship.stipend}
-          </p>
+                  <p className="mt-4 text-sm text-gray-500 dark:text-gray-400">
+                    {internship.duration} • {internship.stipend}
+                  </p>
+
+                </div>
+
+                <div className="flex gap-4">
+
+                  <Link
+                    href={`/dashboard/admin/edit/${internship.id}`}
+                    className="rounded-2xl bg-black px-6 py-3 text-sm font-semibold text-white transition hover:scale-[1.02] dark:bg-white dark:text-black"
+                  >
+                    Edit
+                  </Link>
+
+                  <form
+                    action={async () => {
+                      "use server";
+
+                      await deleteInternship(
+                        internship.id
+                      );
+                    }}
+                    className="inline-block"
+                  >
+
+                    <button
+                      type="submit"
+                      className="rounded-2xl bg-red-600 px-6 py-3 text-sm font-semibold text-white shadow-xl transition duration-300 hover:scale-[1.02] hover:bg-red-700"
+                    >
+                      Delete
+                    </button>
+
+                  </form>
+
+                </div>
+
+              </div>
+
+            ))}
+
+          </div>
 
         </div>
-
-        <div className="flex gap-4">
-
-          <Link
-  href={`/dashboard/admin/edit/${internship.id}`}
-  className="rounded-2xl bg-black px-6 py-3 text-sm font-semibold text-white transition hover:scale-[1.02] dark:bg-white dark:text-black"
->
-  Edit
-</Link>
-
-          <form
-  action={async () => {
-    "use server";
-
-    await deleteInternship(
-      internship.id
-    );
-  }}
-  className="inline-block"
->
-
-  <button
-    type="submit"
-    className="rounded-2xl bg-red-600 px-6 py-3 text-sm font-semibold text-white shadow-xl transition duration-300 hover:scale-[1.02] hover:bg-red-700"
-  >
-    Delete
-  </button>
-
-</form>
-
-        </div>
-
-      </div>
-
-    ))}
-
-  </div>
-
-</div>
 
       </div>
 
