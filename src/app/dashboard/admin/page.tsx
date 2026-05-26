@@ -1,238 +1,146 @@
+import Link from "next/link";
+import { BriefcaseBusiness, Edit3, ImageIcon, Plus, Trash2 } from "lucide-react";
 import { deleteInternship } from "@/actions/deleteInternship";
 import { getInternships } from "@/Services/Internships";
 import { createInternship } from "@/actions/createInternships";
-import Link from "next/link";
 
 export default async function AdminPage() {
-  
-  const internships =
-    await getInternships();
+  const internships = await getInternships();
 
   return (
-    <main className="min-h-screen px-5 py-8 sm:px-8 xl:px-12">
+    <main className="min-h-screen px-5 py-8 sm:px-8 xl:px-10">
+      <section className="rounded-3xl bg-zinc-950 p-6 text-white shadow-xl sm:p-8">
+        <p className="text-sm font-black uppercase tracking-[0.28em] text-white/50">Admin Studio</p>
+        <div className="mt-5 flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
+          <div>
+            <h1 className="max-w-3xl text-4xl font-black tracking-tight sm:text-6xl">Create and manage internship programs.</h1>
+            <p className="mt-5 max-w-2xl text-sm leading-7 text-white/65 sm:text-base">
+              Publish new opportunities, update program details, and keep the student-facing catalog production ready.
+            </p>
+          </div>
+          <div className="rounded-2xl bg-white px-6 py-4 text-zinc-950">
+            <p className="text-xs font-black uppercase tracking-[0.2em] text-zinc-500">Published</p>
+            <p className="mt-1 text-4xl font-black">{internships.length}</p>
+          </div>
+        </div>
+      </section>
 
-      {/* Header */}
-      <div className="mb-12">
-
-        <p className="text-sm font-semibold uppercase tracking-[0.3em] text-gray-400">
-          Admin Dashboard
-        </p>
-
-        <h1 className="mt-4 text-4xl font-black text-black dark:text-white sm:text-5xl">
-          Manage Internships
-        </h1>
-
-        <p className="mt-6 max-w-2xl text-base leading-8 text-gray-500 dark:text-gray-400 sm:text-lg">
-          Add and manage internship
-          opportunities across the platform.
-        </p>
-
-      </div>
-
-      {/* Create Internship */}
-      <div className="rounded-[32px] border border-white/20 bg-white/80 p-6 shadow-2xl backdrop-blur-xl transition duration-500 dark:border-white/10 dark:bg-white/5 sm:p-8">
-
+      <section className="mt-8 grid gap-8 xl:grid-cols-[0.95fr_1.05fr]">
         <form
           action={createInternship}
-          className="grid gap-6"
+          className="rounded-3xl border border-zinc-200 bg-white p-6 shadow-sm dark:border-white/10 dark:bg-white/5 sm:p-8"
         >
-
-          <div>
-
-            <label className="mb-3 block text-sm font-semibold text-gray-600 dark:text-gray-300">
-           
-              Internship Title
-            </label>
-
-            <input
-              type="text"
-              name="title"
-              placeholder="Frontend Developer Internship"
-              className="w-full rounded-3xl border border-black/10 bg-white/70 px-5 py-5 outline-none transition focus:border-black focus:ring-4 focus:ring-black/5 dark:border-white/10 dark:bg-black/20 dark:text-white"
-            />
-
-          </div>
-
-          <div>
-
-            <label className="mb-3 block text-sm font-semibold text-gray-600 dark:text-gray-300">
-           
-              Company Name
-            </label>
-
-            <input
-              type="text"
-              name="company"
-              placeholder="Google"
-              className="w-full rounded-3xl border border-black/10 bg-white/70 px-5 py-5 outline-none transition focus:border-black focus:ring-4 focus:ring-black/5 dark:border-white/10 dark:bg-black/20 dark:text-white"
-            />
-
-          </div>
-
-          <div>
-
-            <label className="mb-3 block text-sm font-semibold text-gray-600 dark:text-gray-300">
-              Internship Description
-            </label>
-
-            <textarea
-              rows={6}
-              name="description"
-              placeholder="Describe internship responsibilities..."
-              className="w-full rounded-3xl border border-black/10 bg-white/70 px-5 py-5 outline-none transition focus:border-black focus:ring-4 focus:ring-black/5 dark:border-white/10 dark:bg-black/20 dark:text-white"
-            />
-
-          </div>
-
-          <div className="grid gap-6 sm:grid-cols-2">
-
+          <div className="flex items-center gap-3">
+            <span className="flex h-11 w-11 items-center justify-center rounded-xl bg-zinc-950 text-white dark:bg-white dark:text-zinc-950">
+              <Plus size={20} />
+            </span>
             <div>
-
-              <label className="mb-3 block text-sm font-semibold text-gray-600 dark:text-gray-300">
-             
-                Duration
-              </label>
-
-              <input
-                type="text"
-                name="duration"
-                placeholder="3 Months"
-                className="w-full rounded-3xl border border-black/10 bg-white/70 px-5 py-5 outline-none transition focus:border-black focus:ring-4 focus:ring-black/5 dark:border-white/10 dark:bg-black/20 dark:text-white"
-              />
-
+              <p className="text-xs font-black uppercase tracking-[0.2em] text-zinc-500">New program</p>
+              <h2 className="text-2xl font-black">Internship details</h2>
             </div>
-
-            <div>
-
-              <label className="mb-3 block text-sm font-semibold text-gray-600 dark:text-gray-300">
-              
-                Stipend
-              </label>
-
-              <input
-                type="text"
-                name="stipend"
-                placeholder="₹25,000/month"
-                className="w-full rounded-3xl border border-black/10 bg-white/70 px-5 py-5 outline-none transition focus:border-black focus:ring-4 focus:ring-black/5 dark:border-white/10 dark:bg-black/20 dark:text-white"
-              />
-
-            </div>
-
           </div>
 
-          <div>
+          <div className="mt-8 grid gap-5">
+            {[
+              { label: "Internship title", name: "title", placeholder: "Frontend Developer Internship" },
+              { label: "Company name", name: "company", placeholder: "Mindfull Methods" },
+              { label: "Duration", name: "duration", placeholder: "12 weeks" },
+              { label: "Stipend", name: "stipend", placeholder: "Rs 25,000/month" },
+              { label: "Image URL", name: "image_url", placeholder: "https://images.unsplash.com/..." },
+            ].map((field) => (
+              <label key={field.name} className="block">
+                <span className="text-sm font-black">{field.label}</span>
+                <input
+                  type="text"
+                  name={field.name}
+                  placeholder={field.placeholder}
+                  className="mt-2 w-full rounded-xl border border-zinc-200 bg-[#f7f8f5] px-4 py-3 text-sm font-semibold outline-none transition focus:border-zinc-950 dark:border-white/10 dark:bg-zinc-950 dark:focus:border-white"
+                />
+              </label>
+            ))}
 
-            <label className="mb-3 block text-sm font-semibold text-gray-600 dark:text-gray-300">
-              Image URL
+            <label className="block">
+              <span className="text-sm font-black">Description</span>
+              <textarea
+                rows={6}
+                name="description"
+                placeholder="Describe responsibilities, outcomes, tools, and who should apply."
+                className="mt-2 w-full rounded-xl border border-zinc-200 bg-[#f7f8f5] px-4 py-3 text-sm font-semibold outline-none transition focus:border-zinc-950 dark:border-white/10 dark:bg-zinc-950 dark:focus:border-white"
+              />
             </label>
-
-            <input
-              type="text"
-              name="image_url"
-              placeholder="https://example.com/image.jpg"
-              className="w-full rounded-3xl border border-black/10 bg-white/70 px-5 py-5 outline-none transition focus:border-black focus:ring-4 focus:ring-black/5 dark:border-white/10 dark:bg-black/20 dark:text-white"
-            />
-
           </div>
 
           <button
             type="submit"
-            className="mt-6 rounded-3xl bg-black px-8 py-5 text-lg font-semibold text-white shadow-2xl transition duration-300 hover:scale-[1.02] hover:shadow-black/30 dark:bg-white dark:text-black"
+            className="mt-7 inline-flex w-full items-center justify-center gap-2 rounded-xl bg-zinc-950 px-5 py-4 text-sm font-black text-white transition hover:scale-[1.01] dark:bg-white dark:text-zinc-950"
           >
-            Add Internship
+            <Plus size={18} />
+            Publish Internship
           </button>
-
         </form>
 
-        {/* Existing Internships */}
-        <div className="mt-16 rounded-[32px] border border-white/20 bg-white/70 p-6 shadow-2xl backdrop-blur-xl transition duration-500 dark:border-white/10 dark:bg-white/5 sm:p-8">
-
-          <div className="mb-10 flex items-center justify-between">
-
+        <div className="rounded-3xl border border-zinc-200 bg-white p-6 shadow-sm dark:border-white/10 dark:bg-white/5 sm:p-8">
+          <div className="flex items-center justify-between gap-5">
             <div>
-
-              <p className="text-sm uppercase tracking-[0.3em] text-gray-400">
-                Internship Management
-              </p>
-
-              <h2 className="mt-3 text-3xl font-black text-black dark:text-white">
-                Manage Existing Internships
-              </h2>
-
+              <p className="text-xs font-black uppercase tracking-[0.2em] text-zinc-500">Catalog</p>
+              <h2 className="mt-2 text-2xl font-black">Published internships</h2>
             </div>
-
-            <div className="rounded-2xl bg-black px-5 py-3 text-white dark:bg-white dark:text-black">
-              {internships.length}
-            </div>
-
+            <BriefcaseBusiness className="text-zinc-400" size={28} />
           </div>
 
-          <div className="space-y-5">
+          <div className="mt-7 space-y-4">
+            {internships.length === 0 && (
+              <div className="rounded-2xl border border-dashed border-zinc-300 p-8 text-center dark:border-white/10">
+                <ImageIcon className="mx-auto text-zinc-400" />
+                <h3 className="mt-4 text-xl font-black">No internships yet</h3>
+                <p className="mt-2 text-sm text-zinc-500">Create your first listing with the form.</p>
+              </div>
+            )}
 
             {internships.map((internship: any) => (
-
-              <div
+              <article
                 key={internship.id}
-                className="flex flex-col gap-5 rounded-3xl border border-black/5 bg-black/[0.02] p-6 transition duration-300 dark:border-white/10 dark:bg-white/[0.03] xl:flex-row xl:items-center xl:justify-between"
+                className="rounded-2xl border border-zinc-200 bg-[#f7f8f5] p-4 dark:border-white/10 dark:bg-zinc-950"
               >
+                <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+                  <div>
+                    <h3 className="text-xl font-black">{internship.title}</h3>
+                    <p className="mt-1 text-sm font-bold text-zinc-500">{internship.company}</p>
+                    <p className="mt-3 text-sm text-zinc-500">
+                      {internship.duration} / {internship.stipend}
+                    </p>
+                  </div>
 
-                <div>
-
-                  <h3 className="text-2xl font-black text-black dark:text-white">
-                    {internship.title}
-                  </h3>
-
-                  <p className="mt-2 text-gray-500 dark:text-gray-400">
-                    {internship.company}
-                  </p>
-
-                  <p className="mt-4 text-sm text-gray-500 dark:text-gray-400">
-                    {internship.duration} • {internship.stipend}
-                  </p>
-
-                </div>
-
-                <div className="flex gap-4">
-
-                  <Link
-                    href={`/dashboard/admin/edit/${internship.id}`}
-                    className="rounded-2xl bg-black px-6 py-3 text-sm font-semibold text-white transition hover:scale-[1.02] dark:bg-white dark:text-black"
-                  >
-                    Edit
-                  </Link>
-
-                  <form
-                    action={async () => {
-                      "use server";
-
-                      await deleteInternship(
-                        internship.id
-                      );
-                    }}
-                    className="inline-block"
-                  >
-
-                    <button
-                      type="submit"
-                      className="rounded-2xl bg-red-600 px-6 py-3 text-sm font-semibold text-white shadow-xl transition duration-300 hover:scale-[1.02] hover:bg-red-700"
+                  <div className="flex gap-2">
+                    <Link
+                      href={`/dashboard/admin/edit/${internship.id}`}
+                      className="inline-flex items-center gap-2 rounded-xl bg-zinc-950 px-4 py-3 text-sm font-black text-white transition hover:scale-[1.02] dark:bg-white dark:text-zinc-950"
                     >
-                      Delete
-                    </button>
+                      <Edit3 size={16} />
+                      Edit
+                    </Link>
 
-                  </form>
-
+                    <form
+                      action={async () => {
+                        "use server";
+                        await deleteInternship(internship.id);
+                      }}
+                    >
+                      <button
+                        type="submit"
+                        className="inline-flex items-center gap-2 rounded-xl bg-red-600 px-4 py-3 text-sm font-black text-white transition hover:bg-red-700"
+                      >
+                        <Trash2 size={16} />
+                        Delete
+                      </button>
+                    </form>
+                  </div>
                 </div>
-
-              </div>
-
+              </article>
             ))}
-
           </div>
-
         </div>
-
-      </div>
-
+      </section>
     </main>
   );
 }

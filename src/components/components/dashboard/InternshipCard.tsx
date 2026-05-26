@@ -2,7 +2,7 @@
 
 import { motion } from "framer-motion";
 import Link from "next/link";
-
+import { ArrowRight, Building2, Clock3, WalletCards } from "lucide-react";
 
 interface InternshipCardProps {
   id: string;
@@ -24,91 +24,63 @@ export default function InternshipCard({
   image,
 }: InternshipCardProps) {
   return (
-    <motion.div
-      onClick={() =>
-        (window.location.href =
-          `/dashboard/internships/${id}`)
-      }
-      initial={{
-        opacity: 0,
-        y: 40,
-      }}
-      animate={{
-        opacity: 1,
-        y: 0,
-      }}
-      transition={{
-        duration: 0.5,
-      }}
-      whileHover={{
-        y: -8,
-      }}
-      className="group cursor-pointer overflow-hidden rounded-[32px] border border-white/20 bg-white/70 shadow-2xl backdrop-blur-xl transition duration-500 hover:-translate-y-2 hover:shadow-[0_25px_80px_rgba(0,0,0,0.25)] dark:border-white/10 dark:bg-zinc-900/80"
+    <motion.article
+      initial={{ opacity: 0, y: 24 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.45 }}
+      whileHover={{ y: -6 }}
+      className="group overflow-hidden rounded-2xl border border-zinc-200 bg-white shadow-sm transition hover:shadow-2xl dark:border-white/10 dark:bg-white/5"
     >
-      <img
-        src={
-          image ||
-          "https://images.unsplash.com/photo-1498050108023-c5249f4df085"
-        }
-        alt={title}
-        className="h-48 w-full object-cover transition duration-700 group-hover:scale-110 sm:h-56"
-      />
+      <Link href={`/dashboard/internships/${id}`} className="block">
+        <div className="relative h-52 overflow-hidden">
+          <img
+            src={image || "https://images.unsplash.com/photo-1497366754035-f200968a6e72"}
+            alt={title}
+            className="h-full w-full object-cover transition duration-700 group-hover:scale-105"
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-zinc-950/75 via-zinc-950/10 to-transparent" />
+          <div className="absolute bottom-4 left-4 right-4 flex items-center justify-between gap-3">
+            <span className="inline-flex items-center gap-2 rounded-full bg-white/90 px-3 py-2 text-xs font-black text-zinc-950 backdrop-blur">
+              <Clock3 size={14} />
+              {duration}
+            </span>
+            <span className="inline-flex items-center gap-2 rounded-full bg-zinc-950/75 px-3 py-2 text-xs font-black text-white backdrop-blur">
+              <WalletCards size={14} />
+              {stipend}
+            </span>
+          </div>
+        </div>
+      </Link>
 
-      <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
-
-      <div className="absolute bottom-4 left-4">
-        <span className="rounded-full bg-white/20 px-4 py-2 text-sm font-medium text-zinc-900 backdrop-blur-md dark:text-white">
-          {duration}
-        </span>
-      </div>
-
-
-      <div className="space-y-6 p-5 sm:p-7">
-    
+      <div className="p-6">
         <div className="flex items-start justify-between gap-4">
-     
           <div>
-            <h2 className="text-xl font-black tracking-tight text-zinc-900 dark:text-white sm:text-2xl">
-              {title}
-            </h2>
-
-            <p className="mt-2 text-sm font-medium text-gray-500 dark:text-gray-300">
+            <p className="flex items-center gap-2 text-sm font-bold text-zinc-500">
+              <Building2 size={16} />
               {company}
             </p>
-      
+            <h3 className="mt-3 text-2xl font-black tracking-tight">{title}</h3>
           </div>
-     
         </div>
 
-        <p className="mt-5 line-clamp-3 text-sm leading-6 text-gray-600 dark:text-gray-400 sm:leading-7">
-          {description}
-        </p>
+        <p className="mt-4 line-clamp-3 text-sm leading-6 text-zinc-600 dark:text-zinc-400">{description}</p>
 
-        <div className="mt-8 flex items-center justify-between">
-     
-          <div>
-     
-            <p className="text-xs uppercase tracking-widest text-gray-500 dark:text-gray-400">
-              Stipend
-            </p>
-
-            <h3 className="mt-1 text-lg font-black text-zinc-900 dark:text-white sm:text-xl">
-              {stipend}  
-            </h3>
-      
-          </div>
-
+        <div className="mt-6 flex items-center justify-between gap-3">
+          <Link
+            href={`/dashboard/internships/${id}`}
+            className="inline-flex items-center gap-2 text-sm font-black text-zinc-700 transition hover:text-zinc-950 dark:text-zinc-300 dark:hover:text-white"
+          >
+            Details
+            <ArrowRight size={16} />
+          </Link>
           <Link
             href={`/dashboard/apply/${id}`}
-            onClick={(e) => e.stopPropagation()}
-            className="rounded-2xl bg-black px-4 py-2.5 text-sm font-semibold text-white transition duration-300 hover:scale-105 dark:bg-white dark:text-black sm:px-5 sm:py-3"
+            className="rounded-xl bg-zinc-950 px-4 py-3 text-sm font-black text-white transition hover:scale-[1.02] dark:bg-white dark:text-zinc-950"
           >
-            Apply
+            Apply Now
           </Link>
         </div>
-   
       </div>
-   
-    </motion.div>
+    </motion.article>
   );
 }

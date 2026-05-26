@@ -1,265 +1,153 @@
+import Link from "next/link";
+import { ArrowRight, BriefcaseBusiness, CheckCircle2, ClipboardList, Sparkles, TrendingUp } from "lucide-react";
 import AnalyticsChart from "@/components/components/dashboard/AnalyticsChart";
-import { getMyApplications } from "@/Services/applications";
-import InternshipCard from "@/components/components/dashboard/InternshipCard";
 import InternshipList from "@/components/components/dashboard/InternshipList";
 import { getInternships } from "@/Services/Internships";
-import ModeToggle from "@/components/components/mode-toggle";
+import { getMyApplications } from "@/Services/applications";
 
 export default async function DashboardPage() {
+  const internships = await getInternships();
+  const applications = await getMyApplications();
 
-  const internships =
-    await getInternships();
-
-  const applications =
-  await getMyApplications();
+  const metrics = [
+    {
+      label: "Open internships",
+      value: internships.length,
+      helper: "Published opportunities",
+      icon: BriefcaseBusiness,
+    },
+    {
+      label: "My applications",
+      value: applications.length,
+      helper: "Submitted from this account",
+      icon: ClipboardList,
+    },
+    {
+      label: "Platform stage",
+      value: "Live",
+      helper: "Connected SaaS workspace",
+      icon: CheckCircle2,
+    },
+  ];
 
   return (
-  <main className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-gray-100 pt-24 px-5 py-8 sm:px-8 xl:px-12 lg:pt-10 lg:pl-24 transition-colors duration-500 dark:from-black dark:via-zinc-950 dark:to-zinc-900">
-
-    <div className="mb-14 flex flex-col gap-8 xl:flex-row xl:items-end xl:justify-between">
-    
-      <div className="pl-20 lg:pl-0">
-
-        
-
-        
-          <p className="mb-3 ml-12 text-sm font-semibold uppercase tracking-[0.3em] text-gray-400">
-            Mindfull Methods Platform
-          </p>
-
-          <h1 className="ml-12 text-6xl font-black tracking-tight text-black dark:text-white sm:text-5xl xl:text-6xl">
-             Explore{" "}
-             <span className="ml-4 bg-gradient-to-r from-zinc-900 to-gray-500 bg-clip-text text-transparent dark:from-white dark:to-gray-400">
-                  Internships
-            </span>
-          </h1>
-        
-
-        <p className="mt-6 ml-12 max-w-2xl text-base sm:text-lg leading-8 text-gray-500 dark:text-gray-400">
-          Discover curated premium internship
-          opportunities from top companies
-          around the world.
-        </p>
-
-      </div>
-
-      <div className="hidden items-center gap-5 lg:flex">
-
-  <ModeToggle />
-
-  <div className="rounded-[28px] border border-white/20 bg-white/60 px-8 py-6 shadow-xl backdrop-blur-xl dark:bg-zinc-900">
-
-    <p className="text-sm font-medium text-gray-400">
-      Total Opportunities
-    </p>
-
-    <h2 className="mt-2 text-5xl font-black text-black dark:text-white">
-      {internships.length}
-    </h2>
-
-  </div>
-
-</div>
-
-    </div>
-
-    <div className="mb-14 grid gap-8 sm:grid-cols-2 xl:grid-cols-3">
-
-  <div className="rounded-[32px] border border-white/20 bg-gradient-to-br from-black to-gray-800 p-8 text-white shadow-2xl">
-
-    <p className="text-sm uppercase tracking-[0.3em] text-gray-400 dark:text-gray-400">
-      Total Internships
-    </p>
-
-    <h2 className="mt-4 text-6xl font-black text-white">
-      {internships.length}
-    </h2>
-
-    <p className="mt-4 text-sm leading-7 text-gray-300">
-      Premium internship opportunities
-      available on the platform.
-    </p>
-
-  </div>
-
-  <div className="rounded-[32px] border border-white/20 bg-white/70 p-8 shadow-2xl backdrop-blur-xl transition duration-500 dark:border-white/10 dark:bg-white/5">
-
-    <p className="text-sm uppercase tracking-[0.3em] text-gray-400">
-      Platform Status
-    </p>
-
-    <h2 className="mt-4 text-5xl font-black">
-      Live
-    </h2>
-
-    <p className="mt-4 text-sm leading-7 text-gray-600 dark:text-gray-400">
-      Real-time applications and
-      internship management system.
-    </p>
-
-  </div>
-
-  <div className="rounded-[32px] border border-white/20 bg-gradient-to-br from-gray-100 to-white p-8 shadow-2xl transition duration-500 dark:border-white/10 dark:from-zinc-900 dark:to-black">
-
-    <p className="text-sm uppercase tracking-[0.3em] text-gray-400">
-      User Experience
-    </p>
-
-    <h2 className="mt-4 text-5xl font-black text-black dark:text-white">
-      Premium
-    </h2>
-
-    <p className="mt-4 text-sm leading-7 text-gray-500 dark:text-gray-400">
-      Modern SaaS dashboard with
-      dynamic user flows.
-    </p>
-
-  </div>
-
-</div>
-    
-      <InternshipList
-        internships={internships}
-      />
-
-      <div className="mt-16 grid gap-8 xl:grid-cols-[1.5fr_1fr]">
-
-  <div className="rounded-[32px] border border-white/20 bg-white/70 p-8 shadow-2xl backdrop-blur-xl transition duration-500 dark:border-white/10 dark:bg-white/5">
-
-    <div className="flex items-center justify-between">
-
-      <div>
-
-        <p className="text-sm uppercase tracking-[0.3em] text-gray-400">
-          Recent Activity
-        </p>
-
-        <h2 className="mt-3 text-3xl font-black text-black dark:text-white">
-          Latest Applications
-        </h2>
-
-      </div>
-
-      <div className="rounded-2xl bg-black px-5 py-3 text-white dark:bg-white dark:text-black">
-        {applications.length}
-      </div>
-
-    </div>
-
-    <div className="mt-8 space-y-5">
-
-      {applications.slice(0, 5).map((application: any, index: number) => (
-
-        <div
-          key={application.id}
-          className="flex items-center justify-between rounded-2xl border border-black/5 bg-black/[0.02] p-5 transition duration-300 dark:border-white/10 dark:bg-white/[0.03]"
-        >
-
+    <main className="min-h-screen px-5 py-8 sm:px-8 xl:px-10">
+      <section className="rounded-3xl bg-zinc-950 p-6 text-white shadow-xl sm:p-8">
+        <div className="grid gap-8 lg:grid-cols-[0.95fr_1.05fr] lg:items-end">
           <div>
-
-            <h3 className="text-lg font-bold text-black dark:text-white">
-              Application #{index + 1}
-            </h3>
-
-            <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
-              Internship application submitted
+            <div className="inline-flex items-center gap-2 rounded-full bg-white/10 px-4 py-2 text-sm font-bold">
+              <Sparkles size={16} />
+              Mindfull Methods workspace
+            </div>
+            <h1 className="mt-6 max-w-4xl text-4xl font-black tracking-tight sm:text-6xl">
+              Manage internships, applications, and growth from one place.
+            </h1>
+            <p className="mt-5 max-w-2xl text-sm leading-7 text-white/65 sm:text-base">
+              A focused command center for students and admins to move from discovery to application decisions.
             </p>
-
+            <Link
+              href="/dashboard/internships"
+              className="mt-7 inline-flex items-center justify-center gap-2 rounded-xl bg-white px-5 py-4 text-sm font-black text-zinc-950 transition hover:scale-[1.02]"
+            >
+              Browse internships
+              <ArrowRight size={18} />
+            </Link>
           </div>
-
-          <div className="rounded-xl bg-green-100 px-4 py-2 text-sm font-semibold text-green-600 dark:bg-green-500/10 dark:text-green-400">
-            Active
+          <div className="overflow-hidden rounded-2xl border border-white/15 bg-white/10 p-2 shadow-2xl">
+            <img
+              src="/brand-assets/dashboard.png"
+              alt="Mindfull Methods dashboard preview"
+              className="aspect-[16/10] w-full rounded-xl object-cover object-left-top"
+            />
           </div>
+        </div>
+      </section>
 
+      <section className="mt-6 grid gap-4 md:grid-cols-3">
+        {metrics.map((metric) => {
+          const Icon = metric.icon;
+
+          return (
+            <article
+              key={metric.label}
+              className="rounded-2xl border border-zinc-200 bg-white p-5 shadow-sm dark:border-white/10 dark:bg-white/5"
+            >
+              <div className="flex items-center justify-between gap-4">
+                <div>
+                  <p className="text-xs font-black uppercase tracking-[0.2em] text-zinc-500">{metric.label}</p>
+                  <h2 className="mt-3 text-4xl font-black">{metric.value}</h2>
+                </div>
+                <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-zinc-950 text-white dark:bg-white dark:text-zinc-950">
+                  <Icon size={21} />
+                </div>
+              </div>
+              <p className="mt-4 text-sm font-semibold text-zinc-500">{metric.helper}</p>
+            </article>
+          );
+        })}
+      </section>
+
+      <section className="mt-8 grid gap-6 xl:grid-cols-[1.1fr_0.9fr]">
+        <div className="rounded-3xl border border-zinc-200 bg-white p-6 shadow-sm dark:border-white/10 dark:bg-white/5">
+          <div className="mb-6 flex items-center justify-between gap-4">
+            <div>
+              <p className="text-xs font-black uppercase tracking-[0.2em] text-zinc-500">Analytics</p>
+              <h2 className="mt-2 text-2xl font-black">Weekly applications</h2>
+            </div>
+            <TrendingUp className="text-emerald-600" />
+          </div>
+          <AnalyticsChart />
         </div>
 
-      ))}
+        <div className="rounded-3xl border border-zinc-200 bg-white p-6 shadow-sm dark:border-white/10 dark:bg-white/5">
+          <div className="flex items-center justify-between gap-4">
+            <div>
+              <p className="text-xs font-black uppercase tracking-[0.2em] text-zinc-500">Recent activity</p>
+              <h2 className="mt-2 text-2xl font-black">Latest applications</h2>
+            </div>
+            <span className="rounded-xl bg-zinc-950 px-4 py-3 text-sm font-black text-white dark:bg-white dark:text-zinc-950">
+              {applications.length}
+            </span>
+          </div>
 
-    </div>
+          <div className="mt-6 space-y-3">
+            {applications.length === 0 ? (
+              <p className="rounded-2xl border border-dashed border-zinc-300 p-6 text-sm font-semibold leading-6 text-zinc-500 dark:border-white/10">
+                No application activity yet. Submitted applications will show here.
+              </p>
+            ) : (
+              applications.slice(0, 5).map((application: any, index: number) => (
+                <div
+                  key={application.id}
+                  className="flex items-center justify-between gap-4 rounded-2xl bg-[#f7f8f5] p-4 dark:bg-zinc-950"
+                >
+                  <div>
+                    <p className="font-black">Application #{index + 1}</p>
+                    <p className="mt-1 text-sm text-zinc-500">{application.email || "Student application submitted"}</p>
+                  </div>
+                  <span className="rounded-full bg-emerald-50 px-3 py-2 text-xs font-black text-emerald-700 dark:bg-emerald-400/10 dark:text-emerald-300">
+                    {application.status || "Pending"}
+                  </span>
+                </div>
+              ))
+            )}
+          </div>
+        </div>
+      </section>
 
-  </div>
-
-  <div className="rounded-[32px] border border-white/20 bg-gradient-to-br from-black to-gray-800 p-8 text-white shadow-2xl">
-
-    <p className="text-sm uppercase tracking-[0.3em] text-gray-400">
-      Platform Insights
-    </p>
-
-    <h2 className="mt-4 text-5xl font-black">
-      Growth 🚀
-    </h2>
-
-    <p className="mt-6 text-sm leading-8 text-gray-300">
-      Your platform now supports
-      responsive dashboards,
-      real-time applications,
-      authentication flows,
-      and premium SaaS UI patterns.
-    </p>
-
-    <div className="mt-10 space-y-4">
-
-      <div className="flex items-center justify-between">
-        <span className="text-sm text-gray-400">
-          Dashboard UI
-        </span>
-
-        <span className="font-bold">
-          95%
-        </span>
-      </div>
-
-      <div className="h-3 overflow-hidden rounded-full bg-white/10">
-        <div className="h-full w-[95%] rounded-full bg-white" />
-      </div>
-
-      <div className="flex items-center justify-between">
-        <span className="text-sm text-gray-400">
-          Backend Integration
-        </span>
-
-        <span className="font-bold">
-          90%
-        </span>
-      </div>
-
-      <div className="h-3 overflow-hidden rounded-full bg-white/10">
-        <div className="h-full w-[90%] rounded-full bg-white" />
-      </div>
-
-    </div>
-
-  </div>
-
-</div>
-<div className="mt-16 rounded-[32px] border border-white/20 bg-white/70 p-8 shadow-2xl backdrop-blur-xl transition duration-500 dark:border-white/10 dark:bg-white/5">
-
-  <div className="mb-10 flex items-center justify-between">
-
-    <div>
-
-      <p className="text-sm uppercase tracking-[0.3em] text-gray-400">
-        Analytics Overview
-      </p>
-
-      <h2 className="mt-3 text-3xl font-black text-black dark:text-white">
-        Weekly Applications
-      </h2>
-
-    </div>
-
-    <div className="rounded-2xl bg-black px-5 py-3 text-white dark:bg-white dark:text-black">
-      Live Data
-    </div>
-
-  </div>
-
-  <AnalyticsChart />
-
-</div>
-
-
-
-  </main>
-);
+      <section className="mt-8 rounded-3xl border border-zinc-200 bg-white p-6 shadow-sm dark:border-white/10 dark:bg-white/5">
+        <div className="mb-6 flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
+          <div>
+            <p className="text-xs font-black uppercase tracking-[0.2em] text-zinc-500">Featured internships</p>
+            <h2 className="mt-2 text-3xl font-black">Explore active opportunities</h2>
+          </div>
+          <Link href="/dashboard/internships" className="inline-flex items-center gap-2 text-sm font-black">
+            View catalog
+            <ArrowRight size={17} />
+          </Link>
+        </div>
+        <InternshipList internships={internships} />
+      </section>
+    </main>
+  );
 }
