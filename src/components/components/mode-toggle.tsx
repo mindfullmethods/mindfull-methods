@@ -15,7 +15,10 @@ export default function ModeToggle() {
     useState(false);
 
   useEffect(() => {
-    setMounted(true);
+    const id = window.requestAnimationFrame(() => {
+      setMounted(true);
+    });
+    return () => window.cancelAnimationFrame(id);
   }, []);
 
   if (!mounted) {

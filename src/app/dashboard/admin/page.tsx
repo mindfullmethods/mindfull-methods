@@ -97,7 +97,7 @@ export default async function AdminPage() {
               </div>
             )}
 
-            {internships.map((internship: any) => (
+            {internships.map((internship) => (
               <article
                 key={internship.id}
                 className="rounded-2xl border border-zinc-200 bg-[#f7f8f5] p-4 dark:border-white/10 dark:bg-zinc-950"

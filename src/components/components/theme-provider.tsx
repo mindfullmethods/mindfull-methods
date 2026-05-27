@@ -16,6 +16,7 @@ export function ThemeProvider({
       attribute="class"
       defaultTheme="dark"
       enableSystem
+      scriptProps={{ type: "application/json" }}
     >
       {children}
     </NextThemesProvider>

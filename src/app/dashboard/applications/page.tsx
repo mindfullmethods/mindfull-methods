@@ -39,7 +39,7 @@ export default async function ApplicationsPage() {
           </div>
         ) : (
           <div className="overflow-hidden rounded-3xl border border-zinc-200 bg-white shadow-sm dark:border-white/10 dark:bg-white/5">
-            {applications.map((application: any) => (
+            {applications.map((application) => (
               <div
                 key={application.id}
                 className="grid gap-5 border-b border-zinc-100 p-5 last:border-b-0 dark:border-white/10 lg:grid-cols-[1fr_auto]"

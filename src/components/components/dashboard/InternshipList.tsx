@@ -3,10 +3,20 @@
 import { useState } from "react";
 import InternshipCard from "./InternshipCard";
 
+type InternshipListItem = {
+  id: string;
+  title: string;
+  company: string;
+  description: string;
+  duration: string;
+  stipend: string;
+  image_url?: string;
+};
+
 export default function InternshipList({
   internships,
 }: {
-  internships: any[];
+  internships: InternshipListItem[];
 }) {
 
   const [search, setSearch] =
@@ -160,7 +170,7 @@ export default function InternshipList({
       <div className="grid gap-10 sm:grid-cols-2 2xl:grid-cols-3">
 
         {sortedInternships.slice(0, visibleCount).map(
-          (internship: any) => (
+          (internship) => (
             <InternshipCard
               key={internship.id}
               id={internship.id}
@@ -176,7 +186,8 @@ export default function InternshipList({
                 internship.stipend
               }
               image={
-                internship.image_url
+                internship.image_url ||
+                "https://images.unsplash.com/photo-1497366754035-f200968a6e72"
               }
             />
           )

@@ -43,7 +43,7 @@ export default async function InternshipsPage() {
         </section>
       ) : (
         <section className="mt-8 grid gap-5 md:grid-cols-2 xl:grid-cols-3">
-          {internships.map((internship: any) => (
+          {internships.map((internship) => (
             <InternshipCard
               key={internship.id}
               id={internship.id}

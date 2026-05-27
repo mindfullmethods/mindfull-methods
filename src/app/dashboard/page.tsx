@@ -116,7 +116,7 @@ export default async function DashboardPage() {
                 No application activity yet. Submitted applications will show here.
               </p>
             ) : (
-              applications.slice(0, 5).map((application: any, index: number) => (
+              applications.slice(0, 5).map((application, index: number) => (
                 <div
                   key={application.id}
                   className="flex items-center justify-between gap-4 rounded-2xl bg-[#f7f8f5] p-4 dark:bg-zinc-950"

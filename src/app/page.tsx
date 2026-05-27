@@ -1,344 +1,319 @@
-import Link from "next/link";
-import {
-  ArrowRight,
-  BarChart3,
-  BriefcaseBusiness,
-  CheckCircle2,
-  ClipboardList,
-  GraduationCap,
-  ShieldCheck,
-  Sparkles,
-} from "lucide-react";
+import { BarChart3, BriefcaseBusiness, GraduationCap, ShieldCheck, Sparkles, Star } from "lucide-react";
 
-const programs = [
-  {
-    title: "Frontend Engineering",
-    level: "Beginner friendly",
-    description: "Build production-ready interfaces with React, Next.js, TypeScript, and Tailwind CSS.",
-    image: "https://images.unsplash.com/photo-1516321318423-f06f85e504b3",
-  },
-  {
-    title: "Product Design",
-    level: "Portfolio track",
-    description: "Learn research, wireframing, visual systems, and polished product storytelling.",
-    image: "https://images.unsplash.com/photo-1586717791821-3f44a563fa4c",
-  },
-  {
-    title: "Data Analytics",
-    level: "Project based",
-    description: "Turn raw datasets into dashboards, insights, and clear business recommendations.",
-    image: "https://images.unsplash.com/photo-1551288049-bebda4e38f71",
-  },
-];
+import Badge from "@/components/marketing/Badge";
+import Button from "@/components/marketing/Button";
+import CourseCard from "@/components/marketing/CourseCard";
+import FAQAccordion from "@/components/marketing/FAQAccordion";
+import Footer from "@/components/marketing/Footer";
+import Navbar from "@/components/marketing/Navbar";
+import StatsStrip from "@/components/marketing/StatsStrip";
+import StepsTimeline, { type StepModel } from "@/components/marketing/StepsTimeline";
+import TestimonialCard from "@/components/marketing/TestimonialCard";
 
-const stats = [
-  { label: "Students enrolled", value: "10K+" },
-  { label: "Project tracks", value: "24" },
-  { label: "Completion rate", value: "95%" },
-  { label: "Average rating", value: "4.9" },
-];
-
-const steps = [
-  {
-    title: "Choose a track",
-    description: "Browse curated internship programs matched to your skill level and career goal.",
-    icon: BriefcaseBusiness,
-  },
-  {
-    title: "Apply in minutes",
-    description: "Submit your profile and resume through a simple, focused application flow.",
-    icon: ClipboardList,
-  },
-  {
-    title: "Build proof of work",
-    description: "Complete guided projects and graduate with portfolio-ready outcomes.",
-    icon: GraduationCap,
-  },
-];
+import { getCourses, getFeaturedCourses } from "@/lib/courses";
+import { getFaqs } from "@/lib/faqs";
+import { getTestimonials } from "@/lib/testimonials";
 
 export default function HomePage() {
+  const featured = getFeaturedCourses();
+  const courses = getCourses();
+  const testimonials = getTestimonials();
+  const faqs = getFaqs();
+
+  const steps: StepModel[] = [
+    {
+      title: "Apply & pick your track",
+      description: "Tell us your goals. We match you to the right structured mentorship course.",
+      icon: BriefcaseBusiness,
+    },
+    {
+      title: "Learn with weekly milestones",
+      description: "Cohort-based learning with clear outcomes, exercises, and mentor touchpoints.",
+      icon: Sparkles,
+    },
+    {
+      title: "Get mentored & build proof",
+      description: "Ship guided projects, receive feedback, and leave with a portfolio-ready result.",
+      icon: GraduationCap,
+    },
+  ];
+
   return (
-    <main className="min-h-screen bg-[#f7f8f5] text-zinc-950 dark:bg-zinc-950 dark:text-white">
-      <section className="relative min-h-[92vh] overflow-hidden">
-        <img
-          src="/brand-assets/linkedin-cover.png"
-          alt="Mindfull Methods brand cover"
-          className="absolute inset-0 h-full w-full object-cover"
-        />
-        <div className="absolute inset-0 bg-zinc-950/72" />
+    <div className="min-h-screen bg-[#f7f8f5] text-zinc-950 dark:bg-zinc-950 dark:text-white">
+      <Navbar />
 
-        <div className="relative z-10 mx-auto flex min-h-[92vh] max-w-7xl flex-col px-5 py-5 sm:px-8 lg:px-10">
-          <nav className="flex items-center justify-between gap-4">
-            <Link href="/" className="flex items-center gap-3 text-white">
-              <span className="flex h-12 w-12 items-center justify-center overflow-hidden rounded-xl bg-white p-1 shadow-lg">
-                <img src="/brand-assets/logo.png" alt="Mindfull Methods logo" className="h-full w-full object-contain" />
-              </span>
-              <span>
-                <span className="block text-base font-black tracking-tight">Mindfull Methods</span>
-                <span className="block text-xs font-bold uppercase tracking-[0.24em] text-white/55">
-                  Internship platform
-                </span>
-              </span>
-            </Link>
+      <main>
+        {/* Hero */}
+        <section className="relative overflow-hidden border-b border-white/10 bg-zinc-950 px-5 py-16 text-white sm:px-8 lg:px-10">
+          <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_top,rgba(139,92,246,0.35),transparent_55%)]" />
+          <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_bottom,rgba(20,184,166,0.25),transparent_50%)]" />
 
-            <div className="hidden items-center gap-7 md:flex">
-              <a href="#programs" className="text-sm font-bold text-white/75 transition hover:text-white">
-                Programs
-              </a>
-              <a href="#workflow" className="text-sm font-bold text-white/75 transition hover:text-white">
-                Workflow
-              </a>
-              <a href="#outcomes" className="text-sm font-bold text-white/75 transition hover:text-white">
-                Outcomes
-              </a>
-            </div>
-
-            <div className="flex items-center gap-2">
-              <Link
-                href="/login"
-                className="rounded-xl px-4 py-2 text-sm font-bold text-white transition hover:bg-white/10"
-              >
-                Login
-              </Link>
-              <Link
-                href="/signup"
-                className="rounded-xl bg-white px-4 py-2 text-sm font-black text-zinc-950 transition hover:scale-[1.02]"
-              >
-                Apply
-              </Link>
-            </div>
-          </nav>
-
-          <div className="grid flex-1 items-end gap-10 pb-12 pt-20 lg:grid-cols-[0.95fr_1.05fr] lg:pb-16">
-            <div className="max-w-4xl">
-              <div className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/10 px-4 py-2 text-sm font-bold text-white backdrop-blur-md">
-                <Sparkles size={16} />
-                Career-ready internships with guided projects
-              </div>
-              <h1 className="mt-6 max-w-4xl text-5xl font-black leading-[1.02] tracking-tight text-white sm:text-6xl lg:text-7xl">
-                Build experience before your first full-time role.
+          <div className="relative mx-auto grid max-w-7xl gap-10 md:grid-cols-[0.95fr_1.05fr] md:items-center">
+            <div>
+              <Badge tone="violet">Mentorship-first learning</Badge>
+              <h1 className="mt-6 text-4xl font-black tracking-tight sm:text-5xl lg:text-6xl">
+                Learn courses the way mentors teach
               </h1>
-              <p className="mt-6 max-w-2xl text-lg leading-8 text-white/75">
-                Mindfull Methods helps students find structured internships, complete practical projects, and track
-                applications from one modern workspace.
+              <p className="mt-4 max-w-2xl text-base leading-7 text-white/70">
+                A curated catalog of structured programs with real mentorship, milestone guidance, and practical
+                outcomes.
               </p>
-              <div className="mt-9 flex flex-wrap gap-3">
-                <Link
-                  href="/signup"
-                  className="inline-flex items-center gap-2 rounded-xl bg-white px-6 py-4 text-sm font-black text-zinc-950 transition hover:scale-[1.02]"
-                >
-                  Start Application
-                  <ArrowRight size={18} />
-                </Link>
-                <Link
-                  href="/dashboard/internships"
-                  className="inline-flex items-center gap-2 rounded-xl border border-white/25 px-6 py-4 text-sm font-black text-white transition hover:bg-white/10"
-                >
-                  Browse Programs
-                </Link>
-              </div>
-            </div>
 
-            <div className="rounded-2xl border border-white/15 bg-white/10 p-3 shadow-2xl backdrop-blur-xl">
-              <img
-                src="/brand-assets/deployment-linkedin-post.png"
-                alt="Mindfull Methods deployed platform preview"
-                className="aspect-[16/10] w-full rounded-xl object-cover object-left-top"
-              />
-              <div className="grid gap-3 p-3 sm:grid-cols-2">
-                {stats.map((item) => (
-                  <div key={item.label} className="rounded-xl bg-white/10 p-3">
-                    <span className="text-xs font-bold text-white/60">{item.label}</span>
-                    <span className="mt-1 block text-2xl font-black text-white">{item.value}</span>
+              <div className="mt-8 flex flex-wrap items-center gap-3">
+                <Button href="/courses" variant="primary" size="lg">
+                  Browse courses
+                </Button>
+                <Button href="/contact" variant="secondary" size="lg">
+                  Book a free call
+                </Button>
+              </div>
+
+              <div className="mt-10 grid gap-3 sm:grid-cols-3">
+                {[
+                  { label: "Mentor sessions", value: "Weekly" },
+                  { label: "Project-based", value: "Yes" },
+                  { label: "Career support", value: "Included" },
+                ].map((s) => (
+                  <div key={s.label} className="rounded-2xl border border-white/10 bg-white/5 p-4">
+                    <p className="text-xs font-bold text-white/60">{s.label}</p>
+                    <p className="mt-1 text-xl font-black">{s.value}</p>
                   </div>
                 ))}
               </div>
             </div>
-          </div>
-        </div>
-      </section>
 
-      <section className="mx-auto max-w-7xl px-5 py-20 sm:px-8 lg:px-10">
-        <div className="grid gap-6 lg:grid-cols-[0.8fr_1.2fr]">
-          <div className="flex flex-col justify-center">
-            <p className="text-sm font-black uppercase tracking-[0.28em] text-violet-700 dark:text-violet-300">
-              Product proof
-            </p>
-            <h2 className="mt-4 text-4xl font-black tracking-tight sm:text-5xl">
-              Designed from your real platform screenshots.
-            </h2>
-            <p className="mt-5 text-sm leading-7 text-zinc-600 dark:text-zinc-400">
-              The interface now uses your Mindfull Methods identity and showcases the deployed product, mobile views,
-              dashboard, and admin panel as part of the landing experience.
-            </p>
-          </div>
+            <div className="relative">
+              <div className="absolute -inset-10 -z-10 rounded-[3rem] bg-[radial-gradient(circle_at_top,rgba(139,92,246,0.35),transparent_60%)] blur-2xl" />
 
-          <div className="grid gap-4">
-            <div className="overflow-hidden rounded-2xl border border-zinc-200 bg-white p-2 shadow-xl dark:border-white/10 dark:bg-white/5">
-              <img
-                src="/brand-assets/dashboard.png"
-                alt="Mindfull Methods dashboard and admin panel sample"
-                className="w-full rounded-xl object-cover"
-              />
-            </div>
-            <div className="overflow-hidden rounded-2xl border border-zinc-200 bg-white p-2 shadow-xl dark:border-white/10 dark:bg-white/5">
-              <img
-                src="/brand-assets/linkedin-cover.png"
-                alt="Mindfull Methods brand cover"
-                className="aspect-[21/8] w-full rounded-xl object-cover"
-              />
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <section id="programs" className="mx-auto max-w-7xl px-5 py-20 sm:px-8 lg:px-10">
-        <div className="flex flex-col gap-5 md:flex-row md:items-end md:justify-between">
-          <div>
-            <p className="text-sm font-black uppercase tracking-[0.28em] text-emerald-700 dark:text-emerald-300">
-              Featured tracks
-            </p>
-            <h2 className="mt-4 max-w-2xl text-4xl font-black tracking-tight sm:text-5xl">
-              Practical programs students can finish with real proof.
-            </h2>
-          </div>
-          <Link href="/dashboard/internships" className="inline-flex items-center gap-2 text-sm font-black">
-            View all internships
-            <ArrowRight size={17} />
-          </Link>
-        </div>
-
-        <div className="mt-10 grid gap-5 md:grid-cols-3">
-          {programs.map((program) => (
-            <article
-              key={program.title}
-              className="overflow-hidden rounded-2xl border border-zinc-200 bg-white shadow-sm transition hover:-translate-y-1 hover:shadow-xl dark:border-white/10 dark:bg-white/5"
-            >
-              <img src={program.image} alt={program.title} className="h-52 w-full object-cover" />
-              <div className="p-6">
-                <span className="rounded-full bg-emerald-50 px-3 py-1 text-xs font-black text-emerald-700 dark:bg-emerald-400/10 dark:text-emerald-300">
-                  {program.level}
-                </span>
-                <h3 className="mt-5 text-2xl font-black">{program.title}</h3>
-                <p className="mt-3 text-sm leading-6 text-zinc-600 dark:text-zinc-400">{program.description}</p>
+              <div className="rounded-3xl border border-white/10 bg-white/5 p-4 shadow-2xl backdrop-blur">
+                <img
+                  src="/brand-assets/deployment-linkedin-post.png"
+                  alt="Mindfull Methods preview"
+                  className="aspect-[16/10] w-full rounded-2xl object-cover"
+                />
               </div>
-            </article>
-          ))}
-        </div>
-      </section>
 
-      <section id="workflow" className="border-y border-zinc-200 bg-white py-20 dark:border-white/10 dark:bg-white/[0.03]">
-        <div className="mx-auto grid max-w-7xl gap-10 px-5 sm:px-8 lg:grid-cols-[0.75fr_1.25fr] lg:px-10">
-          <div>
-            <p className="text-sm font-black uppercase tracking-[0.28em] text-sky-700 dark:text-sky-300">
-              Student workflow
-            </p>
-            <h2 className="mt-4 text-4xl font-black tracking-tight sm:text-5xl">
-              From browsing to building, the path is clear.
-            </h2>
-          </div>
-
-          <div className="grid gap-4">
-            {steps.map((step, index) => {
-              const Icon = step.icon;
-
-              return (
-                <article
-                  key={step.title}
-                  className="flex gap-5 rounded-2xl border border-zinc-200 bg-[#f7f8f5] p-5 dark:border-white/10 dark:bg-zinc-950"
-                >
-                  <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-zinc-950 text-white dark:bg-white dark:text-zinc-950">
-                    <Icon size={20} />
+              <div className="mt-4 grid gap-4 sm:grid-cols-2">
+                <div className="rounded-3xl border border-white/10 bg-white/5 p-5">
+                  <div className="flex items-center gap-3">
+                    <ShieldCheck size={18} className="text-white/80" />
+                    <p className="text-sm font-black text-white/80">Structured track</p>
                   </div>
-                  <div>
-                    <p className="text-sm font-black text-zinc-500">Step {index + 1}</p>
-                    <h3 className="mt-1 text-xl font-black">{step.title}</h3>
-                    <p className="mt-2 text-sm leading-6 text-zinc-600 dark:text-zinc-400">{step.description}</p>
+                  <p className="mt-3 text-sm leading-6 text-white/70">
+                    Milestones, feedback windows, and guided projects—so you always know what to do next.
+                  </p>
+                </div>
+                <div className="rounded-3xl border border-white/10 bg-white/5 p-5">
+                  <div className="flex items-center gap-3">
+                    <BarChart3 size={18} className="text-white/80" />
+                    <p className="text-sm font-black text-white/80">Measurable progress</p>
                   </div>
-                </article>
-              );
-            })}
+                  <p className="mt-3 text-sm leading-6 text-white/70">
+                    You track outcomes as you learn—then present proof in a portfolio-ready format.
+                  </p>
+                </div>
+              </div>
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
 
-      <section id="outcomes" className="mx-auto max-w-7xl px-5 py-20 sm:px-8 lg:px-10">
-        <div className="grid gap-6 lg:grid-cols-3">
-          <div className="lg:col-span-2">
-            <p className="text-sm font-black uppercase tracking-[0.28em] text-zinc-500">Platform outcomes</p>
-            <h2 className="mt-4 max-w-3xl text-4xl font-black tracking-tight sm:text-5xl">
-              Built for students, admins, and measurable progress.
-            </h2>
-          </div>
-          <div className="overflow-hidden rounded-2xl bg-zinc-950 p-3 text-white dark:bg-white dark:text-zinc-950">
-            <img
-              src="/brand-assets/deployment-linkedin-post.png"
-              alt="Live deployment and responsive screenshots"
-              className="aspect-[4/3] w-full rounded-xl object-cover object-left-top"
-            />
-            <div className="p-3">
-              <BarChart3 />
-              <p className="mt-4 text-2xl font-black">Real dashboard</p>
-              <p className="mt-3 text-sm leading-6 text-white/70 dark:text-zinc-600">
-                Track internships, applications, approvals, and platform activity from the admin workspace.
+        {/* Trust / Stats */}
+        <section className="mx-auto max-w-7xl px-5 py-14 sm:px-8 lg:px-10">
+          <div className="flex flex-col gap-5 md:flex-row md:items-end md:justify-between">
+            <div className="max-w-xl">
+              <p className="text-sm font-black uppercase tracking-[0.28em] text-white/60">Trusted mentorship</p>
+              <h2 className="mt-4 text-3xl font-black tracking-tight text-zinc-950 dark:text-white sm:text-4xl">
+                Built for outcomes, not just content
+              </h2>
+              <p className="mt-3 text-sm leading-7 text-zinc-600 dark:text-white/70">
+                From enrollment to final capstone, you’ll get coaching designed to move you forward.
               </p>
             </div>
+            <div className="w-full max-w-2xl">
+              <StatsStrip
+                stats={[
+                  { label: "Courses available", value: String(courses.length) },
+                  { label: "Student outcomes", value: "Portfolio-ready" },
+                  { label: "Mentor touchpoints", value: "Weekly" },
+                  { label: "Average rating", value: "4.9" },
+                ]}
+              />
+            </div>
           </div>
-        </div>
+        </section>
 
-        <div className="mt-8 grid gap-4 md:grid-cols-3">
-          {[
-            "Supabase authentication",
-            "Internship CRUD dashboard",
-            "Student application tracking",
-            "Responsive dark mode UI",
-            "Admin review workflow",
-            "Production-ready Next.js app",
-          ].map((item) => (
-            <div
-              key={item}
-              className="flex items-center gap-3 rounded-xl border border-zinc-200 bg-white p-4 text-sm font-bold dark:border-white/10 dark:bg-white/5"
-            >
-              <CheckCircle2 size={18} className="text-emerald-600" />
-              {item}
+        {/* Benefits */}
+        <section className="border-y border-white/10 bg-[#f7f8f5] px-5 py-16 text-zinc-950 sm:px-8 lg:px-10 dark:bg-zinc-950 dark:text-white">
+          <div className="mx-auto max-w-7xl">
+            <div className="max-w-3xl">
+              <p className="text-sm font-black uppercase tracking-[0.28em] text-violet-700 dark:text-violet-300">
+                Why our mentorship works
+              </p>
+              <h2 className="mt-4 text-4xl font-black tracking-tight sm:text-5xl">A learning system that sticks</h2>
             </div>
-          ))}
-        </div>
-      </section>
 
-      <section className="relative overflow-hidden bg-zinc-950 px-5 py-16 text-white sm:px-8 lg:px-10">
-        <img
-          src="/brand-assets/linkedin-cover.png"
-          alt="Mindfull Methods brand background"
-          className="absolute inset-0 h-full w-full object-cover opacity-30"
-        />
-        <div className="absolute inset-0 bg-zinc-950/75" />
-        <div className="relative z-10 mx-auto flex max-w-7xl flex-col gap-8 md:flex-row md:items-center md:justify-between">
-          <div>
-            <div className="inline-flex items-center gap-2 rounded-full bg-white/10 px-4 py-2 text-sm font-bold">
-              <ShieldCheck size={16} />
-              Ready for your next application
+            <div className="mt-10 grid gap-5 md:grid-cols-2 lg:grid-cols-4">
+              {[
+                {
+                  title: "Real mentor feedback",
+                  description: "Weekly coaching and targeted reviews so you improve fast.",
+                  icon: ShieldCheck,
+                },
+                {
+                  title: "Structured milestones",
+                  description: "Clear outcomes and step-by-step guidance from day one.",
+                  icon: Sparkles,
+                },
+                {
+                  title: "Practical projects",
+                  description: "Ship guided work and build proof with a capstone result.",
+                  icon: BriefcaseBusiness,
+                },
+                {
+                  title: "Career-ready delivery",
+                  description: "Present your outcomes in a portfolio format recruiters understand.",
+                  icon: BarChart3,
+                },
+              ].map((f) => (
+                <article
+                  key={f.title}
+                  className="rounded-3xl border border-black/10 bg-white/70 p-6 shadow-sm backdrop-blur dark:border-white/10 dark:bg-white/5"
+                >
+                  <div className="flex items-center gap-3">
+                    <span className="flex h-12 w-12 items-center justify-center rounded-2xl bg-zinc-950 text-white dark:bg-white dark:text-zinc-950">
+                      <f.icon size={18} />
+                    </span>
+                    <p className="text-sm font-black">{f.title}</p>
+                  </div>
+                  <p className="mt-4 text-sm leading-6 text-zinc-700 dark:text-white/70">{f.description}</p>
+                </article>
+              ))}
             </div>
-            <h2 className="mt-5 max-w-2xl text-4xl font-black tracking-tight sm:text-5xl">
-              Start with a focused internship platform, not scattered forms.
+          </div>
+        </section>
+
+        {/* Featured Courses */}
+        <section className="mx-auto max-w-7xl px-5 py-16 sm:px-8 lg:px-10">
+          <div className="flex flex-col gap-5 md:flex-row md:items-end md:justify-between">
+            <div>
+              <p className="text-sm font-black uppercase tracking-[0.28em] text-white/60">Featured courses</p>
+              <h2 className="mt-4 text-4xl font-black tracking-tight text-zinc-950 dark:text-white sm:text-5xl">
+                Programs you can finish with proof
+              </h2>
+            </div>
+            <Button href="/courses" variant="secondary" size="md">
+              View all courses
+            </Button>
+          </div>
+
+          <div className="mt-10 grid gap-5 md:grid-cols-2 lg:grid-cols-3">
+            {featured.map((c) => (
+              <CourseCard
+                key={c.slug}
+                course={{
+                  slug: c.slug,
+                  title: c.title,
+                  shortDescription: c.shortDescription,
+                  level: c.level,
+                  duration: c.duration,
+                  mode: c.mode,
+                  tags: c.tags,
+                  priceLabel: c.priceLabel,
+                  imageUrl: c.imageUrl,
+                }}
+              />
+            ))}
+          </div>
+        </section>
+
+        {/* How it works */}
+        <section className="border-y border-white/10 bg-zinc-950 px-5 py-16 text-white sm:px-8 lg:px-10">
+          <div className="mx-auto max-w-7xl">
+            <div className="max-w-3xl">
+              <p className="text-sm font-black uppercase tracking-[0.28em] text-white/60">How it works</p>
+              <h2 className="mt-4 text-4xl font-black tracking-tight sm:text-5xl">From apply to finished work</h2>
+              <p className="mt-4 text-sm leading-7 text-white/70">
+                A simple rhythm: apply, learn with milestones, and get mentored as you build proof.
+              </p>
+            </div>
+
+            <div className="mt-10">
+              <StepsTimeline steps={steps} />
+            </div>
+          </div>
+        </section>
+
+        {/* Testimonials */}
+        <section className="mx-auto max-w-7xl px-5 py-16 sm:px-8 lg:px-10">
+          <div className="max-w-3xl">
+            <p className="text-sm font-black uppercase tracking-[0.28em] text-white/60">What learners say</p>
+            <h2 className="mt-4 text-4xl font-black tracking-tight text-zinc-950 dark:text-white sm:text-5xl">
+              Mentorship that feels personal
             </h2>
           </div>
-          <Link
-            href="/signup"
-            className="inline-flex items-center justify-center gap-2 rounded-xl bg-white px-6 py-4 text-sm font-black text-zinc-950 transition hover:scale-[1.02]"
-          >
-            Create Account
-            <ArrowRight size={18} />
-          </Link>
-        </div>
-      </section>
 
-      <footer className="border-t border-zinc-200 bg-[#f7f8f5] px-5 py-8 text-sm font-bold text-zinc-500 dark:border-white/10 dark:bg-zinc-950 sm:px-8 lg:px-10">
-        <div className="mx-auto flex max-w-7xl flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-          <span>Mindfull Methods</span>
-          <span>Internship SaaS Platform</span>
-        </div>
-      </footer>
-    </main>
+          <div className="mt-10 grid gap-5 md:grid-cols-2 lg:grid-cols-3">
+            {testimonials.map((t) => (
+              <TestimonialCard key={t.name} quote={t.quote} name={t.name} role={t.role} rating={t.rating} />
+            ))}
+          </div>
+        </section>
+
+        {/* FAQ */}
+        <section className="border-y border-white/10 bg-zinc-950 px-5 py-16 text-white sm:px-8 lg:px-10">
+          <div className="mx-auto max-w-7xl grid gap-10 lg:grid-cols-[0.9fr_1.1fr] lg:items-start">
+            <div>
+              <p className="text-sm font-black uppercase tracking-[0.28em] text-white/60">FAQ</p>
+              <h2 className="mt-4 text-4xl font-black tracking-tight sm:text-5xl">Questions, answered</h2>
+              <p className="mt-4 text-sm leading-7 text-white/70">
+                If you’re deciding between tracks, these answers will help you choose confidently.
+              </p>
+            </div>
+            <div className="rounded-3xl border border-white/10 bg-white/5 p-6 shadow-sm">
+              <FAQAccordion items={faqs.map((f) => ({ question: f.question, answer: f.answer }))} />
+            </div>
+          </div>
+        </section>
+
+        {/* Final CTA */}
+        <section className="px-5 py-16 sm:px-8 lg:px-10">
+          <div className="mx-auto max-w-7xl overflow-hidden rounded-[2.5rem] border border-white/10 bg-zinc-950 p-8 text-white shadow-2xl sm:p-12">
+            <div className="grid gap-10 lg:grid-cols-[1.05fr_0.95fr] lg:items-center">
+              <div>
+                <p className="text-sm font-black uppercase tracking-[0.28em] text-white/60">Ready?</p>
+                <h2 className="mt-4 text-4xl font-black tracking-tight sm:text-5xl">
+                  Get matched to the right course in minutes
+                </h2>
+                <p className="mt-4 text-sm leading-7 text-white/70">
+                  Share your goals and we’ll recommend the best track. No pressure, just mentorship guidance.
+                </p>
+              </div>
+              <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-end lg:flex-col lg:justify-start">
+                <Button href="/contact" variant="primary" size="lg">
+                  Book a free call
+                </Button>
+                <Button href="/courses" variant="secondary" size="lg">
+                  Browse courses
+                </Button>
+              </div>
+            </div>
+
+            <div className="mt-10 flex flex-wrap items-center gap-4 text-sm font-bold text-white/70">
+              <span className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-2">
+                <Star size={16} className="fill-white/80 text-white/80" />
+                4.9 average rating
+              </span>
+              <span className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-2">
+                <ShieldCheck size={16} className="text-white/80" />
+                Mentor-guided cohorts
+              </span>
+            </div>
+          </div>
+        </section>
+      </main>
+
+      <Footer />
+    </div>
   );
 }
+

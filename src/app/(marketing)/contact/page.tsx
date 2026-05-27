@@ -1,0 +1,275 @@
+"use client";
+
+import { useMemo, useState, type FormEvent } from "react";
+
+import Button from "@/components/marketing/Button";
+import { getCourses } from "@/lib/courses";
+
+type ContactForm = {
+  name: string;
+  email: string;
+  phone?: string;
+  interest: string;
+  message: string;
+};
+
+type ContactStatus = "idle" | "sending" | "sent" | "error";
+
+function isValidEmail(email: string) {
+  // Simple and effective email format check (client-side only).
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim());
+}
+
+export default function ContactPage() {
+  const courses = getCourses();
+
+  const interestOptions = useMemo(() => {
+    return [
+      { value: "general", label: "General guidance" },
+      ...courses.map((c) => ({ value: c.slug, label: c.title })),
+    ];
+  }, [courses]);
+
+  const [form, setForm] = useState<ContactForm>({
+    name: "",
+    email: "",
+    phone: "",
+    interest: "general",
+    message: "",
+  });
+
+  const [status, setStatus] = useState<ContactStatus>("idle");
+  const [errors, setErrors] = useState<Partial<Record<keyof ContactForm, string>>>({});
+
+  function validate(next: ContactForm) {
+    const nextErrors: Partial<Record<keyof ContactForm, string>> = {};
+
+    if (!next.name.trim() || next.name.trim().length < 2) {
+      nextErrors.name = "Please enter your full name.";
+    }
+    if (!next.email.trim() || !isValidEmail(next.email)) {
+      nextErrors.email = "Please enter a valid email address.";
+    }
+    if (!next.interest.trim()) {
+      nextErrors.interest = "Please choose an interest.";
+    }
+    if (!next.message.trim() || next.message.trim().length < 10) {
+      nextErrors.message = "Message should be at least 10 characters.";
+    }
+
+    if (next.phone && next.phone.trim().length > 0) {
+      const digits = next.phone.replace(/\D/g, "");
+      if (digits.length < 8) nextErrors.phone = "Phone number looks too short.";
+    }
+
+    return nextErrors;
+  }
+
+  async function onSubmit(e: FormEvent) {
+    e.preventDefault();
+    setStatus("idle");
+
+    const nextErrors = validate(form);
+    setErrors(nextErrors);
+    if (Object.keys(nextErrors).length > 0) {
+      setStatus("error");
+      return;
+    }
+
+    setStatus("sending");
+    try {
+      const res = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(form),
+      });
+
+      if (!res.ok) {
+        setStatus("error");
+        return;
+      }
+
+      setStatus("sent");
+      setForm({ name: "", email: "", phone: "", interest: "general", message: "" });
+      setErrors({});
+    } catch {
+      setStatus("error");
+    }
+  }
+
+  return (
+    <main className="mx-auto max-w-7xl px-5 py-16 sm:px-8 lg:px-10">
+      <div className="max-w-3xl">
+        <p className="text-sm font-black uppercase tracking-[0.28em] text-white/60">Contact</p>
+        <h1 className="mt-4 text-4xl font-black tracking-tight text-white sm:text-5xl">
+          Talk to a mentor
+        </h1>
+        <p className="mt-4 text-sm leading-7 text-white/70">
+          Tell us your goals and we’ll recommend the best mentorship track. Response time: Mon–Fri, 10am–6pm.
+        </p>
+      </div>
+
+      <div className="mt-12 grid gap-10 lg:grid-cols-[0.95fr_1.05fr]">
+        <section className="rounded-[2rem] border border-white/10 bg-zinc-950/90 p-6 shadow-2xl sm:p-8">
+          <div className="flex items-start justify-between gap-6">
+            <div>
+              <p className="text-sm font-black uppercase tracking-[0.28em] text-white/60">Request</p>
+              <h2 className="mt-3 text-3xl font-black tracking-tight text-white">Send your details</h2>
+            </div>
+
+            <div className="hidden sm:block rounded-3xl border border-white/10 bg-white/5 p-4">
+              <p className="text-xs font-bold uppercase tracking-[0.22em] text-white/50">What happens next</p>
+              <div className="mt-3 space-y-2 text-sm font-bold text-white/70">
+                <div className="flex items-center gap-2">
+                  <span className="h-2 w-2 rounded-full bg-emerald-400" />
+                  Quick review
+                </div>
+                <div className="flex items-center gap-2">
+                  <span className="h-2 w-2 rounded-full bg-emerald-400" />
+                  Track recommendation
+                </div>
+                <div className="flex items-center gap-2">
+                  <span className="h-2 w-2 rounded-full bg-emerald-400" />
+                  Mentor touchpoint
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <form className="mt-6 space-y-5" onSubmit={onSubmit}>
+            {status === "sent" ? (
+              <div className="rounded-2xl border border-emerald-400/30 bg-emerald-400/10 p-4">
+                <p className="text-sm font-black text-emerald-300">Message sent successfully.</p>
+                <p className="mt-1 text-sm font-bold text-emerald-200/70">
+                  We’ll get back to you soon with next steps.
+                </p>
+              </div>
+            ) : null}
+
+            {status === "error" && Object.keys(errors).length > 0 ? (
+              <div className="rounded-2xl border border-rose-400/30 bg-rose-400/10 p-4">
+                <p className="text-sm font-black text-rose-200">Please fix the highlighted fields.</p>
+              </div>
+            ) : null}
+
+            <div className="grid gap-5 sm:grid-cols-2">
+              <label className="block">
+                <span className="text-sm font-black text-white/80">Full name</span>
+                <input
+                  value={form.name}
+                  onChange={(e) => setForm((p) => ({ ...p, name: e.target.value }))}
+                  className="mt-2 w-full rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-sm font-semibold text-white outline-none placeholder:text-white/40 focus:border-white/20 focus:ring-3 focus:ring-white/10"
+                  placeholder="Your name"
+                />
+                {errors.name ? <p className="mt-2 text-xs font-bold text-rose-200">{errors.name}</p> : null}
+              </label>
+
+              <label className="block">
+                <span className="text-sm font-black text-white/80">Email</span>
+                <input
+                  value={form.email}
+                  onChange={(e) => setForm((p) => ({ ...p, email: e.target.value }))}
+                  className="mt-2 w-full rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-sm font-semibold text-white outline-none placeholder:text-white/40 focus:border-white/20 focus:ring-3 focus:ring-white/10"
+                  placeholder="you@example.com"
+                  inputMode="email"
+                />
+                {errors.email ? <p className="mt-2 text-xs font-bold text-rose-200">{errors.email}</p> : null}
+              </label>
+
+              <label className="block">
+                <span className="text-sm font-black text-white/80">Phone (optional)</span>
+                <input
+                  value={form.phone}
+                  onChange={(e) => setForm((p) => ({ ...p, phone: e.target.value }))}
+                  className="mt-2 w-full rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-sm font-semibold text-white outline-none placeholder:text-white/40 focus:border-white/20 focus:ring-3 focus:ring-white/10"
+                  placeholder="+1 555 123 4567"
+                  inputMode="tel"
+                />
+                {errors.phone ? <p className="mt-2 text-xs font-bold text-rose-200">{errors.phone}</p> : null}
+              </label>
+
+              <label className="block">
+                <span className="text-sm font-black text-white/80">Interest</span>
+                <select
+                  value={form.interest}
+                  onChange={(e) => setForm((p) => ({ ...p, interest: e.target.value }))}
+                  className="mt-2 w-full rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-sm font-semibold text-white outline-none focus:border-white/20 focus:ring-3 focus:ring-white/10"
+                >
+                  {interestOptions.map((o) => (
+                    <option key={o.value} value={o.value} className="text-zinc-950">
+                      {o.label}
+                    </option>
+                  ))}
+                </select>
+                {errors.interest ? <p className="mt-2 text-xs font-bold text-rose-200">{errors.interest}</p> : null}
+              </label>
+            </div>
+
+            <label className="block">
+              <span className="text-sm font-black text-white/80">Message</span>
+              <textarea
+                value={form.message}
+                onChange={(e) => setForm((p) => ({ ...p, message: e.target.value }))}
+                rows={6}
+                className="mt-2 w-full resize-none rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-sm font-semibold text-white outline-none placeholder:text-white/40 focus:border-white/20 focus:ring-3 focus:ring-white/10"
+                placeholder="Tell us what you want to achieve and your current level..."
+              />
+              {errors.message ? <p className="mt-2 text-xs font-bold text-rose-200">{errors.message}</p> : null}
+            </label>
+
+            <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+              <p className="text-xs font-bold text-white/50">
+                By submitting, you agree to be contacted about your request.
+              </p>
+
+              <Button
+                variant="primary"
+                size="lg"
+                type="submit"
+                disabled={status === "sending"}
+                className="w-full sm:w-auto"
+              >
+                {status === "sending" ? "Sending..." : "Send message"}
+              </Button>
+            </div>
+          </form>
+        </section>
+
+        <aside className="space-y-5">
+          <div className="rounded-[2rem] border border-white/10 bg-white/5 p-6 sm:p-8">
+            <p className="text-sm font-black uppercase tracking-[0.28em] text-white/60">Support</p>
+            <h2 className="mt-3 text-3xl font-black tracking-tight text-white">Quick answers</h2>
+            <p className="mt-4 text-sm leading-7 text-white/70">
+              Prefer email? Reach out and we’ll help you pick the right course track.
+            </p>
+
+            <div className="mt-6 space-y-3 text-sm font-bold text-white/80">
+              <div className="flex items-center gap-3 rounded-2xl border border-white/10 bg-white/5 p-4">
+                <span className="h-3 w-3 rounded-full bg-violet-400" />
+                support@mindfullmethods.com
+              </div>
+              <div className="flex items-center gap-3 rounded-2xl border border-white/10 bg-white/5 p-4">
+                <span className="h-3 w-3 rounded-full bg-emerald-400" />
+                Mon–Fri · 10am–6pm
+              </div>
+            </div>
+          </div>
+
+          <div className="rounded-[2rem] border border-white/10 bg-zinc-950 p-6 sm:p-8">
+            <p className="text-sm font-black uppercase tracking-[0.28em] text-white/60">Recommendation</p>
+            <p className="mt-3 text-sm leading-7 text-white/70">
+              If you’re unsure which track fits, choose <span className="font-black text-white">General guidance</span>.
+              We’ll tailor the recommendation to your goals.
+            </p>
+            <div className="mt-6">
+              <Button href="/courses" variant="secondary" size="md">
+                Browse courses
+              </Button>
+            </div>
+          </div>
+        </aside>
+      </div>
+    </main>
+  );
+}
+

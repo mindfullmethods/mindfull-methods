@@ -1,10 +1,10 @@
-import { Analytics } from "@vercel/analytics/react";
+import { Analytics } from "@vercel/analytics/next";
 import "./globals.css";
 import { ThemeProvider } from "@/components/components/theme-provider";
 export const metadata = {
   title: "Mindfull Methods",
   description:
-    "Premium Internship Platform",
+    "Online certification courses and live mentorship training with Mindfull Methods.",
 };
 
 export default function RootLayout({
@@ -20,8 +20,8 @@ export default function RootLayout({
       <body>
         <ThemeProvider>
           {children}
+          <Analytics />
         </ThemeProvider>
-      <Analytics/>
       </body>
     </html>
   );
