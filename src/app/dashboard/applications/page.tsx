@@ -1,5 +1,6 @@
 import { ExternalLink, FileText, Mail, UserRound } from "lucide-react";
 import { getApplications } from "@/Services/getApplications";
+import { requireAdmin } from "@/lib/auth";
 
 function statusClass(status?: string) {
   if (status === "Approved") return "bg-emerald-50 text-emerald-700 dark:bg-emerald-400/10 dark:text-emerald-300";
@@ -8,6 +9,7 @@ function statusClass(status?: string) {
 }
 
 export default async function ApplicationsPage() {
+  await requireAdmin();
   const applications = await getApplications();
 
   return (

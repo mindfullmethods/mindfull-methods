@@ -1,17 +1,14 @@
-import { supabase } from "@/lib/supabase";
+import { createClient } from "@/lib/supabase/server";
 
 export async function getInternships() {
-  const { data, error } = await supabase
-    .from("internships")
-    .select("*");
+  const supabase = await createClient();
+
+  const { data, error } = await supabase.from("internships").select("*").order("created_at", { ascending: false });
 
   if (error) {
-    console.error(
-  "Supabase Error:",
-  error.message
-);
+    console.error("Supabase Error:", error.message);
     return [];
   }
 
-  return data;
+  return data ?? [];
 }

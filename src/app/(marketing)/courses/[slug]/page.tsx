@@ -6,7 +6,7 @@ import Button from "@/components/marketing/Button";
 import Badge from "@/components/marketing/Badge";
 import FAQAccordion from "@/components/marketing/FAQAccordion";
 import { getCourseBySlug, getCourseSlugs } from "@/lib/courses";
-import { contactUrl, signupUrl } from "@/lib/site";
+import { contactUrl, signupUrl, syllabusUrl } from "@/lib/site";
 import type { Metadata } from "next";
 
 export function generateStaticParams() {
@@ -110,7 +110,14 @@ export default async function CourseDetailsPage({
                     <Download size={16} className="text-white/70" />
                     <p className="text-sm font-bold text-white/80">Download syllabus</p>
                   </div>
-                  <p className="mt-2 text-xs font-bold text-white/50">Coming soon</p>
+                  <a
+                    href={syllabusUrl(course.slug)}
+                    download
+                    className="mt-3 inline-flex items-center gap-2 rounded-xl border border-white/15 bg-white/10 px-4 py-2.5 text-sm font-black text-white transition hover:bg-white/15"
+                  >
+                    <Download size={14} />
+                    Get syllabus (.txt)
+                  </a>
                   <div className="mt-3 flex items-center gap-2 text-xs font-bold text-white/50">
                     <Sparkles size={14} />
                     Weekly mentorship included

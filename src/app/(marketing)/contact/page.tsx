@@ -60,6 +60,7 @@ function ContactPageContent() {
   }, [defaultInterest]);
 
   const [status, setStatus] = useState<ContactStatus>("idle");
+  const [serverError, setServerError] = useState("");
   const [errors, setErrors] = useState<Partial<Record<keyof ContactForm, string>>>({});
 
   function validate(next: ContactForm) {
@@ -98,6 +99,7 @@ function ContactPageContent() {
     }
 
     setStatus("sending");
+    setServerError("");
     try {
       const res = await fetch("/api/contact", {
         method: "POST",
@@ -105,15 +107,19 @@ function ContactPageContent() {
         body: JSON.stringify(form),
       });
 
-      if (!res.ok) {
+      const data = (await res.json()) as { ok?: boolean; error?: string };
+
+      if (!res.ok || !data.ok) {
+        setServerError(data.error ?? "Something went wrong. Please try again.");
         setStatus("error");
         return;
       }
 
       setStatus("sent");
-      setForm({ name: "", email: "", phone: "", interest: "general", message: "" });
+      setForm({ name: "", email: "", phone: "", interest: defaultInterest, message: "" });
       setErrors({});
     } catch {
+      setServerError("Network error. Check your connection and try again.");
       setStatus("error");
     }
   }
@@ -167,7 +173,13 @@ function ContactPageContent() {
               </div>
             ) : null}
 
-            {status === "error" && Object.keys(errors).length > 0 ? (
+            {status === "error" && serverError ? (
+              <div className="rounded-2xl border border-rose-400/30 bg-rose-400/10 p-4">
+                <p className="text-sm font-black text-rose-200">{serverError}</p>
+              </div>
+            ) : null}
+
+            {status === "error" && Object.keys(errors).length > 0 && !serverError ? (
               <div className="rounded-2xl border border-rose-400/30 bg-rose-400/10 p-4">
                 <p className="text-sm font-black text-rose-200">Please fix the highlighted fields.</p>
               </div>

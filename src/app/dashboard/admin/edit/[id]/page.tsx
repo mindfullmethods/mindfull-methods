@@ -1,11 +1,13 @@
 import { getInternshipById } from "@/Services/internship-details";
 import { updateInternship } from "@/actions/updateInternship";
+import { requireAdmin } from "@/lib/auth";
 
 export default async function EditInternshipPage({
   params,
 }: {
   params: Promise<{ id: string }>;
 }) {
+  await requireAdmin();
 
   const { id } = await params;
 

@@ -4,6 +4,7 @@ export const siteConfig = {
     "Online certification courses and live mentorship training. Build career-ready skills with structured programs and expert guidance.",
   url: process.env.NEXT_PUBLIC_SITE_URL ?? "https://mindfull-methods.vercel.app",
   supportEmail: "support@mindfullmethods.com",
+  ogImage: "/brand-assets/logo-full.png",
 };
 
 export function pageTitle(title?: string) {
@@ -18,4 +19,8 @@ export function signupUrl(courseSlug?: string) {
 export function contactUrl(courseSlug?: string) {
   if (!courseSlug) return "/contact";
   return `/contact?course=${encodeURIComponent(courseSlug)}`;
+}
+
+export function syllabusUrl(courseSlug: string) {
+  return `/api/syllabus/${encodeURIComponent(courseSlug)}`;
 }

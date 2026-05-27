@@ -18,12 +18,27 @@ export const metadata: Metadata = {
     template: `%s | ${siteConfig.name}`,
   },
   description: siteConfig.description,
+  icons: {
+    icon: [
+      { url: "/favicon.png", sizes: "32x32", type: "image/png" },
+      { url: "/brand-assets/logo-icon.png", sizes: "256x256", type: "image/png" },
+    ],
+    apple: "/brand-assets/logo-icon.png",
+    shortcut: "/favicon.png",
+  },
   openGraph: {
     title: pageTitle(),
     description: siteConfig.description,
     url: siteConfig.url,
     siteName: siteConfig.name,
     type: "website",
+    images: [{ url: siteConfig.ogImage, alt: siteConfig.name }],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: pageTitle(),
+    description: siteConfig.description,
+    images: [siteConfig.ogImage],
   },
 };
 

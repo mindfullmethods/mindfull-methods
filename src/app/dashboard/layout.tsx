@@ -1,16 +1,13 @@
-"use client";
+import { getSessionUser, isAdminUser, requireUser } from "@/lib/auth";
+import DashboardShell from "./DashboardShell";
 
-import Sidebar from "@/components/components/dashboard/Sidebar";
-
-export default function DashboardLayout({
+export default async function DashboardLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  return (
-    <div className="min-h-screen bg-[#f7f8f5] text-zinc-950 dark:bg-zinc-950 dark:text-white">
-      <Sidebar />
-      <main className="min-h-screen lg:pl-80">{children}</main>
-    </div>
-  );
+  const user = await requireUser();
+  const isAdmin = isAdminUser(user);
+
+  return <DashboardShell isAdmin={isAdmin}>{children}</DashboardShell>;
 }

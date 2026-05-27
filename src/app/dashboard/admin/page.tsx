@@ -3,12 +3,41 @@ import { BriefcaseBusiness, Edit3, ImageIcon, Plus, Trash2 } from "lucide-react"
 import { deleteInternship } from "@/actions/deleteInternship";
 import { getInternships } from "@/Services/Internships";
 import { createInternship } from "@/actions/createInternships";
+import { requireAdmin } from "@/lib/auth";
 
-export default async function AdminPage() {
+export default async function AdminPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ error?: string; created?: string; deleted?: string; updated?: string }>;
+}) {
+  await requireAdmin();
+  const params = await searchParams;
   const internships = await getInternships();
+
+  const flash =
+    params.error
+      ? { tone: "error" as const, message: decodeURIComponent(params.error) }
+      : params.created
+        ? { tone: "success" as const, message: "Internship published successfully." }
+        : params.deleted
+          ? { tone: "success" as const, message: "Internship deleted." }
+          : params.updated
+            ? { tone: "success" as const, message: "Internship updated." }
+            : null;
 
   return (
     <main className="min-h-screen px-5 py-8 sm:px-8 xl:px-10">
+      {flash ? (
+        <div
+          className={
+            flash.tone === "error"
+              ? "mb-6 rounded-2xl border border-red-200 bg-red-50 px-5 py-4 text-sm font-bold text-red-700 dark:border-red-500/30 dark:bg-red-500/10 dark:text-red-200"
+              : "mb-6 rounded-2xl border border-emerald-200 bg-emerald-50 px-5 py-4 text-sm font-bold text-emerald-800 dark:border-emerald-400/30 dark:bg-emerald-400/10 dark:text-emerald-200"
+          }
+        >
+          {flash.message}
+        </div>
+      ) : null}
       <section className="rounded-3xl bg-zinc-950 p-6 text-white shadow-xl sm:p-8">
         <p className="text-sm font-black uppercase tracking-[0.28em] text-white/50">Admin Studio</p>
         <div className="mt-5 flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
@@ -120,12 +149,7 @@ export default async function AdminPage() {
                       Edit
                     </Link>
 
-                    <form
-                      action={async () => {
-                        "use server";
-                        await deleteInternship(internship.id);
-                      }}
-                    >
+                    <form action={deleteInternship.bind(null, internship.id)}>
                       <button
                         type="submit"
                         className="inline-flex items-center gap-2 rounded-xl bg-red-600 px-4 py-3 text-sm font-black text-white transition hover:bg-red-700"

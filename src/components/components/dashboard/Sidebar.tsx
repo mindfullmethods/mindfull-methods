@@ -15,17 +15,21 @@ import {
 import { supabase } from "@/lib/supabase";
 import BrandLogo from "@/components/marketing/BrandLogo";
 
-const links = [
+const studentLinks = [
   { label: "Overview", href: "/dashboard", icon: LayoutDashboard },
   { label: "Internships", href: "/dashboard/internships", icon: BriefcaseBusiness },
+];
+
+const adminLinks = [
   { label: "Applications", href: "/dashboard/applications", icon: ClipboardList },
   { label: "Admin Studio", href: "/dashboard/admin", icon: ShieldCheck },
 ];
 
-export default function Sidebar() {
+export default function Sidebar({ isAdmin = false }: { isAdmin?: boolean }) {
   const [userEmail, setUserEmail] = useState("");
   const [open, setOpen] = useState(true);
   const pathname = usePathname();
+  const links = isAdmin ? [...studentLinks, ...adminLinks] : studentLinks;
 
   useEffect(() => {
     async function getUser() {

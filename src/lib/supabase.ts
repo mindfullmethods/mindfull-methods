@@ -1,12 +1,6 @@
-import { createClient } from "@supabase/supabase-js";
+export { createClient as createBrowserClient } from "@/lib/supabase/client";
 
-const supabaseUrl =
-  process.env.NEXT_PUBLIC_SUPABASE_URL!;
+import { createClient } from "@/lib/supabase/client";
 
-const supabaseAnonKey =
-  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
-
-export const supabase = createClient(
-  supabaseUrl,
-  supabaseAnonKey
-);
+/** Browser Supabase client — use in client components. */
+export const supabase = createClient();
