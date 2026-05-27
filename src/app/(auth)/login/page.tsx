@@ -1,17 +1,27 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
-import { useRouter } from "next/navigation";
+import { Suspense, useState } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 import { ArrowRight, BriefcaseBusiness, LockKeyhole, Mail } from "lucide-react";
 import { supabase } from "@/lib/supabase";
 
 export default function LoginPage() {
+  return (
+    <Suspense fallback={<main className="min-h-screen bg-[#f7f8f5] dark:bg-zinc-950" />}>
+      <LoginPageContent />
+    </Suspense>
+  );
+}
+
+function LoginPageContent() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const nextPath = searchParams.get("next") ?? "/dashboard";
 
   async function handleLogin(event: React.FormEvent) {
     event.preventDefault();
@@ -30,22 +40,22 @@ export default function LoginPage() {
     }
 
     setLoading(false);
-    router.replace("/dashboard");
+    router.replace(nextPath.startsWith("/") ? nextPath : "/dashboard");
   }
 
   return (
     <main className="grid min-h-screen bg-[#f7f8f5] text-zinc-950 dark:bg-zinc-950 dark:text-white lg:grid-cols-[1.05fr_0.95fr]">
       <section className="relative hidden overflow-hidden lg:block">
         <img
-          src="/brand-assets/linkedin-cover.png"
-          alt="Mindfull Methods cover"
+          src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&w=1600&q=60"
+          alt="Team collaboration"
           className="absolute inset-0 h-full w-full object-cover"
         />
         <div className="absolute inset-0 bg-zinc-950/65" />
         <div className="relative z-10 flex h-full flex-col justify-between p-10 text-white">
           <Link href="/" className="flex items-center gap-3">
             <span className="flex h-12 w-12 items-center justify-center overflow-hidden rounded-xl bg-white p-1 shadow-lg">
-              <img src="/brand-assets/logo.png" alt="Mindfull Methods logo" className="h-full w-full object-contain" />
+              <img src="/brand-assets/logo.svg" alt="Mindfull Methods logo" className="h-full w-full object-contain" />
             </span>
             <span>
               <span className="block text-lg font-black">Mindfull Methods</span>
@@ -74,7 +84,7 @@ export default function LoginPage() {
         <div className="w-full max-w-md">
           <Link href="/" className="mb-10 flex items-center gap-3 lg:hidden">
             <span className="flex h-12 w-12 items-center justify-center overflow-hidden rounded-xl bg-white p-1 shadow-lg">
-              <img src="/brand-assets/logo.png" alt="Mindfull Methods logo" className="h-full w-full object-contain" />
+              <img src="/brand-assets/logo.svg" alt="Mindfull Methods logo" className="h-full w-full object-contain" />
             </span>
             <span className="font-black">Mindfull Methods</span>
           </Link>

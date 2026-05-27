@@ -1,8 +1,16 @@
+import type { Metadata } from "next";
 import { BarChart3, BriefcaseBusiness, GraduationCap, Sparkles } from "lucide-react";
 
 import Badge from "@/components/marketing/Badge";
 import Button from "@/components/marketing/Button";
 import StepsTimeline, { type StepModel } from "@/components/marketing/StepsTimeline";
+import { signupUrl } from "@/lib/site";
+
+export const metadata: Metadata = {
+  title: "About",
+  description:
+    "Mindfull Methods helps learners build career-ready skills through structured mentorship, milestone guidance, and portfolio projects.",
+};
 
 export default function AboutPage() {
   const steps: StepModel[] = [
@@ -24,7 +32,7 @@ export default function AboutPage() {
   ];
 
   return (
-    <main className="mx-auto max-w-7xl px-5 py-16 sm:px-8 lg:px-10">
+    <div className="mx-auto max-w-7xl px-5 py-16 sm:px-8 lg:px-10">
       <section className="rounded-[2.5rem] border border-white/10 bg-zinc-950 p-6 shadow-2xl sm:p-8">
         <div className="grid gap-10 lg:grid-cols-[1.1fr_0.9fr] lg:items-center">
           <div>
@@ -111,7 +119,7 @@ export default function AboutPage() {
           </div>
         </div>
       </section>
-    </main>
+    </div>
   );
 }
 

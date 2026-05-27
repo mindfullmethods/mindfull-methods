@@ -5,6 +5,8 @@ import { usePathname } from "next/navigation";
 import { useMemo, useState } from "react";
 import { Menu, X } from "lucide-react";
 
+import NavAuth from "@/components/marketing/NavAuth";
+
 type NavItem = {
   href: string;
   label: string;
@@ -42,7 +44,7 @@ export default function Navbar() {
         >
           <span className="flex h-10 w-10 items-center justify-center overflow-hidden rounded-xl bg-white/10 p-1">
             <img
-              src="/brand-assets/logo.png"
+              src="/brand-assets/logo.svg"
               alt="Mindfull Methods logo"
               className="h-full w-full object-contain"
             />
@@ -73,6 +75,7 @@ export default function Navbar() {
         </nav>
 
         <div className="hidden items-center gap-2 md:flex">
+          <NavAuth />
           <Link
             href="/contact"
             className="inline-flex items-center justify-center rounded-xl bg-white px-5 py-2.5 text-sm font-black text-zinc-950 transition hover:scale-[1.02]"
@@ -115,6 +118,28 @@ export default function Navbar() {
             })}
 
             <Link
+              href="/login"
+              onClick={() => setOpen(false)}
+              className="rounded-xl px-4 py-3 text-sm font-bold text-white/70"
+            >
+              Login
+            </Link>
+            <Link
+              href="/signup"
+              onClick={() => setOpen(false)}
+              className="rounded-xl px-4 py-3 text-sm font-bold text-white/70"
+            >
+              Sign up
+            </Link>
+            <Link
+              href="/dashboard"
+              onClick={() => setOpen(false)}
+              className="rounded-xl px-4 py-3 text-sm font-bold text-white/70"
+            >
+              Dashboard
+            </Link>
+
+            <Link
               href="/contact"
               onClick={() => setOpen(false)}
               className="mt-2 inline-flex items-center justify-center rounded-xl bg-white px-4 py-3 text-sm font-black text-zinc-950"
@@ -127,4 +152,3 @@ export default function Navbar() {
     </header>
   );
 }
-

@@ -1,9 +1,10 @@
 "use client";
 
-import { useMemo, useState, type FormEvent } from "react";
+import { Suspense, useEffect, useMemo, useState, type FormEvent } from "react";
+import { useSearchParams } from "next/navigation";
 
 import Button from "@/components/marketing/Button";
-import { getCourses } from "@/lib/courses";
+import { getCourseBySlug, getCourses } from "@/lib/courses";
 
 type ContactForm = {
   name: string;
@@ -21,6 +22,16 @@ function isValidEmail(email: string) {
 }
 
 export default function ContactPage() {
+  return (
+    <Suspense fallback={<div className="mx-auto max-w-7xl px-5 py-16 sm:px-8 lg:px-10" />}>
+      <ContactPageContent />
+    </Suspense>
+  );
+}
+
+function ContactPageContent() {
+  const searchParams = useSearchParams();
+  const courseParam = searchParams.get("course");
   const courses = getCourses();
 
   const interestOptions = useMemo(() => {
@@ -30,13 +41,23 @@ export default function ContactPage() {
     ];
   }, [courses]);
 
+  const defaultInterest = useMemo(() => {
+    if (!courseParam) return "general";
+    const course = getCourseBySlug(courseParam);
+    return course?.slug ?? "general";
+  }, [courseParam]);
+
   const [form, setForm] = useState<ContactForm>({
     name: "",
     email: "",
     phone: "",
-    interest: "general",
+    interest: defaultInterest,
     message: "",
   });
+
+  useEffect(() => {
+    setForm((prev) => ({ ...prev, interest: defaultInterest }));
+  }, [defaultInterest]);
 
   const [status, setStatus] = useState<ContactStatus>("idle");
   const [errors, setErrors] = useState<Partial<Record<keyof ContactForm, string>>>({});
@@ -98,7 +119,7 @@ export default function ContactPage() {
   }
 
   return (
-    <main className="mx-auto max-w-7xl px-5 py-16 sm:px-8 lg:px-10">
+    <div className="mx-auto max-w-7xl px-5 py-16 sm:px-8 lg:px-10">
       <div className="max-w-3xl">
         <p className="text-sm font-black uppercase tracking-[0.28em] text-white/60">Contact</p>
         <h1 className="mt-4 text-4xl font-black tracking-tight text-white sm:text-5xl">
@@ -269,7 +290,7 @@ export default function ContactPage() {
           </div>
         </aside>
       </div>
-    </main>
+    </div>
   );
 }
 

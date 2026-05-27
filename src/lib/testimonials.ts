@@ -34,6 +34,20 @@ export const testimonials: Testimonial[] = [
     role: "Mentorship program participant",
     rating: 5,
   },
+  {
+    quote:
+      "The full-stack track connected everything I learned in isolation. Having a mentor review my architecture decisions was invaluable.",
+    name: "Rohan M.",
+    role: "Full stack cohort",
+    rating: 5,
+  },
+  {
+    quote:
+      "Digital marketing felt practical from day one. I left with campaign assets I could show in interviews, not just theory.",
+    name: "Priya N.",
+    role: "Marketing track learner",
+    rating: 5,
+  },
 ];
 
 export function getTestimonials() {

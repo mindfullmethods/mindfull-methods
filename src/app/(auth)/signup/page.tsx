@@ -1,11 +1,29 @@
 "use client";
 
-import { useState } from "react";
+import { Suspense, useMemo, useState } from "react";
 import Link from "next/link";
+import { useRouter, useSearchParams } from "next/navigation";
 import { ArrowRight, CheckCircle2, LockKeyhole, Mail, UserRound } from "lucide-react";
 import { supabase } from "@/lib/supabase";
+import { getCourseBySlug } from "@/lib/courses";
 
 export default function SignupPage() {
+  return (
+    <Suspense fallback={<main className="min-h-screen bg-[#f7f8f5] dark:bg-zinc-950" />}>
+      <SignupPageContent />
+    </Suspense>
+  );
+}
+
+function SignupPageContent() {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const courseSlug = searchParams.get("course");
+  const selectedCourse = useMemo(
+    () => (courseSlug ? getCourseBySlug(courseSlug) : null),
+    [courseSlug]
+  );
+
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -23,6 +41,7 @@ export default function SignupPage() {
       options: {
         data: {
           full_name: fullName,
+          interested_course: selectedCourse?.slug ?? courseSlug ?? null,
         },
       },
     });
@@ -42,7 +61,13 @@ export default function SignupPage() {
     }
 
     setLoading(false);
-    setMessage("Account created. Check your email if confirmation is enabled.");
+
+    if (data.session) {
+      router.replace("/dashboard/internships");
+      return;
+    }
+
+    setMessage("Account created. Check your email if confirmation is enabled, then sign in to continue.");
   }
 
   return (
@@ -51,7 +76,7 @@ export default function SignupPage() {
         <div className="w-full max-w-md rounded-2xl border border-zinc-200 bg-white p-7 shadow-xl dark:border-white/10 dark:bg-white/5 sm:p-8">
           <Link href="/" className="mb-8 flex items-center gap-3">
             <span className="flex h-12 w-12 items-center justify-center overflow-hidden rounded-xl bg-white p-1 shadow-lg">
-              <img src="/brand-assets/logo.png" alt="Mindfull Methods logo" className="h-full w-full object-contain" />
+              <img src="/brand-assets/logo.svg" alt="Mindfull Methods logo" className="h-full w-full object-contain" />
             </span>
             <span className="font-black">Mindfull Methods</span>
           </Link>
@@ -59,8 +84,16 @@ export default function SignupPage() {
           <p className="text-sm font-black uppercase tracking-[0.28em] text-zinc-500">Apply</p>
           <h1 className="mt-4 text-4xl font-black tracking-tight">Create your student workspace</h1>
           <p className="mt-3 text-sm leading-6 text-zinc-600 dark:text-zinc-400">
-            Start applying to structured internship programs and build proof of work.
+            {selectedCourse
+              ? `You're applying for ${selectedCourse.title}. Create an account to browse internships and track applications.`
+              : "Start applying to structured programs and build proof of work."}
           </p>
+
+          {selectedCourse ? (
+            <div className="mt-5 rounded-xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm font-bold text-emerald-800 dark:border-emerald-400/20 dark:bg-emerald-400/10 dark:text-emerald-200">
+              Selected track: {selectedCourse.title}
+            </div>
+          ) : null}
 
           <form onSubmit={handleSignup} className="mt-8 space-y-5">
             {[
@@ -122,7 +155,10 @@ export default function SignupPage() {
 
           <p className="mt-7 text-center text-sm font-semibold text-zinc-500">
             Already registered?{" "}
-            <Link href="/login" className="font-black text-zinc-950 dark:text-white">
+            <Link
+              href={courseSlug ? `/login?next=${encodeURIComponent("/dashboard/internships")}` : "/login"}
+              className="font-black text-zinc-950 dark:text-white"
+            >
               Sign in
             </Link>
           </p>
@@ -131,7 +167,7 @@ export default function SignupPage() {
 
       <section className="relative hidden overflow-hidden lg:block">
         <img
-          src="/brand-assets/dashboard.png"
+          src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=1600&q=60"
           alt="Mindfull Methods dashboard preview"
           className="absolute inset-0 h-full w-full object-cover"
         />

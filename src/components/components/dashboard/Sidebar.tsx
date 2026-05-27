@@ -63,7 +63,7 @@ export default function Sidebar() {
         <div className="flex items-start justify-between gap-4">
           <Link href="/dashboard" className="flex items-center gap-3">
             <span className="flex h-12 w-12 items-center justify-center overflow-hidden rounded-xl bg-white p-1 shadow-lg">
-              <img src="/brand-assets/logo.png" alt="Mindfull Methods logo" className="h-full w-full object-contain" />
+              <img src="/brand-assets/logo.svg" alt="Mindfull Methods logo" className="h-full w-full object-contain" />
             </span>
             <span>
               <span className="block text-lg font-black tracking-tight">Mindfull Methods</span>
@@ -113,7 +113,7 @@ export default function Sidebar() {
         </nav>
 
         <div className="overflow-hidden rounded-2xl border border-zinc-200 bg-white dark:border-white/10 dark:bg-white/5">
-          <img src="/brand-assets/dashboard.png" alt="Dashboard preview" className="h-24 w-full object-cover object-left-top" />
+          <img src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=800&q=60" alt="Dashboard preview" className="h-24 w-full object-cover object-left-top" />
           <div className="p-5">
           <p className="text-xs font-black uppercase tracking-[0.24em] text-zinc-500">Platform health</p>
           <p className="mt-3 text-2xl font-black">Production Track</p>

@@ -1,3 +1,4 @@
+import Image from "next/image";
 import { notFound } from "next/navigation";
 import { CheckCircle2, Download, Sparkles } from "lucide-react";
 
@@ -5,9 +6,33 @@ import Button from "@/components/marketing/Button";
 import Badge from "@/components/marketing/Badge";
 import FAQAccordion from "@/components/marketing/FAQAccordion";
 import { getCourseBySlug, getCourseSlugs } from "@/lib/courses";
+import { contactUrl, signupUrl } from "@/lib/site";
+import type { Metadata } from "next";
 
 export function generateStaticParams() {
   return getCourseSlugs().map((slug) => ({ slug }));
+}
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}): Promise<Metadata> {
+  const { slug } = await params;
+  const course = getCourseBySlug(slug);
+
+  if (!course) {
+    return { title: "Course not found" };
+  }
+
+  return {
+    title: course.title,
+    description: course.shortDescription,
+    openGraph: {
+      title: course.title,
+      description: course.shortDescription,
+    },
+  };
 }
 
 export default async function CourseDetailsPage({
@@ -21,18 +46,32 @@ export default async function CourseDetailsPage({
   if (!course) notFound();
 
   return (
-    <main className="mx-auto max-w-7xl px-5 py-14 sm:px-8 lg:px-10">
+    <div className="mx-auto max-w-7xl px-5 py-14 sm:px-8 lg:px-10">
+      <div className="relative mb-8 overflow-hidden rounded-[2rem] border border-white/10">
+        <Image
+          src={course.imageUrl}
+          alt={course.title}
+          width={1200}
+          height={480}
+          className="aspect-[5/2] w-full object-cover"
+          priority
+        />
+        <div className="absolute inset-0 bg-gradient-to-t from-zinc-950 via-zinc-950/40 to-transparent" />
+        <div className="absolute bottom-0 left-0 p-6 sm:p-8">
+          <div className="flex flex-wrap items-center gap-3">
+            <Badge tone="violet">{course.mode}</Badge>
+            <Badge tone="neutral">{course.duration}</Badge>
+            <Badge tone="neutral">{course.level}</Badge>
+          </div>
+          <h1 className="mt-4 max-w-3xl text-3xl font-black tracking-tight text-white sm:text-5xl">{course.title}</h1>
+        </div>
+      </div>
+
       {/* Hero */}
       <section className="rounded-[2.5rem] border border-white/10 bg-zinc-950 p-6 shadow-2xl sm:p-8">
         <div className="grid gap-8 lg:grid-cols-[1.25fr_0.75fr] lg:items-start">
           <div>
-            <div className="flex flex-wrap items-center gap-3">
-              <Badge tone="violet">{course.mode}</Badge>
-              <Badge tone="neutral">{course.duration}</Badge>
-              <Badge tone="neutral">{course.level}</Badge>
-            </div>
-            <h1 className="mt-5 text-4xl font-black tracking-tight text-white sm:text-5xl">{course.title}</h1>
-            <p className="mt-4 text-sm leading-7 text-white/70">{course.longDescription}</p>
+            <p className="text-sm leading-7 text-white/70">{course.longDescription}</p>
 
             <div className="mt-6 flex flex-wrap items-center gap-3">
               {course.tags.slice(0, 5).map((t) => (
@@ -59,10 +98,10 @@ export default async function CourseDetailsPage({
               <p className="mt-2 text-2xl font-black text-white">{course.priceLabel}</p>
 
               <div className="mt-5 flex flex-col gap-3">
-                <Button href="/contact" variant="primary" size="lg">
+                <Button href={signupUrl(course.slug)} variant="primary" size="lg">
                   Apply now
                 </Button>
-                <Button href="/contact" variant="secondary" size="lg">
+                <Button href={contactUrl(course.slug)} variant="secondary" size="lg">
                   Book a call
                 </Button>
 
@@ -186,7 +225,7 @@ export default async function CourseDetailsPage({
             </div>
 
             <div className="mt-8 flex flex-wrap items-center gap-3">
-              <Button href="/contact" variant="primary" size="lg">
+              <Button href={signupUrl(course.slug)} variant="primary" size="lg">
                 Apply for this course
               </Button>
               <Button href="/courses" variant="secondary" size="lg">
@@ -196,7 +235,7 @@ export default async function CourseDetailsPage({
           </div>
         </div>
       </section>
-    </main>
+    </div>
   );
 }
 

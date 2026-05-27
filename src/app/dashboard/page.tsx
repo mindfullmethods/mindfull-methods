@@ -55,7 +55,7 @@ export default async function DashboardPage() {
           </div>
           <div className="overflow-hidden rounded-2xl border border-white/15 bg-white/10 p-2 shadow-2xl">
             <img
-              src="/brand-assets/dashboard.png"
+              src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=1200&q=60"
               alt="Mindfull Methods dashboard preview"
               className="aspect-[16/10] w-full rounded-xl object-cover object-left-top"
             />
