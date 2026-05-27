@@ -5,6 +5,7 @@ import { Suspense, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { ArrowRight, BriefcaseBusiness, LockKeyhole, Mail } from "lucide-react";
 import { supabase } from "@/lib/supabase";
+import BrandLogo from "@/components/marketing/BrandLogo";
 
 export default function LoginPage() {
   return (
@@ -53,14 +54,8 @@ function LoginPageContent() {
         />
         <div className="absolute inset-0 bg-zinc-950/65" />
         <div className="relative z-10 flex h-full flex-col justify-between p-10 text-white">
-          <Link href="/" className="flex items-center gap-3">
-            <span className="flex h-12 w-12 items-center justify-center overflow-hidden rounded-xl bg-white p-1 shadow-lg">
-              <img src="/brand-assets/logo.svg" alt="Mindfull Methods logo" className="h-full w-full object-contain" />
-            </span>
-            <span>
-              <span className="block text-lg font-black">Mindfull Methods</span>
-              <span className="block text-xs font-black uppercase tracking-[0.24em] text-white/55">Internships</span>
-            </span>
+          <Link href="/" className="inline-flex">
+            <BrandLogo size="lg" />
           </Link>
 
           <div className="max-w-xl">
@@ -82,11 +77,8 @@ function LoginPageContent() {
 
       <section className="flex items-center justify-center px-5 py-10 sm:px-8">
         <div className="w-full max-w-md">
-          <Link href="/" className="mb-10 flex items-center gap-3 lg:hidden">
-            <span className="flex h-12 w-12 items-center justify-center overflow-hidden rounded-xl bg-white p-1 shadow-lg">
-              <img src="/brand-assets/logo.svg" alt="Mindfull Methods logo" className="h-full w-full object-contain" />
-            </span>
-            <span className="font-black">Mindfull Methods</span>
+          <Link href="/" className="mb-10 inline-flex lg:hidden">
+            <BrandLogo size="md" theme="light" />
           </Link>
 
           <div className="rounded-2xl border border-zinc-200 bg-white p-7 shadow-xl dark:border-white/10 dark:bg-white/5 sm:p-8">

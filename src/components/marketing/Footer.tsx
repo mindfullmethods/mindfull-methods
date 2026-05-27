@@ -1,5 +1,7 @@
 import Link from "next/link";
 
+import BrandLogo from "@/components/marketing/BrandLogo";
+
 const exploreLinks = [
   { href: "/courses", label: "Courses" },
   { href: "/about", label: "About" },
@@ -23,21 +25,9 @@ export default function Footer() {
     <footer className="border-t border-white/10 bg-zinc-950 px-5 py-12 text-sm text-white/70 sm:px-8 lg:px-10">
       <div className="mx-auto grid max-w-7xl gap-10 md:grid-cols-[1.2fr_0.8fr_0.8fr_0.8fr]">
         <div className="max-w-sm">
-          <div className="flex items-center gap-3">
-            <span className="flex h-10 w-10 items-center justify-center overflow-hidden rounded-xl bg-white/10 p-1.5">
-              <img
-                src="/brand-assets/logo.svg"
-                alt="Mindfull Methods logo"
-                className="h-full w-full object-contain"
-              />
-            </span>
-            <div>
-              <p className="text-base font-black tracking-tight text-white">Mindfull Methods</p>
-              <p className="text-xs font-bold uppercase tracking-[0.24em] text-white/55">
-                Mentorship & courses
-              </p>
-            </div>
-          </div>
+          <Link href="/" className="inline-flex">
+            <BrandLogo size="lg" />
+          </Link>
 
           <p className="mt-4 leading-6 text-white/60">
             Build career-ready skills with structured courses, mentor support, and practical projects.

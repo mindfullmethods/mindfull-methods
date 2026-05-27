@@ -13,6 +13,7 @@ import {
   ShieldCheck,
 } from "lucide-react";
 import { supabase } from "@/lib/supabase";
+import BrandLogo from "@/components/marketing/BrandLogo";
 
 const links = [
   { label: "Overview", href: "/dashboard", icon: LayoutDashboard },
@@ -61,16 +62,8 @@ export default function Sidebar() {
         }`}
       >
         <div className="flex items-start justify-between gap-4">
-          <Link href="/dashboard" className="flex items-center gap-3">
-            <span className="flex h-12 w-12 items-center justify-center overflow-hidden rounded-xl bg-white p-1 shadow-lg">
-              <img src="/brand-assets/logo.svg" alt="Mindfull Methods logo" className="h-full w-full object-contain" />
-            </span>
-            <span>
-              <span className="block text-lg font-black tracking-tight">Mindfull Methods</span>
-              <span className="block text-[11px] font-black uppercase tracking-[0.22em] text-zinc-500">
-                Workspace
-              </span>
-            </span>
+          <Link href="/dashboard" className="inline-flex min-w-0 flex-1">
+            <BrandLogo size="sm" theme="light" className="max-w-[170px]" />
           </Link>
 
           <button

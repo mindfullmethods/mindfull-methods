@@ -6,6 +6,7 @@ import { useMemo, useState } from "react";
 import { Menu, X } from "lucide-react";
 
 import NavAuth from "@/components/marketing/NavAuth";
+import BrandLogo from "@/components/marketing/BrandLogo";
 
 type NavItem = {
   href: string;
@@ -38,20 +39,11 @@ export default function Navbar() {
       <div className="mx-auto flex max-w-7xl items-center justify-between px-5 py-4 sm:px-8 lg:px-10">
         <Link
           href="/"
-          className="flex items-center gap-3"
+          className="flex shrink-0 items-center"
           onClick={() => setOpen(false)}
           aria-label="Go to home"
         >
-          <span className="flex h-10 w-10 items-center justify-center overflow-hidden rounded-xl bg-white/10 p-1">
-            <img
-              src="/brand-assets/logo.svg"
-              alt="Mindfull Methods logo"
-              className="h-full w-full object-contain"
-            />
-          </span>
-          <span className="hidden text-base font-black tracking-tight text-white sm:block">
-            Mindfull Methods
-          </span>
+          <BrandLogo size="md" className="max-w-[min(200px,52vw)]" />
         </Link>
 
         <nav className="hidden items-center gap-7 md:flex" aria-label="Primary navigation">
