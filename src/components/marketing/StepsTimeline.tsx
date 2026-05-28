@@ -15,28 +15,29 @@ export default function StepsTimeline({
   className?: string;
 }) {
   return (
-    <div className={cn("grid gap-4 md:grid-cols-3", className)}>
+    <div className={cn("relative grid gap-5 md:grid-cols-3", className)}>
+      <div className="pointer-events-none absolute left-[16%] right-[16%] top-10 hidden h-px bg-gradient-to-r from-transparent via-violet-400/40 to-transparent md:block" />
+
       {steps.map((step, idx) => {
         const Icon = step.icon;
         return (
           <article
             key={step.title}
-            className="rounded-3xl border border-white/10 bg-white/5 p-5 transition hover:bg-white/10"
+            className="group relative mm-glass rounded-3xl p-6 transition hover:-translate-y-1 hover:border-violet-400/25 hover:bg-white/[0.07]"
           >
-            <div className="flex items-start gap-4">
-              <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-zinc-950 text-white/90">
-                {Icon ? <Icon size={20} /> : <span className="text-sm font-black">{idx + 1}</span>}
-              </div>
-              <div>
-                <p className="text-sm font-black text-white/50">Step {idx + 1}</p>
-                <h3 className="mt-1 text-xl font-black tracking-tight">{step.title}</h3>
-                <p className="mt-2 text-sm leading-6 text-white/70">{step.description}</p>
-              </div>
+            <div className="absolute -top-3 left-6 rounded-full bg-gradient-to-r from-violet-500 to-teal-400 px-3 py-1 text-[10px] font-black uppercase tracking-[0.2em] text-white">
+              Step {idx + 1}
             </div>
+
+            <div className="mt-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br from-violet-500/20 to-teal-400/10 text-white ring-1 ring-white/10">
+              {Icon ? <Icon size={22} /> : <span className="text-lg font-black">{idx + 1}</span>}
+            </div>
+
+            <h3 className="mt-5 text-xl font-black tracking-tight text-white">{step.title}</h3>
+            <p className="mt-3 text-sm leading-6 text-white/70">{step.description}</p>
           </article>
         );
       })}
     </div>
   );
 }
-

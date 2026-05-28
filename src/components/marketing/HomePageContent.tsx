@@ -1,9 +1,20 @@
-import { BarChart3, BriefcaseBusiness, GraduationCap, ShieldCheck, Sparkles, Star } from "lucide-react";
+import {
+  ArrowRight,
+  BarChart3,
+  BriefcaseBusiness,
+  GraduationCap,
+  ShieldCheck,
+  Sparkles,
+  Star,
+  Users,
+} from "lucide-react";
 
 import Badge from "@/components/marketing/Badge";
+import BrandLogo from "@/components/marketing/BrandLogo";
 import Button from "@/components/marketing/Button";
 import CourseCard from "@/components/marketing/CourseCard";
 import FAQAccordion from "@/components/marketing/FAQAccordion";
+import SectionHeader from "@/components/marketing/SectionHeader";
 import StatsStrip from "@/components/marketing/StatsStrip";
 import StepsTimeline, { type StepModel } from "@/components/marketing/StepsTimeline";
 import TestimonialCard from "@/components/marketing/TestimonialCard";
@@ -14,6 +25,33 @@ import { getTestimonials } from "@/lib/testimonials";
 import { signupUrl } from "@/lib/site";
 
 const trustBadges = ["10K+ learners", "Weekly mentorship", "Portfolio projects", "Career support"];
+
+const benefits = [
+  {
+    title: "Real mentor feedback",
+    description: "Weekly coaching and targeted reviews so you improve fast.",
+    icon: ShieldCheck,
+    accent: "from-violet-500/20 to-violet-500/5",
+  },
+  {
+    title: "Structured milestones",
+    description: "Clear outcomes and step-by-step guidance from day one.",
+    icon: Sparkles,
+    accent: "from-fuchsia-500/20 to-fuchsia-500/5",
+  },
+  {
+    title: "Practical projects",
+    description: "Ship guided work and build proof with a capstone result.",
+    icon: BriefcaseBusiness,
+    accent: "from-teal-500/20 to-teal-500/5",
+  },
+  {
+    title: "Career-ready delivery",
+    description: "Present your outcomes in a portfolio format recruiters understand.",
+    icon: BarChart3,
+    accent: "from-sky-500/20 to-sky-500/5",
+  },
+];
 
 export default function HomePageContent() {
   const featured = getFeaturedCourses();
@@ -42,28 +80,56 @@ export default function HomePageContent() {
   return (
     <>
       {/* Hero */}
-      <section className="relative overflow-hidden border-b border-white/10 bg-zinc-950 px-5 py-16 text-white sm:px-8 lg:px-10">
-        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_top,rgba(139,92,246,0.35),transparent_55%)]" />
-        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_bottom,rgba(20,184,166,0.25),transparent_50%)]" />
+      <section className="relative overflow-hidden border-b border-white/10 px-5 pb-20 pt-12 sm:px-8 sm:pt-16 lg:px-10 lg:pb-28">
+        <div className="pointer-events-none absolute inset-0 mm-grid-bg opacity-60" />
+        <div className="pointer-events-none absolute -left-24 top-0 h-72 w-72 rounded-full bg-violet-600/30 blur-[100px]" />
+        <div className="pointer-events-none absolute -right-16 top-24 h-80 w-80 rounded-full bg-teal-500/20 blur-[110px]" />
+        <div className="pointer-events-none absolute bottom-0 left-1/3 h-64 w-64 rounded-full bg-fuchsia-500/10 blur-[90px]" />
 
-        <div className="relative mx-auto grid max-w-7xl gap-10 md:grid-cols-[0.95fr_1.05fr] md:items-center">
+        <div className="relative mx-auto grid max-w-7xl items-center gap-12 lg:grid-cols-[1.05fr_0.95fr] lg:gap-16">
           <div>
-            <Badge tone="violet">Mentorship-first learning</Badge>
-            <h1 className="mt-6 text-4xl font-black tracking-tight sm:text-5xl lg:text-6xl">
-              Learn courses the way mentors teach
+            <div className="flex flex-wrap items-center gap-3">
+              <Badge tone="violet">Mentorship-first learning</Badge>
+              <span className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-1.5 text-xs font-bold text-white/70">
+                <Star size={12} className="fill-amber-300 text-amber-300" />
+                4.9 learner rating
+              </span>
+            </div>
+
+            <h1 className="mt-7 text-4xl font-black leading-[1.05] tracking-tight sm:text-5xl lg:text-6xl xl:text-7xl">
+              Learn courses{" "}
+              <span className="mm-gradient-text">the way mentors teach</span>
             </h1>
-            <p className="mt-4 max-w-2xl text-base leading-7 text-white/70">
-              Mindfull Methods offers structured certification programs with live mentorship, milestone guidance,
-              and practical outcomes—so you finish with proof, not just certificates.
+
+            <p className="mt-6 max-w-xl text-base leading-8 text-white/70 sm:text-lg">
+              Mindfull Methods offers structured certification programs with live mentorship, milestone
+              guidance, and practical outcomes—so you finish with proof, not just certificates.
             </p>
 
             <div className="mt-8 flex flex-wrap items-center gap-3">
-              <Button href="/courses" variant="primary" size="lg">
+              <Button href={signupUrl()} variant="gradient" size="lg">
+                Get started free <ArrowRight size={18} />
+              </Button>
+              <Button href="/courses" variant="secondary" size="lg">
                 Browse courses
               </Button>
-              <Button href={signupUrl()} variant="secondary" size="lg">
-                Get started free
-              </Button>
+            </div>
+
+            <div className="mt-10 flex flex-wrap items-center gap-5">
+              <div className="flex -space-x-3">
+                {["A", "M", "J", "S"].map((initial) => (
+                  <span
+                    key={initial}
+                    className="flex h-10 w-10 items-center justify-center rounded-full border-2 border-zinc-950 bg-gradient-to-br from-violet-500 to-teal-400 text-xs font-black text-white"
+                  >
+                    {initial}
+                  </span>
+                ))}
+              </div>
+              <div>
+                <p className="text-sm font-black text-white">Trusted by ambitious learners</p>
+                <p className="text-xs font-bold text-white/50">Cohorts · Projects · Career support</p>
+              </div>
             </div>
 
             <div className="mt-10 grid gap-3 sm:grid-cols-3">
@@ -72,57 +138,84 @@ export default function HomePageContent() {
                 { label: "Project-based", value: "Yes" },
                 { label: "Career support", value: "Included" },
               ].map((s) => (
-                <div key={s.label} className="rounded-2xl border border-white/10 bg-white/5 p-4">
-                  <p className="text-xs font-bold text-white/60">{s.label}</p>
-                  <p className="mt-1 text-xl font-black">{s.value}</p>
+                <div key={s.label} className="mm-glass rounded-2xl p-4">
+                  <p className="text-xs font-bold uppercase tracking-[0.14em] text-white/50">{s.label}</p>
+                  <p className="mt-1 text-xl font-black text-white">{s.value}</p>
                 </div>
               ))}
             </div>
           </div>
 
           <div className="relative">
-            <div className="absolute -inset-10 -z-10 rounded-[3rem] bg-[radial-gradient(circle_at_top,rgba(139,92,246,0.35),transparent_60%)] blur-2xl" />
+            <div className="absolute -inset-8 rounded-[2.5rem] bg-gradient-to-br from-violet-500/25 via-fuchsia-500/10 to-teal-400/20 blur-2xl" />
 
-            <div className="rounded-3xl border border-white/10 bg-white/5 p-4 shadow-2xl backdrop-blur">
-              <img
-                src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?auto=format&fit=crop&w=1200&q=60"
-                alt="Students collaborating during a mentorship session"
-                className="aspect-[16/10] w-full rounded-2xl object-cover"
-              />
+            <div className="mm-gradient-border relative overflow-hidden rounded-[2rem] p-1 shadow-2xl shadow-violet-950/40">
+              <div className="overflow-hidden rounded-[1.85rem] bg-zinc-950/80 p-3">
+                <img
+                  src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?auto=format&fit=crop&w=1200&q=60"
+                  alt="Students collaborating during a mentorship session"
+                  className="aspect-[4/3] w-full rounded-2xl object-cover"
+                />
+              </div>
             </div>
 
-            <div className="mt-4 grid gap-4 sm:grid-cols-2">
-              <div className="rounded-3xl border border-white/10 bg-white/5 p-5">
-                <div className="flex items-center gap-3">
-                  <ShieldCheck size={18} className="text-white/80" />
-                  <p className="text-sm font-black text-white/80">Structured track</p>
+            <div className="mm-animate-float absolute -left-3 top-8 z-10 mm-glass rounded-2xl px-4 py-3 shadow-xl sm:-left-6">
+              <div className="flex items-center gap-3">
+                <BrandLogo size="sm" />
+                <div>
+                  <p className="text-xs font-black text-white">Mindfull Methods</p>
+                  <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-white/50">
+                    Live cohorts
+                  </p>
                 </div>
-                <p className="mt-3 text-sm leading-6 text-white/70">
-                  Milestones, feedback windows, and guided projects—so you always know what to do next.
-                </p>
               </div>
-              <div className="rounded-3xl border border-white/10 bg-white/5 p-5">
-                <div className="flex items-center gap-3">
-                  <BarChart3 size={18} className="text-white/80" />
-                  <p className="text-sm font-black text-white/80">Measurable progress</p>
+            </div>
+
+            <div className="absolute -bottom-4 -right-2 z-10 mm-glass rounded-2xl px-4 py-3 shadow-xl sm:-right-4">
+              <p className="text-xs font-bold uppercase tracking-[0.16em] text-white/50">Avg. rating</p>
+              <p className="mt-1 flex items-center gap-1 text-lg font-black text-white">
+                4.9 <Star size={16} className="fill-amber-300 text-amber-300" />
+              </p>
+            </div>
+
+            <div className="mt-5 grid gap-4 sm:grid-cols-2">
+              {[
+                {
+                  title: "Structured track",
+                  copy: "Milestones and guided projects so you always know what to do next.",
+                  icon: ShieldCheck,
+                },
+                {
+                  title: "Measurable progress",
+                  copy: "Track outcomes and present proof in a portfolio-ready format.",
+                  icon: BarChart3,
+                },
+              ].map((card) => (
+                <div
+                  key={card.title}
+                  className="mm-glass rounded-2xl p-4 transition hover:border-violet-400/25"
+                >
+                  <div className="flex items-center gap-2">
+                    <card.icon size={16} className="text-violet-300" />
+                    <p className="text-sm font-black text-white">{card.title}</p>
+                  </div>
+                  <p className="mt-2 text-sm leading-6 text-white/65">{card.copy}</p>
                 </div>
-                <p className="mt-3 text-sm leading-6 text-white/70">
-                  Track outcomes as you learn—then present proof in a portfolio-ready format.
-                </p>
-              </div>
+              ))}
             </div>
           </div>
         </div>
       </section>
 
       {/* Trust strip */}
-      <section className="border-b border-white/10 bg-zinc-950/80 px-5 py-6 sm:px-8 lg:px-10">
-        <div className="mx-auto flex max-w-7xl flex-wrap items-center justify-center gap-3 sm:justify-between">
+      <section className="border-b border-white/10 bg-zinc-950/90 px-5 py-5 sm:px-8 lg:px-10">
+        <div className="mx-auto flex max-w-7xl flex-wrap items-center justify-center gap-3">
           {trustBadges.map((badge) => (
             <span
               key={badge}
-              className="rounded-full border border-white/10 bg-white/5 px-4 py-2 text-xs font-bold uppercase tracking-[0.18em] text-white/65"
+              className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.03] px-4 py-2 text-xs font-bold uppercase tracking-[0.16em] text-white/65"
             >
+              <span className="h-1.5 w-1.5 rounded-full bg-gradient-to-r from-violet-400 to-teal-300" />
               {badge}
             </span>
           ))}
@@ -130,17 +223,14 @@ export default function HomePageContent() {
       </section>
 
       {/* Stats */}
-      <section className="mx-auto max-w-7xl px-5 py-14 sm:px-8 lg:px-10">
-        <div className="flex flex-col gap-5 md:flex-row md:items-end md:justify-between">
-          <div className="max-w-xl">
-            <p className="text-sm font-black uppercase tracking-[0.28em] text-white/60">Trusted mentorship</p>
-            <h2 className="mt-4 text-3xl font-black tracking-tight text-white sm:text-4xl">
-              Built for outcomes, not just content
-            </h2>
-            <p className="mt-3 text-sm leading-7 text-white/70">
-              From enrollment to final capstone, you’ll get coaching designed to move you forward.
-            </p>
-          </div>
+      <section className="relative mx-auto max-w-7xl px-5 py-20 sm:px-8 lg:px-10">
+        <div className="pointer-events-none absolute right-0 top-10 h-56 w-56 rounded-full bg-violet-600/10 blur-3xl" />
+        <div className="relative flex flex-col gap-8 lg:flex-row lg:items-end lg:justify-between">
+          <SectionHeader
+            eyebrow="Trusted mentorship"
+            title="Built for outcomes, not just content"
+            description="From enrollment to final capstone, you'll get coaching designed to move you forward."
+          />
           <div className="w-full max-w-2xl">
             <StatsStrip
               stats={[
@@ -155,49 +245,28 @@ export default function HomePageContent() {
       </section>
 
       {/* Benefits */}
-      <section className="border-y border-white/10 bg-zinc-900/50 px-5 py-16 sm:px-8 lg:px-10">
-        <div className="mx-auto max-w-7xl">
-          <div className="max-w-3xl">
-            <p className="text-sm font-black uppercase tracking-[0.28em] text-violet-300">Why our mentorship works</p>
-            <h2 className="mt-4 text-4xl font-black tracking-tight text-white sm:text-5xl">
-              A learning system that sticks
-            </h2>
-          </div>
+      <section className="relative overflow-hidden border-y border-white/10 px-5 py-20 sm:px-8 lg:px-10">
+        <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-violet-950/20 via-transparent to-teal-950/10" />
+        <div className="relative mx-auto max-w-7xl">
+          <SectionHeader
+            eyebrow="Why our mentorship works"
+            title="A learning system that sticks"
+            gradientTitle
+          />
 
-          <div className="mt-10 grid gap-5 md:grid-cols-2 lg:grid-cols-4">
-            {[
-              {
-                title: "Real mentor feedback",
-                description: "Weekly coaching and targeted reviews so you improve fast.",
-                icon: ShieldCheck,
-              },
-              {
-                title: "Structured milestones",
-                description: "Clear outcomes and step-by-step guidance from day one.",
-                icon: Sparkles,
-              },
-              {
-                title: "Practical projects",
-                description: "Ship guided work and build proof with a capstone result.",
-                icon: BriefcaseBusiness,
-              },
-              {
-                title: "Career-ready delivery",
-                description: "Present your outcomes in a portfolio format recruiters understand.",
-                icon: BarChart3,
-              },
-            ].map((f) => (
+          <div className="mt-12 grid gap-5 md:grid-cols-2 lg:grid-cols-4">
+            {benefits.map((f) => (
               <article
                 key={f.title}
-                className="rounded-3xl border border-white/10 bg-white/5 p-6 shadow-sm"
+                className="group mm-glass rounded-3xl p-6 transition hover:-translate-y-1 hover:border-violet-400/30"
               >
-                <div className="flex items-center gap-3">
-                  <span className="flex h-12 w-12 items-center justify-center rounded-2xl bg-zinc-950 text-white">
-                    <f.icon size={18} />
-                  </span>
-                  <p className="text-sm font-black text-white">{f.title}</p>
+                <div
+                  className={`flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br ${f.accent} text-white ring-1 ring-white/10`}
+                >
+                  <f.icon size={22} />
                 </div>
-                <p className="mt-4 text-sm leading-6 text-white/70">{f.description}</p>
+                <h3 className="mt-5 text-lg font-black text-white">{f.title}</h3>
+                <p className="mt-3 text-sm leading-6 text-white/70">{f.description}</p>
               </article>
             ))}
           </div>
@@ -205,20 +274,19 @@ export default function HomePageContent() {
       </section>
 
       {/* Featured Courses */}
-      <section className="mx-auto max-w-7xl px-5 py-16 sm:px-8 lg:px-10">
-        <div className="flex flex-col gap-5 md:flex-row md:items-end md:justify-between">
-          <div>
-            <p className="text-sm font-black uppercase tracking-[0.28em] text-white/60">Featured courses</p>
-            <h2 className="mt-4 text-4xl font-black tracking-tight text-white sm:text-5xl">
-              Programs you can finish with proof
-            </h2>
-          </div>
+      <section className="mx-auto max-w-7xl px-5 py-20 sm:px-8 lg:px-10">
+        <div className="flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
+          <SectionHeader
+            eyebrow="Featured courses"
+            title="Programs you can finish with proof"
+            description="Pick a track, follow milestones, and leave with work you can show."
+          />
           <Button href="/courses" variant="secondary" size="md">
-            View all courses
+            View all courses <ArrowRight size={16} />
           </Button>
         </div>
 
-        <div className="mt-10 grid gap-5 md:grid-cols-2 lg:grid-cols-3">
+        <div className="mt-12 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
           {featured.map((c) => (
             <CourseCard
               key={c.slug}
@@ -239,32 +307,30 @@ export default function HomePageContent() {
       </section>
 
       {/* How it works */}
-      <section className="border-y border-white/10 bg-zinc-950 px-5 py-16 text-white sm:px-8 lg:px-10">
-        <div className="mx-auto max-w-7xl">
-          <div className="max-w-3xl">
-            <p className="text-sm font-black uppercase tracking-[0.28em] text-white/60">How it works</p>
-            <h2 className="mt-4 text-4xl font-black tracking-tight sm:text-5xl">From apply to finished work</h2>
-            <p className="mt-4 text-sm leading-7 text-white/70">
-              A simple rhythm: apply, learn with milestones, and get mentored as you build proof.
-            </p>
-          </div>
-
-          <div className="mt-10">
+      <section className="relative overflow-hidden border-y border-white/10 px-5 py-20 sm:px-8 lg:px-10">
+        <div className="pointer-events-none absolute inset-0 mm-grid-bg opacity-30" />
+        <div className="relative mx-auto max-w-7xl">
+          <SectionHeader
+            eyebrow="How it works"
+            title="From apply to finished work"
+            description="A simple rhythm: apply, learn with milestones, and get mentored as you build proof."
+            gradientTitle
+          />
+          <div className="mt-12">
             <StepsTimeline steps={steps} />
           </div>
         </div>
       </section>
 
       {/* Testimonials */}
-      <section className="mx-auto max-w-7xl px-5 py-16 sm:px-8 lg:px-10">
-        <div className="max-w-3xl">
-          <p className="text-sm font-black uppercase tracking-[0.28em] text-white/60">What learners say</p>
-          <h2 className="mt-4 text-4xl font-black tracking-tight text-white sm:text-5xl">
-            Mentorship that feels personal
-          </h2>
-        </div>
+      <section className="mx-auto max-w-7xl px-5 py-20 sm:px-8 lg:px-10">
+        <SectionHeader
+          eyebrow="What learners say"
+          title="Mentorship that feels personal"
+          description="Real feedback, real projects, and outcomes learners are proud to share."
+        />
 
-        <div className="mt-10 grid gap-5 md:grid-cols-2 lg:grid-cols-3">
+        <div className="mt-12 grid gap-5 md:grid-cols-2 lg:grid-cols-3">
           {testimonials.map((t) => (
             <TestimonialCard key={t.name} quote={t.quote} name={t.name} role={t.role} rating={t.rating} />
           ))}
@@ -272,53 +338,63 @@ export default function HomePageContent() {
       </section>
 
       {/* FAQ */}
-      <section className="border-y border-white/10 bg-zinc-950 px-5 py-16 text-white sm:px-8 lg:px-10">
+      <section className="border-y border-white/10 bg-zinc-950/80 px-5 py-20 sm:px-8 lg:px-10">
         <div className="mx-auto grid max-w-7xl gap-10 lg:grid-cols-[0.9fr_1.1fr] lg:items-start">
-          <div>
-            <p className="text-sm font-black uppercase tracking-[0.28em] text-white/60">FAQ</p>
-            <h2 className="mt-4 text-4xl font-black tracking-tight sm:text-5xl">Questions, answered</h2>
-            <p className="mt-4 text-sm leading-7 text-white/70">
-              If you’re deciding between tracks, these answers will help you choose confidently.
-            </p>
-          </div>
-          <div className="rounded-3xl border border-white/10 bg-white/5 p-6 shadow-sm">
+          <SectionHeader
+            eyebrow="FAQ"
+            title="Questions, answered"
+            description="If you're deciding between tracks, these answers will help you choose confidently."
+          />
+          <div className="mm-glass rounded-3xl p-6 sm:p-8">
             <FAQAccordion items={faqs.map((f) => ({ question: f.question, answer: f.answer }))} />
           </div>
         </div>
       </section>
 
       {/* Final CTA */}
-      <section className="px-5 py-16 sm:px-8 lg:px-10">
-        <div className="mx-auto max-w-7xl overflow-hidden rounded-[2.5rem] border border-white/10 bg-zinc-950 p-8 text-white shadow-2xl sm:p-12">
-          <div className="grid gap-10 lg:grid-cols-[1.05fr_0.95fr] lg:items-center">
-            <div>
-              <p className="text-sm font-black uppercase tracking-[0.28em] text-white/60">Ready?</p>
-              <h2 className="mt-4 text-4xl font-black tracking-tight sm:text-5xl">
-                Get matched to the right course in minutes
-              </h2>
-              <p className="mt-4 text-sm leading-7 text-white/70">
-                Share your goals and we’ll recommend the best track. No pressure, just mentorship guidance.
-              </p>
-            </div>
-            <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-end lg:flex-col lg:justify-start">
-              <Button href={signupUrl()} variant="primary" size="lg">
-                Get started free
-              </Button>
-              <Button href="/dashboard/internships" variant="secondary" size="lg">
-                Browse internships
-              </Button>
-            </div>
-          </div>
+      <section className="px-5 py-20 sm:px-8 lg:px-10">
+        <div className="relative mx-auto max-w-7xl overflow-hidden rounded-[2.5rem] p-[1px] shadow-2xl shadow-violet-950/30">
+          <div className="absolute inset-0 bg-gradient-to-r from-violet-500 via-fuchsia-500 to-teal-400 opacity-80" />
+          <div className="relative overflow-hidden rounded-[2.45rem] bg-zinc-950 px-8 py-12 sm:px-12 sm:py-14">
+            <div className="pointer-events-none absolute -right-20 -top-20 h-64 w-64 rounded-full bg-violet-500/20 blur-3xl" />
+            <div className="pointer-events-none absolute -bottom-24 left-10 h-64 w-64 rounded-full bg-teal-400/10 blur-3xl" />
 
-          <div className="mt-10 flex flex-wrap items-center gap-4 text-sm font-bold text-white/70">
-            <span className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-2">
-              <Star size={16} className="fill-white/80 text-white/80" />
-              4.9 average rating
-            </span>
-            <span className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-2">
-              <ShieldCheck size={16} className="text-white/80" />
-              Mentor-guided cohorts
-            </span>
+            <div className="relative grid gap-10 lg:grid-cols-[1.05fr_0.95fr] lg:items-center">
+              <div>
+                <div className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-2 text-xs font-black uppercase tracking-[0.18em] text-white/70">
+                  <Users size={14} />
+                  Join the next cohort
+                </div>
+                <h2 className="mt-5 text-4xl font-black tracking-tight sm:text-5xl">
+                  Get matched to the right course in{" "}
+                  <span className="mm-gradient-text">minutes</span>
+                </h2>
+                <p className="mt-4 max-w-xl text-base leading-7 text-white/70">
+                  Share your goals and we'll recommend the best track. No pressure, just mentorship
+                  guidance.
+                </p>
+              </div>
+
+              <div className="flex flex-col gap-4 sm:flex-row lg:flex-col">
+                <Button href={signupUrl()} variant="gradient" size="lg">
+                  Get started free <ArrowRight size={18} />
+                </Button>
+                <Button href="/contact" variant="secondary" size="lg">
+                  Book a free call
+                </Button>
+              </div>
+            </div>
+
+            <div className="relative mt-10 flex flex-wrap items-center gap-4 text-sm font-bold text-white/70">
+              <span className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-2">
+                <Star size={16} className="fill-amber-300 text-amber-300" />
+                4.9 average rating
+              </span>
+              <span className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-2">
+                <ShieldCheck size={16} className="text-teal-300" />
+                Mentor-guided cohorts
+              </span>
+            </div>
           </div>
         </div>
       </section>

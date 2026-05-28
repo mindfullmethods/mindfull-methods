@@ -27,7 +27,7 @@ export default function CourseCard({
   return (
     <article
       className={cn(
-        "group overflow-hidden rounded-3xl border border-white/10 bg-white/5 shadow-sm transition hover:-translate-y-1 hover:bg-white/10",
+        "group overflow-hidden rounded-3xl border border-white/10 bg-white/[0.04] shadow-sm backdrop-blur-sm transition duration-300 hover:-translate-y-1.5 hover:border-violet-400/30 hover:bg-white/[0.07] hover:shadow-xl hover:shadow-violet-950/20",
         className
       )}
     >
@@ -42,6 +42,7 @@ export default function CourseCard({
         ) : (
           <div className="h-52 w-full bg-zinc-800/40" />
         )}
+        <div className="absolute inset-x-0 bottom-0 h-20 bg-gradient-to-t from-zinc-950/80 to-transparent" />
         <div className="absolute left-4 top-4">
           <Badge tone="neutral">{course.mode}</Badge>
         </div>
