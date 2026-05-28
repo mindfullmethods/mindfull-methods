@@ -1,12 +1,14 @@
 import Link from "next/link";
-import { BookOpen, CheckCircle2, Clock, GraduationCap } from "lucide-react";
+import { Award, BookOpen, CheckCircle2, Clock, GraduationCap } from "lucide-react";
 
 import Button from "@/components/marketing/Button";
 import EnrollmentsSchemaBanner from "@/components/components/dashboard/EnrollmentsSchemaBanner";
 import { getMyEnrollments } from "@/Services/enrollments";
+import { getProgressSummariesForSlugs } from "@/Services/course-progress";
 import { requireUser } from "@/lib/auth";
 import { linkOrphanEnrollmentsByEmail } from "@/lib/enrollments";
 import { isEnrollmentsTableReady } from "@/lib/enrollments-schema";
+import { isCourseProgressTableReady } from "@/lib/course-progress-schema";
 import { hasSyllabusPdf, syllabusPdfPublicUrl } from "@/lib/syllabus-files";
 
 function formatDate(value: string) {
@@ -39,6 +41,11 @@ export default async function MyCoursesPage({
   }
 
   const enrollments = tableReady ? await getMyEnrollments() : [];
+  const progressReady = await isCourseProgressTableReady();
+  const progressMap =
+    progressReady && enrollments.length > 0
+      ? await getProgressSummariesForSlugs(enrollments.map((e) => e.course_slug))
+      : new Map();
 
   return (
     <main className="min-h-screen px-5 py-8 sm:px-8 xl:px-10">
@@ -79,6 +86,8 @@ export default async function MyCoursesPage({
           <div className="grid gap-5 lg:grid-cols-2">
             {enrollments.map((enrollment) => {
               const courseInfo = enrollment.course;
+              const progress = progressMap.get(enrollment.course_slug);
+              const percent = progress?.percent ?? 0;
 
               return (
                 <article
@@ -115,7 +124,36 @@ export default async function MyCoursesPage({
                       ) : null}
                       <span>Paid {formatDate(enrollment.created_at)}</span>
                     </div>
+                    {progressReady ? (
+                      <div className="mt-4">
+                        <div className="flex items-center justify-between text-xs font-bold text-zinc-500">
+                          <span>Progress</span>
+                          <span>{percent}%</span>
+                        </div>
+                        <div className="mt-2 h-2 overflow-hidden rounded-full bg-zinc-200 dark:bg-zinc-800">
+                          <div
+                            className="h-full rounded-full bg-gradient-to-r from-violet-500 to-teal-400"
+                            style={{ width: `${percent}%` }}
+                          />
+                        </div>
+                      </div>
+                    ) : null}
                     <div className="mt-6 flex flex-wrap gap-3">
+                      {percent >= 100 ? (
+                        <Link
+                          href={`/dashboard/my-courses/${enrollment.course_slug}/certificate`}
+                          className="inline-flex items-center gap-2 rounded-xl bg-emerald-600 px-4 py-2.5 text-sm font-black text-white"
+                        >
+                          <Award size={14} />
+                          Certificate
+                        </Link>
+                      ) : null}
+                      <Link
+                        href={`/dashboard/my-courses/${enrollment.course_slug}`}
+                        className="inline-flex rounded-xl bg-violet-600 px-4 py-2.5 text-sm font-black text-white"
+                      >
+                        Track progress
+                      </Link>
                       <Link
                         href={`/courses/${enrollment.course_slug}`}
                         className="inline-flex rounded-xl bg-zinc-950 px-4 py-2.5 text-sm font-black text-white dark:bg-white dark:text-zinc-950"

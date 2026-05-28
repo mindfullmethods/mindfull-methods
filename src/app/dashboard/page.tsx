@@ -4,18 +4,36 @@ import AnalyticsChart from "@/components/components/dashboard/AnalyticsChart";
 import InternshipList from "@/components/components/dashboard/InternshipList";
 import { getInternships } from "@/Services/Internships";
 import { getMyApplications } from "@/Services/applications";
+import { getStudentApplicationChart, getOverallCourseProgressPercent } from "@/Services/admin-analytics";
+import { getProgressSummariesForSlugs } from "@/Services/course-progress";
 import { getMyEnrollments } from "@/Services/enrollments";
+import { getSessionUser, isAdminUser } from "@/lib/auth";
+import { isCourseProgressTableReady } from "@/lib/course-progress-schema";
 import { marketingImages } from "@/lib/images";
 
 export default async function DashboardPage() {
+  const user = await getSessionUser();
+  const isAdmin = isAdminUser(user);
   const internships = await getInternships();
-  const [applications, enrollments] = await Promise.all([getMyApplications(), getMyEnrollments()]);
+  const [applications, enrollments, applicationChart] = await Promise.all([
+    getMyApplications(),
+    getMyEnrollments(),
+    user ? getStudentApplicationChart(user.id) : Promise.resolve([]),
+  ]);
+
+  const progressReady = await isCourseProgressTableReady();
+  const progressMap =
+    progressReady && enrollments.length > 0
+      ? await getProgressSummariesForSlugs(enrollments.map((e) => e.course_slug))
+      : new Map();
+
+  const overallProgress = getOverallCourseProgressPercent([...progressMap.values()]);
 
   const metrics = [
     {
       label: "My courses",
       value: enrollments.length,
-      helper: "Paid enrollments",
+      helper: enrollments.length ? `${overallProgress}% avg progress` : "Paid enrollments",
       icon: GraduationCap,
       href: "/dashboard/my-courses",
     },
@@ -64,6 +82,14 @@ export default async function DashboardPage() {
               >
                 My courses
               </Link>
+              {isAdmin ? (
+                <Link
+                  href="/dashboard/analytics"
+                  className="inline-flex items-center justify-center gap-2 rounded-xl border border-violet-400/30 bg-violet-500/20 px-5 py-4 text-sm font-black text-white transition hover:bg-violet-500/30"
+                >
+                  Analytics
+                </Link>
+              ) : null}
             </div>
           </div>
           <div className="overflow-hidden rounded-2xl border border-white/15 bg-white/10 p-2 shadow-2xl">
@@ -101,16 +127,62 @@ export default async function DashboardPage() {
         })}
       </section>
 
+      {enrollments.length > 0 && progressReady ? (
+        <section className="mt-8 rounded-3xl border border-zinc-200 bg-white p-6 shadow-sm dark:border-white/10 dark:bg-white/5">
+          <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+            <div>
+              <p className="text-xs font-black uppercase tracking-[0.2em] text-zinc-500">Learning progress</p>
+              <h2 className="mt-2 text-2xl font-black">Your course milestones</h2>
+            </div>
+            <span className="rounded-xl bg-violet-100 px-4 py-2 text-sm font-black text-violet-800 dark:bg-violet-400/10 dark:text-violet-200">
+              {overallProgress}% overall
+            </span>
+          </div>
+          <div className="mt-6 grid gap-4 md:grid-cols-2">
+            {enrollments.map((enrollment) => {
+              const progress = progressMap.get(enrollment.course_slug);
+              const percent = progress?.percent ?? 0;
+
+              return (
+                <Link
+                  key={enrollment.id}
+                  href={`/dashboard/my-courses/${enrollment.course_slug}`}
+                  className="rounded-2xl border border-zinc-200 p-4 transition hover:border-violet-300 dark:border-white/10 dark:hover:border-violet-400/30"
+                >
+                  <p className="font-black">{enrollment.course?.title ?? enrollment.course_title}</p>
+                  <div className="mt-3 h-2 overflow-hidden rounded-full bg-zinc-200 dark:bg-zinc-800">
+                    <div
+                      className="h-full rounded-full bg-gradient-to-r from-violet-500 to-teal-400"
+                      style={{ width: `${percent}%` }}
+                    />
+                  </div>
+                  <p className="mt-2 text-xs font-bold text-zinc-500">
+                    {progress?.completedWeeks.length ?? 0} of {progress?.totalWeeks ?? 0} weeks · {percent}%
+                  </p>
+                </Link>
+              );
+            })}
+          </div>
+        </section>
+      ) : null}
+
       <section className="mt-8 grid gap-6 xl:grid-cols-[1.1fr_0.9fr]">
         <div className="rounded-3xl border border-zinc-200 bg-white p-6 shadow-sm dark:border-white/10 dark:bg-white/5">
           <div className="mb-6 flex items-center justify-between gap-4">
             <div>
               <p className="text-xs font-black uppercase tracking-[0.2em] text-zinc-500">Analytics</p>
-              <h2 className="mt-2 text-2xl font-black">Weekly applications</h2>
+              <h2 className="mt-2 text-2xl font-black">
+                {isAdmin ? "Your activity" : "Applications — last 7 days"}
+              </h2>
             </div>
             <TrendingUp className="text-emerald-600" />
           </div>
-          <AnalyticsChart />
+          <AnalyticsChart data={applicationChart} emptyLabel="No applications in the last 7 days" />
+          {isAdmin ? (
+            <Link href="/dashboard/analytics" className="mt-4 inline-flex text-sm font-black text-violet-600 hover:underline">
+              View full platform analytics →
+            </Link>
+          ) : null}
         </div>
 
         <div className="rounded-3xl border border-zinc-200 bg-white p-6 shadow-sm dark:border-white/10 dark:bg-white/5">

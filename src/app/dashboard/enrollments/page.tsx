@@ -2,6 +2,7 @@ import Link from "next/link";
 import { BookOpen, CreditCard, GraduationCap, Mail, UserRound } from "lucide-react";
 
 import EnrollmentsSchemaBanner from "@/components/components/dashboard/EnrollmentsSchemaBanner";
+import ExportCsvButton from "@/components/components/dashboard/ExportCsvButton";
 import { getAllEnrollments } from "@/Services/admin-enrollments";
 import { requireAdmin } from "@/lib/auth";
 import { isEnrollmentsTableReady } from "@/lib/enrollments-schema";
@@ -43,7 +44,11 @@ export default async function AdminEnrollmentsPage() {
               Students who completed Razorpay checkout for mentorship courses.
             </p>
           </div>
-          <div className="grid gap-3 sm:grid-cols-2">
+          <div className="flex flex-col items-end gap-3">
+            {enrollments.length > 0 ? (
+              <ExportCsvButton href="/api/admin/export/enrollments" label="Export CSV" />
+            ) : null}
+            <div className="grid gap-3 sm:grid-cols-2">
             <div className="rounded-2xl bg-zinc-950 px-6 py-4 text-white dark:bg-white dark:text-zinc-950">
               <p className="text-xs font-black uppercase tracking-[0.2em] opacity-60">Paid</p>
               <p className="mt-1 text-3xl font-black">{paidEnrollments.length}</p>
@@ -51,6 +56,7 @@ export default async function AdminEnrollmentsPage() {
             <div className="rounded-2xl bg-violet-600 px-6 py-4 text-white">
               <p className="text-xs font-black uppercase tracking-[0.2em] opacity-80">Revenue</p>
               <p className="mt-1 text-3xl font-black">{formatAmount(revenue)}</p>
+            </div>
             </div>
           </div>
         </div>

@@ -2,6 +2,7 @@ import { BriefcaseBusiness, ExternalLink, FileText, Mail, UserRound } from "luci
 
 import ApplicationStatusControl from "@/components/components/dashboard/ApplicationStatusControl";
 import ApplicationsSchemaBanner from "@/components/components/dashboard/ApplicationsSchemaBanner";
+import ExportCsvButton from "@/components/components/dashboard/ExportCsvButton";
 import { getApplications } from "@/Services/getApplications";
 import { requireAdmin } from "@/lib/auth";
 import { isApplicationsStatusReady } from "@/lib/applications-schema";
@@ -28,9 +29,14 @@ export default async function ApplicationsPage() {
               Review applicants, update status, and keep every submission organized for admin decisions.
             </p>
           </div>
-          <div className="rounded-2xl bg-zinc-950 px-6 py-4 text-white dark:bg-white dark:text-zinc-950">
-            <p className="text-xs font-black uppercase tracking-[0.2em] opacity-60">Total</p>
-            <p className="mt-1 text-4xl font-black">{applications.length}</p>
+          <div className="flex flex-wrap items-end gap-3">
+            {applications.length > 0 ? (
+              <ExportCsvButton href="/api/admin/export/applications" label="Export CSV" />
+            ) : null}
+            <div className="rounded-2xl bg-zinc-950 px-6 py-4 text-white dark:bg-white dark:text-zinc-950">
+              <p className="text-xs font-black uppercase tracking-[0.2em] opacity-60">Total</p>
+              <p className="mt-1 text-4xl font-black">{applications.length}</p>
+            </div>
           </div>
         </div>
       </section>

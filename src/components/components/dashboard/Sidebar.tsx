@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
+  BarChart3,
   BriefcaseBusiness,
   ClipboardList,
   CreditCard,
@@ -26,6 +27,7 @@ const studentLinks = [
 ];
 
 const adminLinks = [
+  { label: "Analytics", href: "/dashboard/analytics", icon: BarChart3 },
   { label: "All applications", href: "/dashboard/applications", icon: ClipboardList },
   { label: "All enrollments", href: "/dashboard/enrollments", icon: CreditCard },
   { label: "Admin Studio", href: "/dashboard/admin", icon: ShieldCheck },

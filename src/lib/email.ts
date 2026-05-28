@@ -148,6 +148,45 @@ export async function notifyApplicationSubmitted(payload: {
   ]);
 }
 
+export async function notifyApplicationStatusChange(payload: {
+  studentName: string;
+  studentEmail: string;
+  internshipTitle: string;
+  company?: string | null;
+  status: "Approved" | "Rejected";
+}) {
+  const companyLine = payload.company ? ` at ${payload.company}` : "";
+  const dashboardUrl = `${siteConfig.url}/dashboard/my-applications`;
+  const approved = payload.status === "Approved";
+
+  const subject = approved
+    ? `Application approved — ${payload.internshipTitle}`
+    : `Application update — ${payload.internshipTitle}`;
+
+  const headline = approved ? "Your application was approved" : "Application status update";
+  const body = approved
+    ? `Great news! Your application for ${payload.internshipTitle}${companyLine} has been approved. We'll share next steps soon.`
+    : `Thank you for applying to ${payload.internshipTitle}${companyLine}. After review, we are unable to move forward with your application at this time.`;
+
+  await sendEmail({
+    to: payload.studentEmail,
+    subject,
+    text: [
+      `Hi ${payload.studentName},`,
+      "",
+      body,
+      "",
+      `View status: ${dashboardUrl}`,
+    ].join("\n"),
+    html: `
+      <p>Hi ${escapeHtml(payload.studentName)},</p>
+      <h2>${headline}</h2>
+      <p>${escapeHtml(body)}</p>
+      <p><a href="${dashboardUrl}">View my applications →</a></p>
+    `,
+  });
+}
+
 export async function notifyEnrollmentCompleted(payload: {
   studentName: string;
   studentEmail: string;

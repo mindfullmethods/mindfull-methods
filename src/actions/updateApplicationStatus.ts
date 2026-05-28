@@ -3,6 +3,7 @@
 import { revalidatePath } from "next/cache";
 
 import { requireAdmin } from "@/lib/auth";
+import { notifyApplicationStatusChange } from "@/lib/email";
 import { createAdminClient } from "@/lib/supabase/admin";
 
 const ALLOWED_STATUSES = ["Pending", "Approved", "Rejected", "Submitted"] as const;
@@ -22,6 +23,21 @@ export async function updateApplicationStatus(applicationId: string, status: App
   } catch (err) {
     const message = err instanceof Error ? err.message : "Admin database client is not configured.";
     return { ok: false as const, error: message };
+  }
+
+  const { data: existing, error: fetchError } = await supabase
+    .from("applications")
+    .select("id, status, email, student_name, internship_id")
+    .eq("id", applicationId)
+    .maybeSingle();
+
+  if (fetchError) {
+    console.error("[updateApplicationStatus] fetch", fetchError);
+    return { ok: false as const, error: fetchError.message ?? "Could not load application." };
+  }
+
+  if (!existing) {
+    return { ok: false as const, error: "Application not found." };
   }
 
   const { error } = await supabase.from("applications").update({ status }).eq("id", applicationId);
@@ -44,6 +60,41 @@ export async function updateApplicationStatus(applicationId: string, status: App
   revalidatePath("/dashboard/applications");
   revalidatePath("/dashboard/my-applications");
   revalidatePath("/dashboard");
+
+  const shouldNotify =
+    (status === "Approved" || status === "Rejected") &&
+    status !== existing.status &&
+    existing.email?.includes("@");
+
+  if (shouldNotify) {
+    let internshipTitle = "Internship";
+    let company: string | null = null;
+
+    if (existing.internship_id) {
+      const { data: internship } = await supabase
+        .from("internships")
+        .select("title, company")
+        .eq("id", existing.internship_id)
+        .maybeSingle();
+
+      if (internship) {
+        internshipTitle = internship.title;
+        company = internship.company;
+      }
+    }
+
+    try {
+      await notifyApplicationStatusChange({
+        studentName: existing.student_name ?? "Student",
+        studentEmail: existing.email!,
+        internshipTitle,
+        company,
+        status,
+      });
+    } catch (err) {
+      console.error("[updateApplicationStatus] email", err);
+    }
+  }
 
   return { ok: true as const, status };
 }
