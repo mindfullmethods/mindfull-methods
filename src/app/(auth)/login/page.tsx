@@ -6,6 +6,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { ArrowRight, BriefcaseBusiness, LockKeyhole, Mail } from "lucide-react";
 import { supabase } from "@/lib/supabase";
 import BrandLogo from "@/components/marketing/BrandLogo";
+import { marketingImages } from "@/lib/images";
 
 export default function LoginPage() {
   return (
@@ -48,7 +49,7 @@ function LoginPageContent() {
     <main className="grid min-h-screen bg-[#f7f8f5] text-zinc-950 dark:bg-zinc-950 dark:text-white lg:grid-cols-[1.05fr_0.95fr]">
       <section className="relative hidden overflow-hidden lg:block">
         <img
-          src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&w=1600&q=60"
+          src={marketingImages.authCollaboration}
           alt="Team collaboration"
           className="absolute inset-0 h-full w-full object-cover"
         />

@@ -75,7 +75,7 @@ export default async function AdminPage({
               { label: "Company name", name: "company", placeholder: "Mindfull Methods" },
               { label: "Duration", name: "duration", placeholder: "12 weeks" },
               { label: "Stipend", name: "stipend", placeholder: "Rs 25,000/month" },
-              { label: "Image URL", name: "image_url", placeholder: "https://images.unsplash.com/..." },
+              { label: "Image URL", name: "image_url", placeholder: "/images/marketing/internship-fallback.jpg" },
             ].map((field) => (
               <label key={field.name} className="block">
                 <span className="text-sm font-black">{field.label}</span>

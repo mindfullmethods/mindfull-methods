@@ -1,32 +1,37 @@
 import Link from "next/link";
-import { ArrowRight, BriefcaseBusiness, CheckCircle2, ClipboardList, Sparkles, TrendingUp } from "lucide-react";
+import { ArrowRight, BriefcaseBusiness, ClipboardList, GraduationCap, Sparkles, TrendingUp } from "lucide-react";
 import AnalyticsChart from "@/components/components/dashboard/AnalyticsChart";
 import InternshipList from "@/components/components/dashboard/InternshipList";
 import { getInternships } from "@/Services/Internships";
 import { getMyApplications } from "@/Services/applications";
+import { getMyEnrollments } from "@/Services/enrollments";
+import { marketingImages } from "@/lib/images";
 
 export default async function DashboardPage() {
   const internships = await getInternships();
-  const applications = await getMyApplications();
+  const [applications, enrollments] = await Promise.all([getMyApplications(), getMyEnrollments()]);
 
   const metrics = [
+    {
+      label: "My courses",
+      value: enrollments.length,
+      helper: "Paid enrollments",
+      icon: GraduationCap,
+      href: "/dashboard/my-courses",
+    },
+    {
+      label: "My applications",
+      value: applications.length,
+      helper: "Internship submissions",
+      icon: ClipboardList,
+      href: "/dashboard/my-applications",
+    },
     {
       label: "Open internships",
       value: internships.length,
       helper: "Published opportunities",
       icon: BriefcaseBusiness,
-    },
-    {
-      label: "My applications",
-      value: applications.length,
-      helper: "Submitted from this account",
-      icon: ClipboardList,
-    },
-    {
-      label: "Platform stage",
-      value: "Live",
-      helper: "Connected SaaS workspace",
-      icon: CheckCircle2,
+      href: "/dashboard/internships",
     },
   ];
 
@@ -43,19 +48,27 @@ export default async function DashboardPage() {
               Manage internships, applications, and growth from one place.
             </h1>
             <p className="mt-5 max-w-2xl text-sm leading-7 text-white/65 sm:text-base">
-              A focused command center for students and admins to move from discovery to application decisions.
+              Track courses, apply to internships, and manage everything from one workspace.
             </p>
-            <Link
-              href="/dashboard/internships"
-              className="mt-7 inline-flex items-center justify-center gap-2 rounded-xl bg-white px-5 py-4 text-sm font-black text-zinc-950 transition hover:scale-[1.02]"
-            >
-              Browse internships
-              <ArrowRight size={18} />
-            </Link>
+            <div className="mt-7 flex flex-wrap gap-3">
+              <Link
+                href="/dashboard/internships"
+                className="inline-flex items-center justify-center gap-2 rounded-xl bg-white px-5 py-4 text-sm font-black text-zinc-950 transition hover:scale-[1.02]"
+              >
+                Browse internships
+                <ArrowRight size={18} />
+              </Link>
+              <Link
+                href="/dashboard/my-courses"
+                className="inline-flex items-center justify-center gap-2 rounded-xl border border-white/20 bg-white/10 px-5 py-4 text-sm font-black text-white transition hover:bg-white/15"
+              >
+                My courses
+              </Link>
+            </div>
           </div>
           <div className="overflow-hidden rounded-2xl border border-white/15 bg-white/10 p-2 shadow-2xl">
             <img
-              src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=1200&q=60"
+              src={marketingImages.dashboardPreview}
               alt="Mindfull Methods dashboard preview"
               className="aspect-[16/10] w-full rounded-xl object-cover object-left-top"
             />
@@ -68,9 +81,10 @@ export default async function DashboardPage() {
           const Icon = metric.icon;
 
           return (
-            <article
+            <Link
               key={metric.label}
-              className="rounded-2xl border border-zinc-200 bg-white p-5 shadow-sm dark:border-white/10 dark:bg-white/5"
+              href={metric.href}
+              className="rounded-2xl border border-zinc-200 bg-white p-5 shadow-sm transition hover:-translate-y-0.5 hover:shadow-md dark:border-white/10 dark:bg-white/5"
             >
               <div className="flex items-center justify-between gap-4">
                 <div>
@@ -82,7 +96,7 @@ export default async function DashboardPage() {
                 </div>
               </div>
               <p className="mt-4 text-sm font-semibold text-zinc-500">{metric.helper}</p>
-            </article>
+            </Link>
           );
         })}
       </section>

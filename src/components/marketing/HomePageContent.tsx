@@ -21,6 +21,7 @@ import TestimonialCard from "@/components/marketing/TestimonialCard";
 
 import { getCourses, getFeaturedCourses } from "@/lib/courses";
 import { getFaqs } from "@/lib/faqs";
+import { marketingImages } from "@/lib/images";
 import { getTestimonials } from "@/lib/testimonials";
 import { signupUrl } from "@/lib/site";
 
@@ -152,7 +153,7 @@ export default function HomePageContent() {
             <div className="mm-gradient-border relative overflow-hidden rounded-[2rem] p-1 shadow-2xl shadow-violet-950/40">
               <div className="overflow-hidden rounded-[1.85rem] bg-zinc-950/80 p-3">
                 <img
-                  src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?auto=format&fit=crop&w=1200&q=60"
+                  src={marketingImages.hero}
                   alt="Students collaborating during a mentorship session"
                   className="aspect-[4/3] w-full rounded-2xl object-cover"
                 />

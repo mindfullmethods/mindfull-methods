@@ -3,6 +3,7 @@
 import { motion } from "framer-motion";
 import Link from "next/link";
 import { ArrowRight, Building2, Clock3, WalletCards } from "lucide-react";
+import { marketingImages } from "@/lib/images";
 
 interface InternshipCardProps {
   id: string;
@@ -34,7 +35,7 @@ export default function InternshipCard({
       <Link href={`/dashboard/internships/${id}`} className="block">
         <div className="relative h-52 overflow-hidden">
           <img
-            src={image || "https://images.unsplash.com/photo-1497366754035-f200968a6e72"}
+            src={image || marketingImages.internshipFallback}
             alt={title}
             className="h-full w-full object-cover transition duration-700 group-hover:scale-105"
           />

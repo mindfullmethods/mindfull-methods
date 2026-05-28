@@ -24,3 +24,11 @@ export function contactUrl(courseSlug?: string) {
 export function syllabusUrl(courseSlug: string) {
   return `/api/syllabus/${encodeURIComponent(courseSlug)}`;
 }
+
+export function syllabusPrintUrl(courseSlug: string) {
+  return `/courses/${encodeURIComponent(courseSlug)}/syllabus`;
+}
+
+export function syllabusPdfUrl(courseSlug: string) {
+  return `/syllabi/${encodeURIComponent(courseSlug)}.pdf`;
+}

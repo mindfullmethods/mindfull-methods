@@ -6,6 +6,8 @@ import { usePathname } from "next/navigation";
 import {
   BriefcaseBusiness,
   ClipboardList,
+  CreditCard,
+  GraduationCap,
   LayoutDashboard,
   LogOut,
   Menu,
@@ -14,14 +16,18 @@ import {
 } from "lucide-react";
 import { supabase } from "@/lib/supabase";
 import BrandLogo from "@/components/marketing/BrandLogo";
+import { marketingImages } from "@/lib/images";
 
 const studentLinks = [
   { label: "Overview", href: "/dashboard", icon: LayoutDashboard },
+  { label: "My courses", href: "/dashboard/my-courses", icon: GraduationCap },
   { label: "Internships", href: "/dashboard/internships", icon: BriefcaseBusiness },
+  { label: "My applications", href: "/dashboard/my-applications", icon: ClipboardList },
 ];
 
 const adminLinks = [
-  { label: "Applications", href: "/dashboard/applications", icon: ClipboardList },
+  { label: "All applications", href: "/dashboard/applications", icon: ClipboardList },
+  { label: "All enrollments", href: "/dashboard/enrollments", icon: CreditCard },
   { label: "Admin Studio", href: "/dashboard/admin", icon: ShieldCheck },
 ];
 
@@ -110,7 +116,7 @@ export default function Sidebar({ isAdmin = false }: { isAdmin?: boolean }) {
         </nav>
 
         <div className="overflow-hidden rounded-2xl border border-zinc-200 bg-white dark:border-white/10 dark:bg-white/5">
-          <img src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=800&q=60" alt="Dashboard preview" className="h-24 w-full object-cover object-left-top" />
+          <img src={marketingImages.dashboardPreview} alt="Dashboard preview" className="h-24 w-full object-cover object-left-top" />
           <div className="p-5">
           <p className="text-xs font-black uppercase tracking-[0.24em] text-zinc-500">Platform health</p>
           <p className="mt-3 text-2xl font-black">Production Track</p>

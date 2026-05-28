@@ -2,11 +2,14 @@ import Image from "next/image";
 import { notFound } from "next/navigation";
 import { CheckCircle2, Download, Sparkles } from "lucide-react";
 
+import EnrollButton from "@/components/marketing/EnrollButton";
 import Button from "@/components/marketing/Button";
 import Badge from "@/components/marketing/Badge";
 import FAQAccordion from "@/components/marketing/FAQAccordion";
 import { getCourseBySlug, getCourseSlugs } from "@/lib/courses";
-import { contactUrl, signupUrl, syllabusUrl } from "@/lib/site";
+import { isRazorpayConfigured } from "@/lib/razorpay";
+import { contactUrl, signupUrl, syllabusPdfUrl, syllabusPrintUrl, syllabusUrl } from "@/lib/site";
+import { hasSyllabusPdf } from "@/lib/syllabus-files";
 import type { Metadata } from "next";
 
 export function generateStaticParams() {
@@ -44,6 +47,9 @@ export default async function CourseDetailsPage({
   const course = getCourseBySlug(slug);
 
   if (!course) notFound();
+
+  const paymentsEnabled = isRazorpayConfigured();
+  const pdfAvailable = hasSyllabusPdf(course.slug);
 
   return (
     <div className="mx-auto max-w-7xl px-5 py-14 sm:px-8 lg:px-10">
@@ -98,9 +104,18 @@ export default async function CourseDetailsPage({
               <p className="mt-2 text-2xl font-black text-white">{course.priceLabel}</p>
 
               <div className="mt-5 flex flex-col gap-3">
-                <Button href={signupUrl(course.slug)} variant="primary" size="lg">
-                  Apply now
-                </Button>
+                {paymentsEnabled ? (
+                  <EnrollButton
+                    courseSlug={course.slug}
+                    courseTitle={course.title}
+                    amountInPaise={course.priceInPaise}
+                    priceLabel={course.priceLabel}
+                  />
+                ) : (
+                  <Button href={signupUrl(course.slug)} variant="primary" size="lg">
+                    Apply now
+                  </Button>
+                )}
                 <Button href={contactUrl(course.slug)} variant="secondary" size="lg">
                   Book a call
                 </Button>
@@ -108,16 +123,35 @@ export default async function CourseDetailsPage({
                 <div className="rounded-2xl border border-white/10 bg-white/5 p-4">
                   <div className="flex items-center gap-2">
                     <Download size={16} className="text-white/70" />
-                    <p className="text-sm font-bold text-white/80">Download syllabus</p>
+                    <p className="text-sm font-bold text-white/80">Course syllabus</p>
                   </div>
-                  <a
-                    href={syllabusUrl(course.slug)}
-                    download
-                    className="mt-3 inline-flex items-center gap-2 rounded-xl border border-white/15 bg-white/10 px-4 py-2.5 text-sm font-black text-white transition hover:bg-white/15"
-                  >
-                    <Download size={14} />
-                    Get syllabus (.txt)
-                  </a>
+                  <div className="mt-3 flex flex-wrap gap-2">
+                    {pdfAvailable ? (
+                      <a
+                        href={syllabusPdfUrl(course.slug)}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center gap-2 rounded-xl border border-white/15 bg-white/10 px-4 py-2.5 text-sm font-black text-white transition hover:bg-white/15"
+                      >
+                        <Download size={14} />
+                        Download PDF
+                      </a>
+                    ) : null}
+                    <a
+                      href={syllabusPrintUrl(course.slug)}
+                      className="inline-flex items-center gap-2 rounded-xl border border-white/15 bg-white/10 px-4 py-2.5 text-sm font-black text-white transition hover:bg-white/15"
+                    >
+                      {pdfAvailable ? "View & print" : "View & print PDF"}
+                    </a>
+                    <a
+                      href={syllabusUrl(course.slug)}
+                      download
+                      className="inline-flex items-center gap-2 rounded-xl border border-white/15 bg-white/10 px-4 py-2.5 text-sm font-black text-white transition hover:bg-white/15"
+                    >
+                      <Download size={14} />
+                      .txt
+                    </a>
+                  </div>
                   <div className="mt-3 flex items-center gap-2 text-xs font-bold text-white/50">
                     <Sparkles size={14} />
                     Weekly mentorship included

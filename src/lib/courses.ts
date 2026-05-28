@@ -1,3 +1,5 @@
+import { getCourseImage } from "@/lib/images";
+
 export type CourseFaq = {
   question: string;
   answer: string;
@@ -18,6 +20,7 @@ export type Course = {
   duration: string;
   mode: "Online" | "Hybrid";
   priceLabel: string;
+  priceInPaise: number;
   tags: string[];
   imageUrl: string;
   featured: boolean;
@@ -38,8 +41,9 @@ const courses: Course[] = [
     duration: "8 weeks",
     mode: "Online",
     priceLabel: "₹12,999 · Cohort-based",
+    priceInPaise: 1299900,
     tags: ["React", "Next.js", "Tailwind", "Projects"],
-    imageUrl: "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=1200&q=60",
+    imageUrl: getCourseImage("frontend-engineering"),
     featured: true,
     learnOutcomes: [
       "Build reusable UI components with accessibility in mind",
@@ -86,8 +90,9 @@ const courses: Course[] = [
     duration: "6 weeks",
     mode: "Online",
     priceLabel: "₹12,999 · Cohort-based",
+    priceInPaise: 1299900,
     tags: ["Research", "Figma", "Design systems", "Case studies"],
-    imageUrl: "https://images.unsplash.com/photo-1586717791821-3f44a563fa4c?auto=format&fit=crop&w=1200&q=60",
+    imageUrl: getCourseImage("product-design"),
     featured: true,
     learnOutcomes: [
       "Conduct lightweight UX research and translate findings into design decisions",
@@ -127,8 +132,9 @@ const courses: Course[] = [
     duration: "7 weeks",
     mode: "Online",
     priceLabel: "₹12,999 · Cohort-based",
+    priceInPaise: 1299900,
     tags: ["Dashboards", "SQL", "Storytelling", "Projects"],
-    imageUrl: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=1200&q=60",
+    imageUrl: getCourseImage("data-analytics"),
     featured: true,
     learnOutcomes: [
       "Ask better questions and define metrics that matter",
@@ -169,8 +175,9 @@ const courses: Course[] = [
     duration: "10 weeks",
     mode: "Hybrid",
     priceLabel: "₹14,999 · Cohort-based",
+    priceInPaise: 1499900,
     tags: ["React", "Node.js", "PostgreSQL", "APIs"],
-    imageUrl: "https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&w=1200&q=60",
+    imageUrl: getCourseImage("full-stack-development"),
     featured: true,
     learnOutcomes: [
       "Design RESTful APIs and connect them to a React frontend",
@@ -212,8 +219,9 @@ const courses: Course[] = [
     duration: "6 weeks",
     mode: "Online",
     priceLabel: "₹9,999 · Cohort-based",
+    priceInPaise: 999900,
     tags: ["SEO", "Content", "Ads", "Analytics"],
-    imageUrl: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=1200&q=60",
+    imageUrl: getCourseImage("digital-marketing"),
     featured: false,
     learnOutcomes: [
       "Plan a multi-channel campaign with clear goals and KPIs",
@@ -251,8 +259,9 @@ const courses: Course[] = [
     duration: "8 weeks",
     mode: "Online",
     priceLabel: "₹16,999 · Cohort-based",
+    priceInPaise: 1699900,
     tags: ["Python", "Scikit-learn", "Models", "Projects"],
-    imageUrl: "https://images.unsplash.com/photo-1555949963-aa79dcee981c?auto=format&fit=crop&w=1200&q=60",
+    imageUrl: getCourseImage("machine-learning"),
     featured: true,
     learnOutcomes: [
       "Prepare datasets and evaluate model performance responsibly",

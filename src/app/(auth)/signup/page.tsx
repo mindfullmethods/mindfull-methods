@@ -6,7 +6,9 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { ArrowRight, CheckCircle2, LockKeyhole, Mail, UserRound } from "lucide-react";
 import { supabase } from "@/lib/supabase";
 import { getCourseBySlug } from "@/lib/courses";
+import { linkEnrollmentAction } from "@/actions/linkEnrollment";
 import BrandLogo from "@/components/marketing/BrandLogo";
+import { marketingImages } from "@/lib/images";
 
 export default function SignupPage() {
   return (
@@ -20,6 +22,8 @@ function SignupPageContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const courseSlug = searchParams.get("course");
+  const paid = searchParams.get("paid") === "1";
+  const orderId = searchParams.get("order");
   const selectedCourse = useMemo(
     () => (courseSlug ? getCourseBySlug(courseSlug) : null),
     [courseSlug]
@@ -59,12 +63,16 @@ function SignupPageContent() {
         full_name: fullName,
         email,
       });
+
+      if (orderId) {
+        await linkEnrollmentAction(orderId);
+      }
     }
 
     setLoading(false);
 
     if (data.session) {
-      router.replace("/dashboard/internships");
+      router.replace(paid ? "/dashboard/my-courses?enrolled=1" : "/dashboard/internships");
       return;
     }
 
@@ -86,6 +94,12 @@ function SignupPageContent() {
               ? `You're applying for ${selectedCourse.title}. Create an account to browse internships and track applications.`
               : "Start applying to structured programs and build proof of work."}
           </p>
+
+          {paid ? (
+            <div className="mt-5 rounded-xl border border-violet-200 bg-violet-50 px-4 py-3 text-sm font-bold text-violet-900 dark:border-violet-400/20 dark:bg-violet-400/10 dark:text-violet-100">
+              Payment confirmed — create your account to access the course and dashboard.
+            </div>
+          ) : null}
 
           {selectedCourse ? (
             <div className="mt-5 rounded-xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm font-bold text-emerald-800 dark:border-emerald-400/20 dark:bg-emerald-400/10 dark:text-emerald-200">
@@ -165,7 +179,7 @@ function SignupPageContent() {
 
       <section className="relative hidden overflow-hidden lg:block">
         <img
-          src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=1600&q=60"
+          src={marketingImages.authDashboard}
           alt="Mindfull Methods dashboard preview"
           className="absolute inset-0 h-full w-full object-cover"
         />

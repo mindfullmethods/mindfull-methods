@@ -1,5 +1,6 @@
 import ApplyButton from "@/components/components/dashboard/ApplyButton";
 import { getInternshipById } from "@/Services/internship-details";
+import { marketingImages } from "@/lib/images";
 
 export default async function InternshipDetailsPage({
   params,
@@ -25,10 +26,7 @@ export default async function InternshipDetailsPage({
       <div className="overflow-hidden rounded-3xl border border-black/10 bg-white shadow-xl transition duration-500 dark:border-white/10 dark:bg-zinc-900">
 
         <img
-          src={
-            internship.image_url ||
-               "https://images.unsplash.com/photo-1498050108023-c5249f4df085"
-          }
+          src={internship.image_url || marketingImages.internshipFallback}
           alt={internship.title}
           className="h-[280px] sm:h-[400px] xl:h-[500px] w-full object-cover"
         />

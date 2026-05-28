@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { marketingImages } from "@/lib/images";
 import InternshipCard from "./InternshipCard";
 
 type InternshipListItem = {
@@ -185,10 +186,7 @@ export default function InternshipList({
               stipend={
                 internship.stipend
               }
-              image={
-                internship.image_url ||
-                "https://images.unsplash.com/photo-1497366754035-f200968a6e72"
-              }
+              image={internship.image_url || marketingImages.internshipFallback}
             />
           )
         )}
