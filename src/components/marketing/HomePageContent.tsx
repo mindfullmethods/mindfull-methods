@@ -10,7 +10,7 @@ import {
 } from "lucide-react";
 
 import Badge from "@/components/marketing/Badge";
-import BrandLogo from "@/components/marketing/BrandLogo";
+import ThemedBrandLogo from "@/components/marketing/ThemedBrandLogo";
 import Button from "@/components/marketing/Button";
 import CourseCard from "@/components/marketing/CourseCard";
 import FAQAccordion from "@/components/marketing/FAQAccordion";
@@ -81,7 +81,7 @@ export default function HomePageContent() {
   return (
     <>
       {/* Hero */}
-      <section className="relative overflow-hidden border-b border-white/10 px-5 pb-20 pt-12 sm:px-8 sm:pt-16 lg:px-10 lg:pb-28">
+      <section className="relative overflow-hidden border-b mm-border px-5 pb-20 pt-12 sm:px-8 sm:pt-16 lg:px-10 lg:pb-28">
         <div className="pointer-events-none absolute inset-0 mm-grid-bg opacity-60" />
         <div className="pointer-events-none absolute -left-24 top-0 h-72 w-72 rounded-full bg-violet-600/30 blur-[100px]" />
         <div className="pointer-events-none absolute -right-16 top-24 h-80 w-80 rounded-full bg-teal-500/20 blur-[110px]" />
@@ -91,7 +91,7 @@ export default function HomePageContent() {
           <div>
             <div className="flex flex-wrap items-center gap-3">
               <Badge tone="violet">Mentorship-first learning</Badge>
-              <span className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-1.5 text-xs font-bold text-white/70">
+              <span className="inline-flex items-center gap-2 rounded-full mm-pill px-3 py-1.5 text-xs font-bold">
                 <Star size={12} className="fill-amber-300 text-amber-300" />
                 4.9 learner rating
               </span>
@@ -102,7 +102,7 @@ export default function HomePageContent() {
               <span className="mm-gradient-text">the way mentors teach</span>
             </h1>
 
-            <p className="mt-6 max-w-xl text-base leading-8 text-white/70 sm:text-lg">
+            <p className="mt-6 max-w-xl text-base leading-8 mm-muted sm:text-lg">
               Mindfull Methods offers structured certification programs with live mentorship, milestone
               guidance, and practical outcomes—so you finish with proof, not just certificates.
             </p>
@@ -121,15 +121,15 @@ export default function HomePageContent() {
                 {["A", "M", "J", "S"].map((initial) => (
                   <span
                     key={initial}
-                    className="flex h-10 w-10 items-center justify-center rounded-full border-2 border-zinc-950 bg-gradient-to-br from-violet-500 to-teal-400 text-xs font-black text-white"
+                    className="flex h-10 w-10 items-center justify-center rounded-full border-2 border-[#f7f8f5] bg-gradient-to-br from-violet-500 to-teal-400 text-xs font-black text-white dark:border-zinc-950"
                   >
                     {initial}
                   </span>
                 ))}
               </div>
               <div>
-                <p className="text-sm font-black text-white">Trusted by ambitious learners</p>
-                <p className="text-xs font-bold text-white/50">Cohorts · Projects · Career support</p>
+                <p className="text-sm font-black mm-heading">Trusted by ambitious learners</p>
+                <p className="text-xs font-bold mm-subtle">Cohorts · Projects · Career support</p>
               </div>
             </div>
 
@@ -140,8 +140,8 @@ export default function HomePageContent() {
                 { label: "Career support", value: "Included" },
               ].map((s) => (
                 <div key={s.label} className="mm-glass rounded-2xl p-4">
-                  <p className="text-xs font-bold uppercase tracking-[0.14em] text-white/50">{s.label}</p>
-                  <p className="mt-1 text-xl font-black text-white">{s.value}</p>
+                  <p className="text-xs font-bold uppercase tracking-[0.14em] mm-subtle">{s.label}</p>
+                  <p className="mt-1 text-xl font-black mm-heading">{s.value}</p>
                 </div>
               ))}
             </div>
@@ -150,8 +150,8 @@ export default function HomePageContent() {
           <div className="relative">
             <div className="absolute -inset-8 rounded-[2.5rem] bg-gradient-to-br from-violet-500/25 via-fuchsia-500/10 to-teal-400/20 blur-2xl" />
 
-            <div className="mm-gradient-border relative overflow-hidden rounded-[2rem] p-1 shadow-2xl shadow-violet-950/40">
-              <div className="overflow-hidden rounded-[1.85rem] bg-zinc-950/80 p-3">
+            <div className="mm-gradient-border relative overflow-hidden rounded-[2rem] p-1 shadow-2xl shadow-violet-500/10 dark:shadow-violet-950/40">
+              <div className="overflow-hidden rounded-[1.85rem] bg-zinc-100 p-3 dark:bg-zinc-950/80">
                 <img
                   src={marketingImages.hero}
                   alt="Students collaborating during a mentorship session"
@@ -162,10 +162,10 @@ export default function HomePageContent() {
 
             <div className="mm-animate-float absolute -left-3 top-8 z-10 mm-glass rounded-2xl px-4 py-3 shadow-xl sm:-left-6">
               <div className="flex items-center gap-3">
-                <BrandLogo size="sm" />
+                <ThemedBrandLogo size="sm" />
                 <div>
-                  <p className="text-xs font-black text-white">Mindfull Methods</p>
-                  <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-white/50">
+                  <p className="text-xs font-black mm-heading">Mindfull Methods</p>
+                  <p className="text-[10px] font-bold uppercase tracking-[0.18em] mm-subtle">
                     Live cohorts
                   </p>
                 </div>
@@ -173,8 +173,8 @@ export default function HomePageContent() {
             </div>
 
             <div className="absolute -bottom-4 -right-2 z-10 mm-glass rounded-2xl px-4 py-3 shadow-xl sm:-right-4">
-              <p className="text-xs font-bold uppercase tracking-[0.16em] text-white/50">Avg. rating</p>
-              <p className="mt-1 flex items-center gap-1 text-lg font-black text-white">
+              <p className="text-xs font-bold uppercase tracking-[0.16em] mm-subtle">Avg. rating</p>
+              <p className="mt-1 flex items-center gap-1 text-lg font-black mm-heading">
                 4.9 <Star size={16} className="fill-amber-300 text-amber-300" />
               </p>
             </div>
@@ -197,10 +197,10 @@ export default function HomePageContent() {
                   className="mm-glass rounded-2xl p-4 transition hover:border-violet-400/25"
                 >
                   <div className="flex items-center gap-2">
-                    <card.icon size={16} className="text-violet-300" />
-                    <p className="text-sm font-black text-white">{card.title}</p>
+                    <card.icon size={16} className="text-violet-600 dark:text-violet-300" />
+                    <p className="text-sm font-black mm-heading">{card.title}</p>
                   </div>
-                  <p className="mt-2 text-sm leading-6 text-white/65">{card.copy}</p>
+                  <p className="mt-2 text-sm leading-6 mm-muted">{card.copy}</p>
                 </div>
               ))}
             </div>
@@ -209,12 +209,12 @@ export default function HomePageContent() {
       </section>
 
       {/* Trust strip */}
-      <section className="border-b border-white/10 bg-zinc-950/90 px-5 py-5 sm:px-8 lg:px-10">
+      <section className="border-b mm-border mm-section-muted px-5 py-5 sm:px-8 lg:px-10">
         <div className="mx-auto flex max-w-7xl flex-wrap items-center justify-center gap-3">
           {trustBadges.map((badge) => (
             <span
               key={badge}
-              className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.03] px-4 py-2 text-xs font-bold uppercase tracking-[0.16em] text-white/65"
+              className="inline-flex items-center gap-2 rounded-full mm-pill px-4 py-2 text-xs font-bold uppercase tracking-[0.16em]"
             >
               <span className="h-1.5 w-1.5 rounded-full bg-gradient-to-r from-violet-400 to-teal-300" />
               {badge}
@@ -246,8 +246,8 @@ export default function HomePageContent() {
       </section>
 
       {/* Benefits */}
-      <section className="relative overflow-hidden border-y border-white/10 px-5 py-20 sm:px-8 lg:px-10">
-        <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-violet-950/20 via-transparent to-teal-950/10" />
+      <section className="relative overflow-hidden border-y mm-border px-5 py-20 sm:px-8 lg:px-10">
+        <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-violet-100/50 via-transparent to-teal-100/30 dark:from-violet-950/20 dark:to-teal-950/10" />
         <div className="relative mx-auto max-w-7xl">
           <SectionHeader
             eyebrow="Why our mentorship works"
@@ -262,12 +262,12 @@ export default function HomePageContent() {
                 className="group mm-glass rounded-3xl p-6 transition hover:-translate-y-1 hover:border-violet-400/30"
               >
                 <div
-                  className={`flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br ${f.accent} text-white ring-1 ring-white/10`}
+                  className={`flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br ${f.accent} text-violet-700 ring-1 ring-violet-200 dark:text-white dark:ring-white/10`}
                 >
                   <f.icon size={22} />
                 </div>
-                <h3 className="mt-5 text-lg font-black text-white">{f.title}</h3>
-                <p className="mt-3 text-sm leading-6 text-white/70">{f.description}</p>
+                <h3 className="mt-5 text-lg font-black mm-heading">{f.title}</h3>
+                <p className="mt-3 text-sm leading-6 mm-muted">{f.description}</p>
               </article>
             ))}
           </div>
@@ -308,7 +308,7 @@ export default function HomePageContent() {
       </section>
 
       {/* How it works */}
-      <section className="relative overflow-hidden border-y border-white/10 px-5 py-20 sm:px-8 lg:px-10">
+      <section className="relative overflow-hidden border-y mm-border px-5 py-20 sm:px-8 lg:px-10">
         <div className="pointer-events-none absolute inset-0 mm-grid-bg opacity-30" />
         <div className="relative mx-auto max-w-7xl">
           <SectionHeader
@@ -339,7 +339,7 @@ export default function HomePageContent() {
       </section>
 
       {/* FAQ */}
-      <section className="border-y border-white/10 bg-zinc-950/80 px-5 py-20 sm:px-8 lg:px-10">
+      <section className="border-y mm-border mm-section-muted px-5 py-20 sm:px-8 lg:px-10">
         <div className="mx-auto grid max-w-7xl gap-10 lg:grid-cols-[0.9fr_1.1fr] lg:items-start">
           <SectionHeader
             eyebrow="FAQ"
@@ -354,7 +354,7 @@ export default function HomePageContent() {
 
       {/* Final CTA */}
       <section className="px-5 py-20 sm:px-8 lg:px-10">
-        <div className="relative mx-auto max-w-7xl overflow-hidden rounded-[2.5rem] p-[1px] shadow-2xl shadow-violet-950/30">
+        <div className="relative mx-auto max-w-7xl overflow-hidden rounded-[2.5rem] p-[1px] shadow-2xl shadow-violet-500/20 dark:shadow-violet-950/30">
           <div className="absolute inset-0 bg-gradient-to-r from-violet-500 via-fuchsia-500 to-teal-400 opacity-80" />
           <div className="relative overflow-hidden rounded-[2.45rem] bg-zinc-950 px-8 py-12 sm:px-12 sm:py-14">
             <div className="pointer-events-none absolute -right-20 -top-20 h-64 w-64 rounded-full bg-violet-500/20 blur-3xl" />
@@ -366,7 +366,7 @@ export default function HomePageContent() {
                   <Users size={14} />
                   Join the next cohort
                 </div>
-                <h2 className="mt-5 text-4xl font-black tracking-tight sm:text-5xl">
+                <h2 className="mt-5 text-4xl font-black tracking-tight text-white sm:text-5xl">
                   Get matched to the right course in{" "}
                   <span className="mm-gradient-text">minutes</span>
                 </h2>

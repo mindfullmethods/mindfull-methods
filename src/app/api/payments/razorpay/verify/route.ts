@@ -1,6 +1,7 @@
 import { createHmac, timingSafeEqual } from "crypto";
 import { NextResponse } from "next/server";
 
+import { markInquiryEnrolledForCourse } from "@/lib/contact-inquiry-enrollment";
 import {
   getEnrollmentCourseMeta,
   recordEnrollment,
@@ -45,9 +46,10 @@ export async function POST(req: Request) {
       razorpay_payment_id?: string;
       razorpay_signature?: string;
       courseSlug?: string;
+      customerEmail?: string;
     };
 
-    const { razorpay_order_id, razorpay_payment_id, razorpay_signature, courseSlug } = body;
+    const { razorpay_order_id, razorpay_payment_id, razorpay_signature, courseSlug, customerEmail } = body;
 
     if (!razorpay_order_id || !razorpay_payment_id || !razorpay_signature) {
       return NextResponse.json({ ok: false, error: "Missing payment details." }, { status: 400 });
@@ -75,6 +77,8 @@ export async function POST(req: Request) {
       data: { user },
     } = await supabase.auth.getUser();
 
+    const payerEmail = user?.email ?? customerEmail?.trim() ?? null;
+
     try {
       await recordEnrollment({
         courseSlug: courseMeta.slug,
@@ -83,7 +87,7 @@ export async function POST(req: Request) {
         razorpayOrderId: razorpay_order_id,
         razorpayPaymentId: razorpay_payment_id,
         userId: user?.id ?? null,
-        email: user?.email ?? null,
+        email: payerEmail,
       });
     } catch (err) {
       const message = err instanceof Error ? err.message : "Could not save enrollment.";
@@ -94,11 +98,15 @@ export async function POST(req: Request) {
       courseSlug: courseMeta.slug,
       courseTitle: courseMeta.title,
       amountPaise: courseMeta.amountPaise,
-      email: user?.email,
+      email: payerEmail,
       name:
         (user?.user_metadata?.full_name as string | undefined) ??
         (user?.user_metadata?.name as string | undefined),
     });
+
+    if (payerEmail) {
+      void markInquiryEnrolledForCourse(payerEmail, courseMeta.slug);
+    }
 
     if (user) {
       return NextResponse.json({

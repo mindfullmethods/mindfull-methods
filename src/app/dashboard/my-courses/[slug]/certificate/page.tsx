@@ -1,6 +1,6 @@
 import { notFound, redirect } from "next/navigation";
 
-import BrandLogo from "@/components/marketing/BrandLogo";
+import BrandWordmark from "@/components/marketing/BrandWordmark";
 import CertificateActions from "@/components/components/dashboard/CertificateActions";
 import { getCourseProgress, isEnrolledInCourse } from "@/Services/course-progress";
 import { getSessionUser, requireUser } from "@/lib/auth";
@@ -45,7 +45,7 @@ export default async function CourseCertificatePage({ params }: { params: Promis
 
         <article className="rounded-[2rem] border-4 border-violet-200 bg-gradient-to-br from-violet-50 via-white to-teal-50 p-8 shadow-xl sm:p-12 print:border-violet-300 print:shadow-none">
           <div className="flex flex-col items-center text-center">
-            <BrandLogo size="md" theme="light" />
+            <BrandWordmark size="md" />
             <p className="mt-8 text-xs font-black uppercase tracking-[0.35em] text-violet-600">
               Certificate of completion
             </p>

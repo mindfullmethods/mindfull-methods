@@ -8,13 +8,13 @@ export const metadata: Metadata = {
 export default function PrivacyPage() {
   return (
     <div className="mx-auto max-w-3xl px-5 py-16 sm:px-8 lg:px-10">
-      <p className="text-sm font-black uppercase tracking-[0.28em] text-white/60">Legal</p>
-      <h1 className="mt-4 text-4xl font-black tracking-tight text-white sm:text-5xl">Privacy Policy</h1>
-      <p className="mt-4 text-sm text-white/50">Last updated: May 2026</p>
+      <p className="mm-eyebrow">Legal</p>
+      <h1 className="mt-4 text-4xl font-black tracking-tight mm-heading sm:text-5xl">Privacy Policy</h1>
+      <p className="mt-4 text-sm mm-subtle">Last updated: May 2026</p>
 
-      <div className="prose prose-invert mt-10 max-w-none space-y-8 text-sm leading-7 text-white/70">
+      <div className="prose prose-zinc dark:prose-invert mt-10 max-w-none space-y-8 text-sm leading-7 mm-muted">
         <section>
-          <h2 className="text-xl font-black text-white">Overview</h2>
+          <h2 className="text-xl font-black mm-heading">Overview</h2>
           <p className="mt-3">
             Mindfull Methods (&quot;we&quot;, &quot;us&quot;) respects your privacy. This policy explains what information we
             collect when you use our website, enroll in courses, or contact us—and how we use it.
@@ -22,7 +22,7 @@ export default function PrivacyPage() {
         </section>
 
         <section>
-          <h2 className="text-xl font-black text-white">Information we collect</h2>
+          <h2 className="text-xl font-black mm-heading">Information we collect</h2>
           <ul className="mt-3 list-disc space-y-2 pl-5">
             <li>Account details such as name and email when you sign up</li>
             <li>Course preferences and application information you submit</li>
@@ -32,7 +32,7 @@ export default function PrivacyPage() {
         </section>
 
         <section>
-          <h2 className="text-xl font-black text-white">How we use your information</h2>
+          <h2 className="text-xl font-black mm-heading">How we use your information</h2>
           <ul className="mt-3 list-disc space-y-2 pl-5">
             <li>Provide access to courses, mentorship, and dashboard features</li>
             <li>Respond to inquiries and send program-related updates</li>
@@ -42,7 +42,7 @@ export default function PrivacyPage() {
         </section>
 
         <section>
-          <h2 className="text-xl font-black text-white">Third-party services</h2>
+          <h2 className="text-xl font-black mm-heading">Third-party services</h2>
           <p className="mt-3">
             We use trusted providers for authentication (Supabase), email delivery (Resend), and analytics (Vercel).
             These services process data according to their own privacy policies.
@@ -50,10 +50,10 @@ export default function PrivacyPage() {
         </section>
 
         <section>
-          <h2 className="text-xl font-black text-white">Your choices</h2>
+          <h2 className="text-xl font-black mm-heading">Your choices</h2>
           <p className="mt-3">
             You may request access, correction, or deletion of your personal data by emailing{" "}
-            <a href="mailto:support@mindfullmethods.com" className="font-bold text-white hover:underline">
+            <a href="mailto:support@mindfullmethods.com" className="font-bold mm-heading hover:underline">
               support@mindfullmethods.com
             </a>
             .
@@ -61,10 +61,10 @@ export default function PrivacyPage() {
         </section>
 
         <section>
-          <h2 className="text-xl font-black text-white">Contact</h2>
+          <h2 className="text-xl font-black mm-heading">Contact</h2>
           <p className="mt-3">
             Questions about this policy? Reach us at{" "}
-            <a href="mailto:support@mindfullmethods.com" className="font-bold text-white hover:underline">
+            <a href="mailto:support@mindfullmethods.com" className="font-bold mm-heading hover:underline">
               support@mindfullmethods.com
             </a>
             .

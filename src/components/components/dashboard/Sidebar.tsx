@@ -19,7 +19,8 @@ import {
   ShieldCheck,
 } from "lucide-react";
 import { supabase } from "@/lib/supabase";
-import BrandLogo from "@/components/marketing/BrandLogo";
+import ThemedBrandLogo from "@/components/marketing/ThemedBrandLogo";
+import ThemeToggle from "@/components/ThemeToggle";
 import { marketingImages } from "@/lib/images";
 
 const studentLinks = [
@@ -82,16 +83,19 @@ export default function Sidebar({ isAdmin = false }: { isAdmin?: boolean }) {
         <div className="shrink-0 p-5 pb-0">
           <div className="flex items-start justify-between gap-4">
             <Link href="/dashboard" className="inline-flex min-w-0 flex-1">
-              <BrandLogo size="sm" theme="light" className="max-w-[170px]" />
+              <ThemedBrandLogo size="sm" className="max-w-[170px]" />
             </Link>
 
-            <button
-              onClick={() => setOpen(false)}
-              aria-label="Close navigation"
-              className="rounded-xl p-2 text-zinc-500 transition hover:bg-zinc-200/70 dark:hover:bg-white/10 lg:hidden"
-            >
-              <PanelLeftClose size={20} />
-            </button>
+            <div className="flex items-center gap-1">
+              <ThemeToggle size="sm" />
+              <button
+                onClick={() => setOpen(false)}
+                aria-label="Close navigation"
+                className="rounded-xl p-2 text-zinc-500 transition hover:bg-zinc-200/70 dark:hover:bg-white/10 lg:hidden"
+              >
+                <PanelLeftClose size={20} />
+              </button>
+            </div>
           </div>
 
           <div className="mt-8 rounded-2xl bg-zinc-950 p-5 text-white dark:bg-white dark:text-zinc-950">

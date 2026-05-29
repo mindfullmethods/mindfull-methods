@@ -1,8 +1,10 @@
 "use client";
 
 import Script from "next/script";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { CreditCard } from "lucide-react";
+
+import { supabase } from "@/lib/supabase";
 
 type RazorpayResponse = {
   razorpay_order_id: string;
@@ -20,6 +22,10 @@ declare global {
   }
 }
 
+function isValidEmail(email: string) {
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim());
+}
+
 export default function EnrollButton({
   courseSlug,
   courseTitle,
@@ -33,16 +39,42 @@ export default function EnrollButton({
 }) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [sessionEmail, setSessionEmail] = useState<string | null>(null);
+  const [guestEmail, setGuestEmail] = useState("");
+  const [checkingSession, setCheckingSession] = useState(true);
+
+  useEffect(() => {
+    async function loadSession() {
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
+      setSessionEmail(user?.email ?? null);
+      if (user?.email) setGuestEmail(user.email);
+      setCheckingSession(false);
+    }
+
+    loadSession();
+  }, []);
 
   async function handlePay() {
     setError("");
+
+    const checkoutEmail = sessionEmail ?? guestEmail.trim();
+    if (!sessionEmail && !isValidEmail(checkoutEmail)) {
+      setError("Enter a valid email before checkout.");
+      return;
+    }
+
     setLoading(true);
 
     try {
       const orderRes = await fetch("/api/payments/razorpay/order", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ courseSlug }),
+        body: JSON.stringify({
+          courseSlug,
+          customerEmail: checkoutEmail,
+        }),
       });
 
       const orderData = (await orderRes.json()) as {
@@ -73,6 +105,7 @@ export default function EnrollButton({
         name: "Mindfull Methods",
         description: courseTitle,
         order_id: orderData.orderId,
+        prefill: { email: checkoutEmail, name: "Student" },
         theme: { color: "#8B5CF6" },
         handler: async (response: RazorpayResponse) => {
           const verifyRes = await fetch("/api/payments/razorpay/verify", {
@@ -81,6 +114,7 @@ export default function EnrollButton({
             body: JSON.stringify({
               ...response,
               courseSlug,
+              customerEmail: checkoutEmail,
             }),
           });
 
@@ -109,10 +143,22 @@ export default function EnrollButton({
   return (
     <>
       <Script src="https://checkout.razorpay.com/v1/checkout.js" strategy="lazyOnload" />
+      {!checkingSession && !sessionEmail ? (
+        <label className="block">
+          <span className="text-xs font-black uppercase tracking-[0.18em] text-zinc-500">Email for enrollment</span>
+          <input
+            type="email"
+            value={guestEmail}
+            onChange={(e) => setGuestEmail(e.target.value)}
+            placeholder="you@example.com"
+            className="mt-2 w-full rounded-xl border border-zinc-200 bg-white px-4 py-3 text-sm font-semibold outline-none focus:border-violet-400 dark:border-white/10 dark:bg-white/5"
+          />
+        </label>
+      ) : null}
       <button
         type="button"
         onClick={handlePay}
-        disabled={loading}
+        disabled={loading || checkingSession}
         className="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-violet-500 via-fuchsia-500 to-teal-400 px-6 py-4 text-sm font-black text-white shadow-lg shadow-violet-500/20 transition hover:scale-[1.02] disabled:opacity-60"
       >
         <CreditCard size={18} />

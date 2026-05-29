@@ -6,6 +6,8 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { ArrowRight, BriefcaseBusiness, LockKeyhole, Mail } from "lucide-react";
 import { supabase } from "@/lib/supabase";
 import BrandLogo from "@/components/marketing/BrandLogo";
+import ThemedBrandLogo from "@/components/marketing/ThemedBrandLogo";
+import ThemeToggle from "@/components/ThemeToggle";
 import { marketingImages } from "@/lib/images";
 
 export default function LoginPage() {
@@ -46,7 +48,10 @@ function LoginPageContent() {
   }
 
   return (
-    <main className="grid min-h-screen bg-[#f7f8f5] text-zinc-950 dark:bg-zinc-950 dark:text-white lg:grid-cols-[1.05fr_0.95fr]">
+    <main className="relative grid min-h-screen bg-[#f7f8f5] text-zinc-950 dark:bg-zinc-950 dark:text-white lg:grid-cols-[1.05fr_0.95fr]">
+      <div className="absolute right-5 top-5 z-20 sm:right-8">
+        <ThemeToggle />
+      </div>
       <section className="relative hidden overflow-hidden lg:block">
         <img
           src={marketingImages.authCollaboration}
@@ -56,7 +61,7 @@ function LoginPageContent() {
         <div className="absolute inset-0 bg-zinc-950/65" />
         <div className="relative z-10 flex h-full flex-col justify-between p-10 text-white">
           <Link href="/" className="inline-flex">
-            <BrandLogo size="lg" />
+            <BrandLogo size="lg" theme="dark" />
           </Link>
 
           <div className="max-w-xl">
@@ -79,7 +84,7 @@ function LoginPageContent() {
       <section className="flex items-center justify-center px-5 py-10 sm:px-8">
         <div className="w-full max-w-md">
           <Link href="/" className="mb-10 inline-flex lg:hidden">
-            <BrandLogo size="md" theme="light" />
+            <ThemedBrandLogo size="md" />
           </Link>
 
           <div className="rounded-2xl border border-zinc-200 bg-white p-7 shadow-xl dark:border-white/10 dark:bg-white/5 sm:p-8">

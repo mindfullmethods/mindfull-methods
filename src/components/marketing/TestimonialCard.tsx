@@ -32,12 +32,17 @@ export default function TestimonialCard({
             <Star key={i} size={16} className="fill-amber-300 text-amber-300" />
           ))}
         </div>
-        <span className="text-4xl font-black leading-none text-white/10 transition group-hover:text-violet-400/20">
-          “
+        <span className="text-4xl font-black leading-none text-zinc-200 transition group-hover:text-violet-300 dark:text-white/10 dark:group-hover:text-violet-400/20">
+          "
         </span>
       </div>
 
-      <p className={cn("mt-4 leading-7 text-white/80", featured ? "text-base sm:text-lg" : "text-sm")}>
+      <p
+        className={cn(
+          "mt-4 leading-7 text-zinc-700 dark:text-white/80",
+          featured ? "text-base sm:text-lg" : "text-sm"
+        )}
+      >
         {quote}
       </p>
 
@@ -46,8 +51,8 @@ export default function TestimonialCard({
           {name.charAt(0)}
         </span>
         <div>
-          <p className="text-sm font-black text-white">{name}</p>
-          {role ? <p className="text-xs font-bold text-white/50">{role}</p> : null}
+          <p className="text-sm font-black mm-heading">{name}</p>
+          {role ? <p className="text-xs font-bold mm-subtle">{role}</p> : null}
         </div>
       </div>
     </div>

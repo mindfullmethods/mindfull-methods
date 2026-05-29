@@ -8,13 +8,13 @@ export const metadata: Metadata = {
 export default function TermsPage() {
   return (
     <div className="mx-auto max-w-3xl px-5 py-16 sm:px-8 lg:px-10">
-      <p className="text-sm font-black uppercase tracking-[0.28em] text-white/60">Legal</p>
-      <h1 className="mt-4 text-4xl font-black tracking-tight text-white sm:text-5xl">Terms of Service</h1>
-      <p className="mt-4 text-sm text-white/50">Last updated: May 2026</p>
+      <p className="mm-eyebrow">Legal</p>
+      <h1 className="mt-4 text-4xl font-black tracking-tight mm-heading sm:text-5xl">Terms of Service</h1>
+      <p className="mt-4 text-sm mm-subtle">Last updated: May 2026</p>
 
-      <div className="prose prose-invert mt-10 max-w-none space-y-8 text-sm leading-7 text-white/70">
+      <div className="prose prose-zinc dark:prose-invert mt-10 max-w-none space-y-8 text-sm leading-7 mm-muted">
         <section>
-          <h2 className="text-xl font-black text-white">Agreement</h2>
+          <h2 className="text-xl font-black mm-heading">Agreement</h2>
           <p className="mt-3">
             By accessing Mindfull Methods or enrolling in a program, you agree to these terms. If you do not agree,
             please do not use our services.
@@ -22,7 +22,7 @@ export default function TermsPage() {
         </section>
 
         <section>
-          <h2 className="text-xl font-black text-white">Programs & mentorship</h2>
+          <h2 className="text-xl font-black mm-heading">Programs & mentorship</h2>
           <p className="mt-3">
             Course content, schedules, and mentor availability may change to improve learning outcomes. We strive to
             communicate updates in advance whenever possible.
@@ -30,7 +30,7 @@ export default function TermsPage() {
         </section>
 
         <section>
-          <h2 className="text-xl font-black text-white">Accounts</h2>
+          <h2 className="text-xl font-black mm-heading">Accounts</h2>
           <p className="mt-3">
             You are responsible for maintaining the confidentiality of your account credentials and for activity under
             your account. Notify us immediately of unauthorized use.
@@ -38,7 +38,7 @@ export default function TermsPage() {
         </section>
 
         <section>
-          <h2 className="text-xl font-black text-white">Payments & refunds</h2>
+          <h2 className="text-xl font-black mm-heading">Payments & refunds</h2>
           <p className="mt-3">
             Pricing is displayed at enrollment. Refund eligibility depends on the specific cohort policy communicated
             during signup. Contact support for billing questions.
@@ -46,7 +46,7 @@ export default function TermsPage() {
         </section>
 
         <section>
-          <h2 className="text-xl font-black text-white">Acceptable use</h2>
+          <h2 className="text-xl font-black mm-heading">Acceptable use</h2>
           <p className="mt-3">
             You agree not to misuse the platform, harass mentors or peers, share account access, or redistribute
             proprietary course materials without permission.
@@ -54,7 +54,7 @@ export default function TermsPage() {
         </section>
 
         <section>
-          <h2 className="text-xl font-black text-white">Limitation of liability</h2>
+          <h2 className="text-xl font-black mm-heading">Limitation of liability</h2>
           <p className="mt-3">
             Mindfull Methods provides educational services &quot;as is.&quot; We do not guarantee employment outcomes.
             Our liability is limited to the extent permitted by applicable law.
@@ -62,10 +62,10 @@ export default function TermsPage() {
         </section>
 
         <section>
-          <h2 className="text-xl font-black text-white">Contact</h2>
+          <h2 className="text-xl font-black mm-heading">Contact</h2>
           <p className="mt-3">
             For questions about these terms, email{" "}
-            <a href="mailto:support@mindfullmethods.com" className="font-bold text-white hover:underline">
+            <a href="mailto:support@mindfullmethods.com" className="font-bold mm-heading hover:underline">
               support@mindfullmethods.com
             </a>
             .

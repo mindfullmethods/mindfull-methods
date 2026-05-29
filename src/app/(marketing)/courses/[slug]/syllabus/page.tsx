@@ -1,5 +1,5 @@
 import { notFound } from "next/navigation";
-import BrandLogo from "@/components/marketing/BrandLogo";
+import BrandWordmark from "@/components/marketing/BrandWordmark";
 import SyllabusActions from "@/components/marketing/SyllabusActions";
 import { getCourseBySlug, getCourseSlugs } from "@/lib/courses";
 import { hasSyllabusPdf, syllabusPdfPublicUrl } from "@/lib/syllabus-files";
@@ -34,7 +34,7 @@ export default async function SyllabusPage({ params }: { params: Promise<{ slug:
       <SyllabusActions courseSlug={course.slug} txtUrl={syllabusUrl(course.slug)} pdfUrl={pdfUrl} />
 
       <header className="border-b border-zinc-200 pb-8">
-        <BrandLogo size="md" theme="light" />
+        <BrandWordmark size="md" />
         <p className="mt-6 text-sm font-black uppercase tracking-[0.24em] text-violet-600">Course syllabus</p>
         <h1 className="mt-3 text-4xl font-black tracking-tight">{course.title}</h1>
         <p className="mt-4 text-sm leading-7 text-zinc-600">{course.longDescription}</p>

@@ -30,7 +30,7 @@ export default function InternshipCard({
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.45 }}
       whileHover={{ y: -6 }}
-      className="group overflow-hidden rounded-2xl border border-zinc-200 bg-white shadow-sm transition hover:shadow-2xl dark:border-white/10 dark:bg-white/5"
+      className="group overflow-hidden rounded-[1.35rem] border border-zinc-200/80 bg-white shadow-sm transition hover:-translate-y-1 hover:border-violet-300/40 hover:shadow-2xl hover:shadow-violet-500/10 dark:border-white/10 dark:bg-white/5 dark:hover:border-violet-400/25"
     >
       <Link href={`/dashboard/internships/${id}`} className="block">
         <div className="relative h-52 overflow-hidden">

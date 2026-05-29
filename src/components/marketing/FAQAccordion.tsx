@@ -19,7 +19,7 @@ export default function FAQAccordion({
       {items.map((item) => (
         <AccordionItem key={item.question} value={item.question}>
           <AccordionTrigger>{item.question}</AccordionTrigger>
-          <AccordionContent className="text-white/70">{item.answer}</AccordionContent>
+          <AccordionContent className="text-zinc-600 dark:text-white/70">{item.answer}</AccordionContent>
         </AccordionItem>
       ))}
     </Accordion>

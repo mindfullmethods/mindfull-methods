@@ -7,7 +7,8 @@ import { ArrowRight, CheckCircle2, LockKeyhole, Mail, UserRound } from "lucide-r
 import { supabase } from "@/lib/supabase";
 import { getCourseBySlug } from "@/lib/courses";
 import { linkEnrollmentAction } from "@/actions/linkEnrollment";
-import BrandLogo from "@/components/marketing/BrandLogo";
+import ThemedBrandLogo from "@/components/marketing/ThemedBrandLogo";
+import ThemeToggle from "@/components/ThemeToggle";
 import { marketingImages } from "@/lib/images";
 
 export default function SignupPage() {
@@ -80,11 +81,14 @@ function SignupPageContent() {
   }
 
   return (
-    <main className="grid min-h-screen bg-[#f7f8f5] text-zinc-950 dark:bg-zinc-950 dark:text-white lg:grid-cols-[0.95fr_1.05fr]">
+    <main className="relative grid min-h-screen bg-[#f7f8f5] text-zinc-950 dark:bg-zinc-950 dark:text-white lg:grid-cols-[0.95fr_1.05fr]">
+      <div className="absolute right-5 top-5 z-20 sm:right-8">
+        <ThemeToggle />
+      </div>
       <section className="flex items-center justify-center px-5 py-10 sm:px-8">
         <div className="w-full max-w-md rounded-2xl border border-zinc-200 bg-white p-7 shadow-xl dark:border-white/10 dark:bg-white/5 sm:p-8">
           <Link href="/" className="mb-8 inline-flex">
-            <BrandLogo size="md" theme="light" />
+            <ThemedBrandLogo size="md" />
           </Link>
 
           <p className="text-sm font-black uppercase tracking-[0.28em] text-zinc-500">Apply</p>

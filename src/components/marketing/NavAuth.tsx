@@ -31,7 +31,10 @@ export default function NavAuth() {
 
   if (!ready) {
     return (
-      <div className="hidden h-10 w-28 animate-pulse rounded-xl bg-white/10 md:block" aria-hidden />
+      <div
+        className="hidden h-10 w-28 animate-pulse rounded-xl bg-zinc-200 dark:bg-white/10 md:block"
+        aria-hidden
+      />
     );
   }
 
@@ -39,7 +42,7 @@ export default function NavAuth() {
     return (
       <Link
         href="/dashboard"
-        className="hidden rounded-xl border border-white/15 bg-white/5 px-4 py-2.5 text-sm font-black text-white transition hover:bg-white/10 md:inline-flex"
+        className="hidden rounded-xl border border-zinc-200 bg-zinc-100 px-4 py-2.5 text-sm font-black text-zinc-950 transition hover:bg-zinc-200 dark:border-white/15 dark:bg-white/5 dark:text-white dark:hover:bg-white/10 md:inline-flex"
       >
         Dashboard
       </Link>
@@ -50,13 +53,13 @@ export default function NavAuth() {
     <div className="hidden items-center gap-2 md:flex">
       <Link
         href="/login"
-        className="rounded-xl px-4 py-2.5 text-sm font-bold text-white/75 transition hover:text-white"
+        className="rounded-xl px-4 py-2.5 text-sm font-bold text-zinc-600 transition hover:text-zinc-950 dark:text-white/75 dark:hover:text-white"
       >
         Login
       </Link>
       <Link
         href="/signup"
-        className="rounded-xl border border-white/15 bg-white/5 px-4 py-2.5 text-sm font-black text-white transition hover:bg-white/10"
+        className="rounded-xl border border-zinc-200 bg-zinc-100 px-4 py-2.5 text-sm font-black text-zinc-950 transition hover:bg-zinc-200 dark:border-white/15 dark:bg-white/5 dark:text-white dark:hover:bg-white/10"
       >
         Sign up
       </Link>

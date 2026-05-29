@@ -92,6 +92,15 @@ export async function getPlatformSetupChecks(): Promise<SetupCheck[]> {
       action: "Add NEXT_PUBLIC_RAZORPAY_KEY_ID and RAZORPAY_KEY_SECRET",
     },
     {
+      id: "razorpay-webhook",
+      label: "Razorpay webhook (production)",
+      ready: Boolean(process.env.RAZORPAY_WEBHOOK_SECRET?.trim()),
+      detail: process.env.RAZORPAY_WEBHOOK_SECRET
+        ? "Backup payment confirmation when checkout closes early"
+        : "Add after domain is live: payment.captured → /api/payments/razorpay/webhook",
+      action: "Razorpay Dashboard → Webhooks → copy secret to RAZORPAY_WEBHOOK_SECRET",
+    },
+    {
       id: "domain",
       label: "Custom domain",
       ready: customDomain,

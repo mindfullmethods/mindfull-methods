@@ -27,7 +27,7 @@ export default function CourseCard({
   return (
     <article
       className={cn(
-        "group overflow-hidden rounded-3xl border border-white/10 bg-white/[0.04] shadow-sm backdrop-blur-sm transition duration-300 hover:-translate-y-1.5 hover:border-violet-400/30 hover:bg-white/[0.07] hover:shadow-xl hover:shadow-violet-950/20",
+        "group overflow-hidden rounded-3xl border border-zinc-200 bg-white shadow-sm backdrop-blur-sm transition duration-300 hover:-translate-y-1.5 hover:border-violet-400/40 hover:shadow-xl hover:shadow-violet-500/10 dark:border-white/10 dark:bg-white/[0.04] dark:hover:border-violet-400/30 dark:hover:bg-white/[0.07] dark:hover:shadow-violet-950/20",
         className
       )}
     >
@@ -40,7 +40,7 @@ export default function CourseCard({
             className="h-52 w-full object-cover transition duration-300 group-hover:scale-[1.03]"
           />
         ) : (
-          <div className="h-52 w-full bg-zinc-800/40" />
+          <div className="h-52 w-full bg-zinc-200 dark:bg-zinc-800/40" />
         )}
         <div className="absolute inset-x-0 bottom-0 h-20 bg-gradient-to-t from-zinc-950/80 to-transparent" />
         <div className="absolute left-4 top-4">
@@ -54,12 +54,15 @@ export default function CourseCard({
           {course.duration ? <Badge tone="neutral">{course.duration}</Badge> : null}
         </div>
 
-        <h3 className="mt-4 text-2xl font-black tracking-tight">{course.title}</h3>
-        <p className="mt-3 text-sm leading-6 text-white/70">{course.shortDescription}</p>
+        <h3 className="mt-4 text-2xl font-black tracking-tight text-zinc-950 dark:text-white">{course.title}</h3>
+        <p className="mt-3 text-sm leading-6 mm-muted">{course.shortDescription}</p>
 
         <div className="mt-5 flex flex-wrap gap-2">
           {course.tags.slice(0, 3).map((t) => (
-            <span key={t} className="rounded-full bg-white/5 px-3 py-1 text-xs font-bold text-white/70">
+            <span
+              key={t}
+              className="rounded-full bg-zinc-100 px-3 py-1 text-xs font-bold text-zinc-600 dark:bg-white/5 dark:text-white/70"
+            >
               {t}
             </span>
           ))}
@@ -67,14 +70,14 @@ export default function CourseCard({
 
         <div className="mt-6 flex items-center justify-between gap-3">
           {course.priceLabel ? (
-            <p className="text-sm font-bold text-white/80">{course.priceLabel}</p>
+            <p className="text-sm font-bold text-zinc-800 dark:text-white/80">{course.priceLabel}</p>
           ) : (
-            <p className="text-sm font-bold text-white/60">Cohort-based</p>
+            <p className="text-sm font-bold text-zinc-500 dark:text-white/60">Cohort-based</p>
           )}
 
           <Link
             href={`/courses/${course.slug}`}
-            className="inline-flex items-center gap-2 rounded-xl bg-white px-4 py-2 text-sm font-black text-zinc-950 transition hover:scale-[1.02]"
+            className="inline-flex items-center gap-2 rounded-xl bg-zinc-950 px-4 py-2 text-sm font-black text-white transition hover:scale-[1.02] dark:bg-white dark:text-zinc-950"
           >
             View details <ArrowRight size={16} />
           </Link>
@@ -83,4 +86,3 @@ export default function CourseCard({
     </article>
   );
 }
-
