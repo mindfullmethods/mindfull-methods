@@ -12,6 +12,7 @@ import {
   GraduationCap,
   LayoutDashboard,
   LogOut,
+  Mail,
   Menu,
   PanelLeftClose,
   ShieldCheck,
@@ -32,6 +33,7 @@ const adminLinks = [
   { label: "Analytics", href: "/dashboard/analytics", icon: BarChart3 },
   { label: "All applications", href: "/dashboard/applications", icon: ClipboardList },
   { label: "All enrollments", href: "/dashboard/enrollments", icon: CreditCard },
+  { label: "Contact inquiries", href: "/dashboard/inquiries", icon: Mail },
   { label: "Admin Studio", href: "/dashboard/admin", icon: ShieldCheck },
 ];
 
