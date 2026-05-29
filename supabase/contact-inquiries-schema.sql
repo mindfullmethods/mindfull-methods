@@ -8,6 +8,7 @@ create table if not exists public.contact_inquiries (
   interest text not null default 'general',
   interest_label text,
   message text not null,
+  status text not null default 'New',
   created_at timestamptz not null default now()
 );
 

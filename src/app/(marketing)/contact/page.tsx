@@ -5,6 +5,8 @@ import { useSearchParams } from "next/navigation";
 
 import Button from "@/components/marketing/Button";
 import { getCourseBySlug, getCourses } from "@/lib/courses";
+import { supabase } from "@/lib/supabase";
+import { siteConfig } from "@/lib/site";
 
 type ContactForm = {
   name: string;
@@ -58,6 +60,29 @@ function ContactPageContent() {
   useEffect(() => {
     setForm((prev) => ({ ...prev, interest: defaultInterest }));
   }, [defaultInterest]);
+
+  useEffect(() => {
+    async function prefillFromSession() {
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
+
+      if (!user) return;
+
+      const name =
+        (user.user_metadata?.full_name as string | undefined) ??
+        (user.user_metadata?.name as string | undefined) ??
+        "";
+
+      setForm((prev) => ({
+        ...prev,
+        name: prev.name || name,
+        email: prev.email || user.email || "",
+      }));
+    }
+
+    prefillFromSession();
+  }, []);
 
   const [status, setStatus] = useState<ContactStatus>("idle");
   const [serverError, setServerError] = useState("");
@@ -279,7 +304,7 @@ function ContactPageContent() {
             <div className="mt-6 space-y-3 text-sm font-bold text-white/80">
               <div className="flex items-center gap-3 rounded-2xl border border-white/10 bg-white/5 p-4">
                 <span className="h-3 w-3 rounded-full bg-violet-400" />
-                support@mindfullmethods.com
+                {siteConfig.supportEmail}
               </div>
               <div className="flex items-center gap-3 rounded-2xl border border-white/10 bg-white/5 p-4">
                 <span className="h-3 w-3 rounded-full bg-emerald-400" />

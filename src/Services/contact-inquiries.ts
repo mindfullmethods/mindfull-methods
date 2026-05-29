@@ -8,6 +8,7 @@ export type ContactInquiry = {
   interest: string;
   interest_label?: string | null;
   message: string;
+  status?: string | null;
   created_at: string;
 };
 

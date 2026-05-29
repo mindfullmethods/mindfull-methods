@@ -3,7 +3,7 @@ export const siteConfig = {
   description:
     "Online certification courses and live mentorship training. Build career-ready skills with structured programs and expert guidance.",
   url: process.env.NEXT_PUBLIC_SITE_URL ?? "https://mindfull-methods.vercel.app",
-  supportEmail: "support@mindfullmethods.com",
+  supportEmail: "rajivshekar@mindfullmethods.com",
   ogImage: "/brand-assets/logo-full.png",
 };
 

@@ -7,11 +7,21 @@ create table if not exists public.contact_inquiries (
   interest text not null default 'general',
   interest_label text,
   message text not null,
+  status text not null default 'New',
   created_at timestamptz not null default now()
 );
 
 create index if not exists contact_inquiries_created_at_idx on public.contact_inquiries (created_at desc);
+create index if not exists contact_inquiries_status_idx on public.contact_inquiries (status);
 
 alter table public.contact_inquiries enable row level security;
+
+notify pgrst, 'reload schema';`;
+
+export const CONTACT_INQUIRIES_STATUS_SQL = `-- Run in Supabase → SQL Editor
+alter table public.contact_inquiries
+  add column if not exists status text not null default 'New';
+
+create index if not exists contact_inquiries_status_idx on public.contact_inquiries (status);
 
 notify pgrst, 'reload schema';`;

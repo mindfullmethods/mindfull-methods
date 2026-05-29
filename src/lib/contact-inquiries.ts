@@ -25,6 +25,7 @@ export async function saveContactInquiry(payload: ContactInquiryInput) {
       interest,
       interest_label: interestLabel,
       message: payload.message,
+      status: "New",
     });
 
     if (error) {

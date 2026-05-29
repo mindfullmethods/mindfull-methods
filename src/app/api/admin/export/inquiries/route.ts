@@ -10,12 +10,13 @@ export async function GET() {
     const inquiries = await getContactInquiries();
 
     const csv = toCsv(
-      ["Name", "Email", "Phone", "Interest", "Message", "Created"],
+      ["Name", "Email", "Phone", "Interest", "Status", "Message", "Created"],
       inquiries.map((row) => [
         row.name,
         row.email,
         row.phone ?? "",
         row.interest_label ?? row.interest,
+        row.status ?? "New",
         row.message,
         row.created_at,
       ])
