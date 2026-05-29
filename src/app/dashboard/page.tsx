@@ -1,6 +1,7 @@
 import Link from "next/link";
-import { ArrowRight, BriefcaseBusiness, ClipboardList, GraduationCap, Sparkles, TrendingUp } from "lucide-react";
+import { ArrowRight, BookOpen, BriefcaseBusiness, ClipboardList, GraduationCap, Sparkles, TrendingUp } from "lucide-react";
 import AnalyticsChart from "@/components/components/dashboard/AnalyticsChart";
+import DashboardCourseCard from "@/components/components/dashboard/DashboardCourseCard";
 import InternshipList from "@/components/components/dashboard/InternshipList";
 import { getInternships } from "@/Services/Internships";
 import { getMyApplications } from "@/Services/applications";
@@ -8,6 +9,7 @@ import { getStudentApplicationChart, getOverallCourseProgressPercent } from "@/S
 import { getProgressSummariesForSlugs } from "@/Services/course-progress";
 import { getMyEnrollments } from "@/Services/enrollments";
 import { getSessionUser, isAdminUser } from "@/lib/auth";
+import { getFeaturedCourses } from "@/lib/courses";
 import { isCourseProgressTableReady } from "@/lib/course-progress-schema";
 import { marketingImages } from "@/lib/images";
 
@@ -15,11 +17,13 @@ export default async function DashboardPage() {
   const user = await getSessionUser();
   const isAdmin = isAdminUser(user);
   const internships = await getInternships();
+  const featuredCourses = getFeaturedCourses();
   const [applications, enrollments, applicationChart] = await Promise.all([
     getMyApplications(),
     getMyEnrollments(),
     user ? getStudentApplicationChart(user.id) : Promise.resolve([]),
   ]);
+  const enrolledSlugs = new Set(enrollments.map((e) => e.course_slug));
 
   const progressReady = await isCourseProgressTableReady();
   const progressMap =
@@ -30,6 +34,13 @@ export default async function DashboardPage() {
   const overallProgress = getOverallCourseProgressPercent([...progressMap.values()]);
 
   const metrics = [
+    {
+      label: "Browse courses",
+      value: featuredCourses.length,
+      helper: "Featured mentorship programs",
+      icon: BookOpen,
+      href: "/dashboard/courses",
+    },
     {
       label: "My courses",
       value: enrollments.length,
@@ -63,18 +74,24 @@ export default async function DashboardPage() {
               Mindfull Methods workspace
             </div>
             <h1 className="mt-6 max-w-4xl text-4xl font-black tracking-tight sm:text-6xl">
-              Manage internships, applications, and growth from one place.
+              Manage courses, internships, and applications from one place.
             </h1>
             <p className="mt-5 max-w-2xl text-sm leading-7 text-white/65 sm:text-base">
-              Track courses, apply to internships, and manage everything from one workspace.
+              Browse mentorship programs, track enrolled courses, apply to internships, and manage everything from one workspace.
             </p>
             <div className="mt-7 flex flex-wrap gap-3">
               <Link
-                href="/dashboard/internships"
+                href="/dashboard/courses"
                 className="inline-flex items-center justify-center gap-2 rounded-xl bg-white px-5 py-4 text-sm font-black text-zinc-950 transition hover:scale-[1.02]"
               >
-                Browse internships
+                Browse courses
                 <ArrowRight size={18} />
+              </Link>
+              <Link
+                href="/dashboard/internships"
+                className="inline-flex items-center justify-center gap-2 rounded-xl border border-white/20 bg-white/10 px-5 py-4 text-sm font-black text-white transition hover:bg-white/15"
+              >
+                Browse internships
               </Link>
               <Link
                 href="/dashboard/my-courses"
@@ -102,7 +119,7 @@ export default async function DashboardPage() {
         </div>
       </section>
 
-      <section className="mt-6 grid gap-4 md:grid-cols-3">
+      <section className="mt-6 grid gap-4 md:grid-cols-2 xl:grid-cols-4">
         {metrics.map((metric) => {
           const Icon = metric.icon;
 
@@ -165,6 +182,31 @@ export default async function DashboardPage() {
           </div>
         </section>
       ) : null}
+
+      <section className="mt-8 rounded-3xl border border-zinc-200 bg-white p-6 shadow-sm dark:border-white/10 dark:bg-white/5">
+        <div className="mb-6 flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
+          <div>
+            <p className="text-xs font-black uppercase tracking-[0.2em] text-zinc-500">Featured courses</p>
+            <h2 className="mt-2 text-3xl font-black">Same programs from the landing page</h2>
+            <p className="mt-2 max-w-2xl text-sm leading-6 text-zinc-500">
+              Browse, compare, and enroll in mentorship tracks without leaving the dashboard.
+            </p>
+          </div>
+          <Link href="/dashboard/courses" className="inline-flex items-center gap-2 text-sm font-black">
+            View all courses
+            <ArrowRight size={17} />
+          </Link>
+        </div>
+        <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-3">
+          {featuredCourses.map((course) => (
+            <DashboardCourseCard
+              key={course.slug}
+              course={course}
+              enrolled={enrolledSlugs.has(course.slug)}
+            />
+          ))}
+        </div>
+      </section>
 
       <section className="mt-8 grid gap-6 xl:grid-cols-[1.1fr_0.9fr]">
         <div className="rounded-3xl border border-zinc-200 bg-white p-6 shadow-sm dark:border-white/10 dark:bg-white/5">

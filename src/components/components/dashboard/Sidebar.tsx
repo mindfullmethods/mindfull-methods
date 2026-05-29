@@ -5,6 +5,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
   BarChart3,
+  BookOpen,
   BriefcaseBusiness,
   ClipboardList,
   CreditCard,
@@ -21,6 +22,7 @@ import { marketingImages } from "@/lib/images";
 
 const studentLinks = [
   { label: "Overview", href: "/dashboard", icon: LayoutDashboard },
+  { label: "Courses", href: "/dashboard/courses", icon: BookOpen },
   { label: "My courses", href: "/dashboard/my-courses", icon: GraduationCap },
   { label: "Internships", href: "/dashboard/internships", icon: BriefcaseBusiness },
   { label: "My applications", href: "/dashboard/my-applications", icon: ClipboardList },
@@ -95,7 +97,9 @@ export default function Sidebar({ isAdmin = false }: { isAdmin?: boolean }) {
         <nav className="mt-8 flex flex-1 flex-col gap-2">
           {links.map((link) => {
             const Icon = link.icon;
-            const active = pathname === link.href;
+            const active =
+              pathname === link.href ||
+              (link.href !== "/dashboard" && pathname.startsWith(`${link.href}/`));
 
             return (
               <Link
