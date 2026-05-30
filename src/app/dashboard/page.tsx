@@ -101,6 +101,14 @@ export default async function DashboardPage() {
               </Link>
               {isAdmin ? (
                 <Link
+                  href="/dashboard/admin-home"
+                  className="inline-flex items-center justify-center gap-2 rounded-xl border border-violet-400/30 bg-violet-500/20 px-5 py-4 text-sm font-black text-white transition hover:bg-violet-500/30"
+                >
+                  Admin home
+                </Link>
+              ) : null}
+              {isAdmin ? (
+                <Link
                   href="/dashboard/analytics"
                   className="inline-flex items-center justify-center gap-2 rounded-xl border border-violet-400/30 bg-violet-500/20 px-5 py-4 text-sm font-black text-white transition hover:bg-violet-500/30"
                 >

@@ -12,7 +12,7 @@ export default async function AdminPage({
 }) {
   await requireAdmin();
   const params = await searchParams;
-  const internships = await getInternships();
+  const internships = await getInternships({ includeUnpublished: true });
 
   const flash =
     params.error
@@ -76,6 +76,7 @@ export default async function AdminPage({
               { label: "Duration", name: "duration", placeholder: "12 weeks" },
               { label: "Stipend", name: "stipend", placeholder: "Rs 25,000/month" },
               { label: "Image URL", name: "image_url", placeholder: "/images/marketing/internship-fallback.jpg" },
+              { label: "Tags (comma-separated)", name: "tags", placeholder: "remote, frontend, paid" },
             ].map((field) => (
               <label key={field.name} className="block">
                 <span className="text-sm font-black">{field.label}</span>
@@ -96,6 +97,11 @@ export default async function AdminPage({
                 placeholder="Describe responsibilities, outcomes, tools, and who should apply."
                 className="mt-2 w-full rounded-xl border border-zinc-200 bg-[#f7f8f5] px-4 py-3 text-sm font-semibold outline-none transition focus:border-zinc-950 dark:border-white/10 dark:bg-zinc-950 dark:focus:border-white"
               />
+            </label>
+
+            <label className="flex items-center gap-3 rounded-xl border border-zinc-200 bg-[#f7f8f5] px-4 py-3 dark:border-white/10 dark:bg-zinc-950">
+              <input type="checkbox" name="is_published" defaultChecked className="h-4 w-4 rounded" />
+              <span className="text-sm font-black">Publish immediately (visible to students)</span>
             </label>
           </div>
 
@@ -133,8 +139,18 @@ export default async function AdminPage({
               >
                 <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
                   <div>
-                    <h3 className="text-xl font-black">{internship.title}</h3>
+                    <div className="flex flex-wrap items-center gap-2">
+                      <h3 className="text-xl font-black">{internship.title}</h3>
+                      {internship.is_published === false ? (
+                        <span className="rounded-full bg-amber-100 px-2 py-1 text-[10px] font-black uppercase text-amber-800 dark:bg-amber-400/20 dark:text-amber-200">
+                          Draft
+                        </span>
+                      ) : null}
+                    </div>
                     <p className="mt-1 text-sm font-bold text-zinc-500">{internship.company}</p>
+                    {internship.tags ? (
+                      <p className="mt-2 text-xs font-bold text-violet-600 dark:text-violet-300">{internship.tags}</p>
+                    ) : null}
                     <p className="mt-3 text-sm text-zinc-500">
                       {internship.duration} / {internship.stipend}
                     </p>

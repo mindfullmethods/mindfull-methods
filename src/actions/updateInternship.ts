@@ -5,6 +5,7 @@ import { redirect } from "next/navigation";
 
 import { requireAdmin } from "@/lib/auth";
 import { createAdminClient } from "@/lib/supabase/admin";
+import { isMissingColumnError } from "@/lib/supabase/column-errors";
 
 function readField(formData: FormData, key: string) {
   const value = formData.get(key);
@@ -20,6 +21,8 @@ export async function updateInternship(id: string, formData: FormData) {
   const duration = readField(formData, "duration");
   const stipend = readField(formData, "stipend");
   const image_url = readField(formData, "image_url");
+  const tags = readField(formData, "tags");
+  const is_published = formData.get("is_published") === "on";
 
   let supabase;
   try {
@@ -29,17 +32,26 @@ export async function updateInternship(id: string, formData: FormData) {
     redirect(`/dashboard/admin/edit/${id}?error=${encodeURIComponent(message)}`);
   }
 
-  const { error } = await supabase
-    .from("internships")
-    .update({
-      title,
-      company,
-      description,
-      duration,
-      stipend,
-      image_url,
-    })
-    .eq("id", id);
+  const baseRow = {
+    title,
+    company,
+    description,
+    duration,
+    stipend,
+    image_url,
+  };
+
+  const extendedRow = {
+    ...baseRow,
+    tags: tags || null,
+    is_published,
+  };
+
+  let { error } = await supabase.from("internships").update(extendedRow).eq("id", id);
+
+  if (error && isMissingColumnError(error.message, "is_published", "tags")) {
+    ({ error } = await supabase.from("internships").update(baseRow).eq("id", id));
+  }
 
   if (error) {
     console.error("[updateInternship]", error);

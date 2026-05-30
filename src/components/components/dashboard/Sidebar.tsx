@@ -17,6 +17,7 @@ import {
   PanelLeftClose,
   Rocket,
   ShieldCheck,
+  Users,
 } from "lucide-react";
 import { supabase } from "@/lib/supabase";
 import ThemedBrandLogo from "@/components/marketing/ThemedBrandLogo";
@@ -32,8 +33,10 @@ const studentLinks = [
 ];
 
 const adminLinks = [
+  { label: "Admin home", href: "/dashboard/admin-home", icon: LayoutDashboard },
   { label: "Launch setup", href: "/dashboard/setup", icon: Rocket },
   { label: "Analytics", href: "/dashboard/analytics", icon: BarChart3 },
+  { label: "Students", href: "/dashboard/users", icon: Users },
   { label: "All applications", href: "/dashboard/applications", icon: ClipboardList },
   { label: "All enrollments", href: "/dashboard/enrollments", icon: CreditCard },
   { label: "Contact inquiries", href: "/dashboard/inquiries", icon: Mail },

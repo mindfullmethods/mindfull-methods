@@ -92,6 +92,23 @@ export default async function EditInternshipPage({
             className="w-full rounded-3xl border border-black/10 bg-white/70 px-5 py-5 outline-none transition dark:border-white/10 dark:bg-black/20 dark:text-white"
           />
 
+          <input
+            name="tags"
+            defaultValue={internship.tags ?? ""}
+            placeholder="Tags (comma-separated)"
+            className="w-full rounded-3xl border border-black/10 bg-white/70 px-5 py-5 outline-none transition dark:border-white/10 dark:bg-black/20 dark:text-white"
+          />
+
+          <label className="flex items-center gap-3 rounded-3xl border border-black/10 bg-white/70 px-5 py-5 dark:border-white/10 dark:bg-black/20">
+            <input
+              type="checkbox"
+              name="is_published"
+              defaultChecked={internship.is_published !== false}
+              className="h-4 w-4 rounded"
+            />
+            <span className="text-sm font-black dark:text-white">Published (visible to students)</span>
+          </label>
+
           <button
             type="submit"
             className="mt-6 rounded-3xl bg-black px-8 py-5 text-lg font-semibold text-white shadow-2xl transition duration-300 hover:scale-[1.02] dark:bg-white dark:text-black"

@@ -6,4 +6,7 @@ export interface Internship {
   duration: string;
   stipend: string;
   image_url: string;
+  tags?: string | null;
+  is_published?: boolean | null;
+  created_at?: string | null;
 }

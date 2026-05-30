@@ -22,6 +22,10 @@ export function isAdminUser(user: User | null | undefined) {
 
 export function isAdminPath(pathname: string) {
   return (
+    pathname === "/dashboard/admin-home" ||
+    pathname.startsWith("/dashboard/admin-home/") ||
+    pathname === "/dashboard/users" ||
+    pathname.startsWith("/dashboard/users/") ||
     pathname === "/dashboard/admin" ||
     pathname.startsWith("/dashboard/admin/") ||
     pathname === "/dashboard/applications" ||

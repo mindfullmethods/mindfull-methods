@@ -9,6 +9,8 @@ export type ContactInquiry = {
   interest_label?: string | null;
   message: string;
   status?: string | null;
+  admin_notes?: string | null;
+  linked_enrollment_id?: string | null;
   created_at: string;
 };
 

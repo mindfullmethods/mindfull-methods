@@ -242,3 +242,46 @@ export async function notifyEnrollmentCompleted(payload: {
       : Promise.resolve(),
   ]);
 }
+
+export async function notifyAdminDigest(payload: {
+  pendingApplications: number;
+  newInquiries: number;
+  paidEnrollments: number;
+  revenuePaise: number;
+  setupPercent: number;
+}) {
+  const revenue = new Intl.NumberFormat("en-IN", {
+    style: "currency",
+    currency: "INR",
+    maximumFractionDigits: 0,
+  }).format(payload.revenuePaise / 100);
+
+  const dashboardUrl = `${siteConfig.url}/dashboard/admin-home`;
+
+  return sendEmail({
+    to: adminEmail(),
+    subject: `[Mindfull Methods] Admin digest — ${new Date().toLocaleDateString("en-IN")}`,
+    text: [
+      "Mindfull Methods — daily admin summary",
+      "",
+      `Pending applications: ${payload.pendingApplications}`,
+      `New inquiries: ${payload.newInquiries}`,
+      `Paid enrollments: ${payload.paidEnrollments}`,
+      `Revenue (paid): ${revenue}`,
+      `Launch setup: ${payload.setupPercent}% complete`,
+      "",
+      `Open admin home: ${dashboardUrl}`,
+    ].join("\n"),
+    html: `
+      <h2>Admin digest</h2>
+      <ul>
+        <li><strong>Pending applications:</strong> ${payload.pendingApplications}</li>
+        <li><strong>New inquiries:</strong> ${payload.newInquiries}</li>
+        <li><strong>Paid enrollments:</strong> ${payload.paidEnrollments}</li>
+        <li><strong>Revenue (paid):</strong> ${escapeHtml(revenue)}</li>
+        <li><strong>Launch setup:</strong> ${payload.setupPercent}% complete</li>
+      </ul>
+      <p><a href="${dashboardUrl}">Open admin home →</a></p>
+    `,
+  });
+}
