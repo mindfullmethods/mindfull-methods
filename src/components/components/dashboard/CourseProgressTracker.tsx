@@ -1,8 +1,9 @@
 "use client";
 
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 import { useState, useTransition } from "react";
-import { CheckCircle2, Circle, Loader2 } from "lucide-react";
+import { Award, CheckCircle2, Circle, Loader2 } from "lucide-react";
 
 import { toggleWeekProgressAction } from "@/actions/toggleWeekProgress";
 
@@ -16,10 +17,12 @@ export default function CourseProgressTracker({
   courseSlug,
   weeks,
   completedWeeks: initialCompleted,
+  lastActivityAt,
 }: {
   courseSlug: string;
   weeks: WeekItem[];
   completedWeeks: number[];
+  lastActivityAt?: string | null;
 }) {
   const router = useRouter();
   const [completed, setCompleted] = useState(new Set(initialCompleted));
@@ -29,6 +32,7 @@ export default function CourseProgressTracker({
   const total = weeks.length;
   const done = completed.size;
   const percent = total > 0 ? Math.round((done / total) * 100) : 0;
+  const isComplete = percent >= 100;
 
   function toggleWeek(weekIndex: number, next: boolean) {
     setError("");
@@ -51,6 +55,21 @@ export default function CourseProgressTracker({
 
   return (
     <div>
+      {isComplete ? (
+        <div className="mb-6 rounded-2xl border border-emerald-200 bg-emerald-50 p-5 dark:border-emerald-400/20 dark:bg-emerald-400/10">
+          <p className="flex items-center gap-2 text-sm font-black text-emerald-800 dark:text-emerald-200">
+            <Award size={18} />
+            Course complete — your certificate is ready!
+          </p>
+          <Link
+            href={`/dashboard/my-courses/${courseSlug}/certificate`}
+            className="mt-3 inline-flex rounded-xl bg-emerald-600 px-4 py-2.5 text-sm font-black text-white transition hover:bg-emerald-700"
+          >
+            View certificate
+          </Link>
+        </div>
+      ) : null}
+
       <div className="mb-6">
         <div className="flex items-center justify-between gap-4">
           <p className="text-sm font-black text-zinc-700 dark:text-zinc-300">
@@ -58,7 +77,24 @@ export default function CourseProgressTracker({
           </p>
           <p className="text-2xl font-black text-violet-600 dark:text-violet-300">{percent}%</p>
         </div>
-        <div className="mt-3 h-3 overflow-hidden rounded-full bg-zinc-200 dark:bg-zinc-800">
+        {lastActivityAt ? (
+          <p className="mt-1 text-xs font-bold text-zinc-500">
+            Last activity:{" "}
+            {new Intl.DateTimeFormat("en-IN", {
+              day: "numeric",
+              month: "short",
+              year: "numeric",
+            }).format(new Date(lastActivityAt))}
+          </p>
+        ) : null}
+        <div
+          role="progressbar"
+          aria-valuenow={percent}
+          aria-valuemin={0}
+          aria-valuemax={100}
+          aria-label="Course progress"
+          className="mt-3 h-3 overflow-hidden rounded-full bg-zinc-200 dark:bg-zinc-800"
+        >
           <div
             className="h-full rounded-full bg-gradient-to-r from-violet-500 to-teal-400 transition-all duration-500"
             style={{ width: `${percent}%` }}

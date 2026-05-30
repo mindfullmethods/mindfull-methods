@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
+  Award,
   BarChart3,
   BookOpen,
   BriefcaseBusiness,
@@ -28,6 +29,7 @@ const studentLinks = [
   { label: "Overview", href: "/dashboard", icon: LayoutDashboard },
   { label: "Courses", href: "/dashboard/courses", icon: BookOpen },
   { label: "My courses", href: "/dashboard/my-courses", icon: GraduationCap },
+  { label: "Certificates", href: "/dashboard/certificates", icon: Award },
   { label: "Internships", href: "/dashboard/internships", icon: BriefcaseBusiness },
   { label: "My applications", href: "/dashboard/my-applications", icon: ClipboardList },
 ];
@@ -45,7 +47,7 @@ const adminLinks = [
 
 export default function Sidebar({ isAdmin = false }: { isAdmin?: boolean }) {
   const [userEmail, setUserEmail] = useState("");
-  const [open, setOpen] = useState(true);
+  const [open, setOpen] = useState(false);
   const pathname = usePathname();
   const links = isAdmin ? [...studentLinks, ...adminLinks] : studentLinks;
 
@@ -68,6 +70,15 @@ export default function Sidebar({ isAdmin = false }: { isAdmin?: boolean }) {
 
   return (
     <>
+      {open ? (
+        <button
+          type="button"
+          aria-label="Close navigation"
+          className="fixed inset-0 z-30 bg-black/40 lg:hidden"
+          onClick={() => setOpen(false)}
+        />
+      ) : null}
+
       {!open && (
         <button
           onClick={() => setOpen(true)}

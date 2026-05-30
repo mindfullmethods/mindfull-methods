@@ -1,9 +1,12 @@
 import type { Metadata } from "next";
 
-export const metadata: Metadata = {
+import { marketingPageMetadata } from "@/lib/seo";
+
+export const metadata: Metadata = marketingPageMetadata({
+  path: "/terms",
   title: "Terms of Service",
   description: "Terms of service for Mindfull Methods mentorship and certification courses.",
-};
+});
 
 export default function TermsPage() {
   return (

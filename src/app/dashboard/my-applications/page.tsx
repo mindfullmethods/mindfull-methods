@@ -5,6 +5,14 @@ import Button from "@/components/marketing/Button";
 import { requireUser } from "@/lib/auth";
 import { getMyApplicationsWithDetails } from "@/Services/my-applications";
 
+function formatDate(value: string) {
+  return new Intl.DateTimeFormat("en-IN", {
+    day: "numeric",
+    month: "short",
+    year: "numeric",
+  }).format(new Date(value));
+}
+
 function statusClass(status?: string) {
   if (status === "Approved") return "bg-emerald-50 text-emerald-700 dark:bg-emerald-400/10 dark:text-emerald-300";
   if (status === "Rejected") return "bg-red-50 text-red-700 dark:bg-red-400/10 dark:text-red-300";
@@ -78,12 +86,17 @@ export default async function MyApplicationsPage({
                           {[internship.duration, internship.stipend].filter(Boolean).join(" · ")}
                         </p>
                       ) : null}
+                      {app.created_at ? (
+                        <p className="mt-2 text-xs font-bold text-zinc-500">
+                          Submitted {formatDate(app.created_at)}
+                        </p>
+                      ) : null}
                     </div>
                     <div className="flex flex-col items-start gap-3 md:items-end">
                       <span
                         className={`inline-flex rounded-full px-3 py-2 text-xs font-black ${statusClass(app.status)}`}
                       >
-                        {app.status ?? "Pending"}
+                        {app.status ?? "Submitted"}
                       </span>
                       {app.internship_id ? (
                         <Link

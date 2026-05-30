@@ -77,7 +77,7 @@ export default async function MyCoursesPage({
               Browse mentorship tracks and enroll with Pay &amp; enroll on any course page.
             </p>
             <div className="mt-8">
-              <Button href="/courses" variant="gradient" size="lg">
+              <Button href="/dashboard/courses" variant="gradient" size="lg">
                 Browse courses
               </Button>
             </div>
@@ -130,7 +130,14 @@ export default async function MyCoursesPage({
                           <span>Progress</span>
                           <span>{percent}%</span>
                         </div>
-                        <div className="mt-2 h-2 overflow-hidden rounded-full bg-zinc-200 dark:bg-zinc-800">
+                        <div
+                          role="progressbar"
+                          aria-valuenow={percent}
+                          aria-valuemin={0}
+                          aria-valuemax={100}
+                          aria-label={`${courseInfo?.title ?? enrollment.course_title} progress`}
+                          className="mt-2 h-2 overflow-hidden rounded-full bg-zinc-200 dark:bg-zinc-800"
+                        >
                           <div
                             className="h-full rounded-full bg-gradient-to-r from-violet-500 to-teal-400"
                             style={{ width: `${percent}%` }}

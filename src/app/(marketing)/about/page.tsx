@@ -4,12 +4,14 @@ import { BarChart3, BriefcaseBusiness, GraduationCap, Sparkles } from "lucide-re
 import Badge from "@/components/marketing/Badge";
 import Button from "@/components/marketing/Button";
 import StepsTimeline, { type StepModel } from "@/components/marketing/StepsTimeline";
+import { marketingPageMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = marketingPageMetadata({
+  path: "/about",
   title: "About",
   description:
     "Mindfull Methods helps learners build career-ready skills through structured mentorship, milestone guidance, and portfolio projects.",
-};
+});
 
 export default function AboutPage() {
   const steps: StepModel[] = [

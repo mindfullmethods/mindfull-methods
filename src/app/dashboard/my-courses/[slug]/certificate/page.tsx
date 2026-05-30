@@ -4,6 +4,7 @@ import BrandWordmark from "@/components/marketing/BrandWordmark";
 import CertificateActions from "@/components/components/dashboard/CertificateActions";
 import { getCourseProgress, isEnrolledInCourse } from "@/Services/course-progress";
 import { getSessionUser, requireUser } from "@/lib/auth";
+import { formatCertificateDate, formatCertificateId } from "@/lib/certificates";
 import { getCourseBySlug } from "@/lib/courses";
 import { isCourseProgressTableReady } from "@/lib/course-progress-schema";
 import { siteConfig } from "@/lib/site";
@@ -32,11 +33,8 @@ export default async function CourseCertificatePage({ params }: { params: Promis
     user?.email?.split("@")[0] ??
     "Student";
 
-  const issuedDate = new Intl.DateTimeFormat("en-IN", {
-    day: "numeric",
-    month: "long",
-    year: "numeric",
-  }).format(new Date());
+  const issuedDate = formatCertificateDate(progress.completedAt ?? new Date());
+  const certificateId = user?.id ? formatCertificateId(user.id, slug) : null;
 
   return (
     <div className="min-h-screen bg-white text-zinc-950 print:bg-white">
@@ -59,6 +57,11 @@ export default async function CourseCertificatePage({ params }: { params: Promis
               {course.duration} · {course.level}
             </p>
             <div className="mt-10 grid w-full max-w-md gap-2 border-t border-violet-200 pt-8 text-sm text-zinc-600">
+              {certificateId ? (
+                <p>
+                  <span className="font-black text-zinc-900">Certificate ID:</span> {certificateId}
+                </p>
+              ) : null}
               <p>
                 <span className="font-black text-zinc-900">Issued:</span> {issuedDate}
               </p>

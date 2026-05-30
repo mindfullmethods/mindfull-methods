@@ -23,19 +23,28 @@ export type CourseProgressSummary = {
   completedWeeks: number[];
   totalWeeks: number;
   percent: number;
+  lastActivityAt: string | null;
+  completedAt: string | null;
 };
+
+function latestTimestamp(rows: ProgressRow[]) {
+  if (rows.length === 0) return null;
+  return rows.reduce(
+    (latest, row) => (row.completed_at > latest ? row.completed_at : latest),
+    rows[0].completed_at,
+  );
+}
 
 export function buildProgressSummary(
   courseSlug: string,
   totalWeeks: number,
   rows: ProgressRow[]
 ): CourseProgressSummary {
-  const completedWeeks = rows
-    .filter((row) => row.course_slug === courseSlug)
-    .map((row) => row.week_index)
-    .sort((a, b) => a - b);
-
+  const courseRows = rows.filter((row) => row.course_slug === courseSlug);
+  const completedWeeks = courseRows.map((row) => row.week_index).sort((a, b) => a - b);
   const percent = totalWeeks > 0 ? Math.round((completedWeeks.length / totalWeeks) * 100) : 0;
+  const lastActivityAt = latestTimestamp(courseRows);
+  const completedAt = percent >= 100 ? lastActivityAt : null;
 
-  return { courseSlug, completedWeeks, totalWeeks, percent };
+  return { courseSlug, completedWeeks, totalWeeks, percent, lastActivityAt, completedAt };
 }

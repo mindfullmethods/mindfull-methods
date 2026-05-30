@@ -6,9 +6,11 @@ import EnrollButton from "@/components/marketing/EnrollButton";
 import Button from "@/components/marketing/Button";
 import Badge from "@/components/marketing/Badge";
 import FAQAccordion from "@/components/marketing/FAQAccordion";
+import JsonLd from "@/components/marketing/JsonLd";
 import { getCourseBySlug, getCourseSlugs } from "@/lib/courses";
 import { isRazorpayConfigured } from "@/lib/razorpay";
-import { contactUrl, signupUrl, syllabusPdfUrl, syllabusPrintUrl, syllabusUrl } from "@/lib/site";
+import { absoluteUrl, courseJsonLd } from "@/lib/seo";
+import { contactUrl, pageTitle, signupUrl, syllabusPdfUrl, syllabusPrintUrl, syllabusUrl } from "@/lib/site";
 import { hasSyllabusPdf } from "@/lib/syllabus-files";
 import type { Metadata } from "next";
 
@@ -31,12 +33,24 @@ export async function generateMetadata({
     return { title: "Course not found" };
   }
 
+  const path = `/courses/${slug}`;
+
   return {
     title: course.title,
     description: course.shortDescription,
+    alternates: { canonical: path },
     openGraph: {
-      title: course.title,
+      title: pageTitle(course.title),
       description: course.shortDescription,
+      url: absoluteUrl(path),
+      type: "website",
+      images: [{ url: course.imageUrl, width: 1200, height: 480, alt: course.title }],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: pageTitle(course.title),
+      description: course.shortDescription,
+      images: [course.imageUrl],
     },
   };
 }
@@ -55,7 +69,9 @@ export default async function CourseDetailsPage({
   const pdfAvailable = hasSyllabusPdf(course.slug);
 
   return (
-    <div className="mx-auto max-w-7xl px-5 py-14 sm:px-8 lg:px-10">
+    <>
+      <JsonLd data={courseJsonLd(course)} />
+      <div className="mx-auto max-w-7xl px-5 py-14 sm:px-8 lg:px-10">
       <div className="relative mb-8 overflow-hidden rounded-[2rem] border mm-border">
         <Image
           src={course.imageUrl}
@@ -269,6 +285,7 @@ export default async function CourseDetailsPage({
           </div>
         </div>
       </section>
-    </div>
+      </div>
+    </>
   );
 }

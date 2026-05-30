@@ -74,6 +74,7 @@ export default async function CourseProgressPage({ params }: { params: Promise<{
             courseSlug={slug}
             weeks={weeks}
             completedWeeks={progress?.completedWeeks ?? []}
+            lastActivityAt={progress?.lastActivityAt}
           />
         </section>
       )}
