@@ -10,11 +10,13 @@ export default function InquiryEnrollmentLink({
   inquiryEmail,
   enrollments,
   linkedEnrollmentId,
+  disabled,
 }: {
   inquiryId: string;
   inquiryEmail: string;
   enrollments: AdminEnrollment[];
   linkedEnrollmentId?: string | null;
+  disabled?: boolean;
 }) {
   const matches = enrollments.filter((e) => e.email?.toLowerCase() === inquiryEmail.toLowerCase());
   const [value, setValue] = useState(linkedEnrollmentId ?? "");
@@ -39,7 +41,8 @@ export default function InquiryEnrollmentLink({
       <select
         value={value}
         onChange={(e) => setValue(e.target.value)}
-        className="mt-2 w-full rounded-xl border border-violet-200 bg-white px-3 py-2 text-sm font-bold dark:border-violet-400/20 dark:bg-zinc-950"
+        disabled={disabled}
+        className="mt-2 w-full rounded-xl border border-violet-200 bg-white px-3 py-2 text-sm font-bold disabled:cursor-not-allowed disabled:opacity-60 dark:border-violet-400/20 dark:bg-zinc-950"
       >
         <option value="">No linked enrollment</option>
         {matches.map((e) => (
@@ -51,12 +54,23 @@ export default function InquiryEnrollmentLink({
       <button
         type="button"
         onClick={save}
-        disabled={isPending}
+        disabled={isPending || disabled}
         className="mt-3 rounded-xl bg-violet-600 px-4 py-2 text-xs font-black text-white disabled:opacity-60"
       >
         {isPending ? "Saving…" : "Save link"}
       </button>
-      {message ? <p className="mt-2 text-xs font-bold text-violet-700 dark:text-violet-300">{message}</p> : null}
+      {disabled ? (
+        <p className="mt-2 text-xs font-bold text-violet-700 dark:text-violet-300">
+          Run the enrollment link SQL from the banner above, then refresh.
+        </p>
+      ) : null}
+      {message ? (
+        <p
+          className={`mt-2 text-xs font-bold ${message.includes("SQL") || message.includes("schema") ? "text-red-600" : "text-violet-700 dark:text-violet-300"}`}
+        >
+          {message}
+        </p>
+      ) : null}
     </div>
   );
 }

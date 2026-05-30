@@ -5,7 +5,10 @@ import { useMemo, useState, useTransition } from "react";
 import { BookOpen, CreditCard, Mail, Search, UserRound } from "lucide-react";
 
 import { markEnrollmentRefunded, resendEnrollmentReceipt } from "@/actions/adminEnrollments";
+import EnrollmentCompleteButton from "@/components/components/dashboard/EnrollmentCompleteButton";
 import { getCourses } from "@/lib/courses";
+import type { CourseProgressSummary } from "@/lib/course-progress-schema";
+import { enrollmentProgressKey, type EnrollmentProgressKey } from "@/Services/admin-course-progress";
 import type { AdminEnrollment } from "@/Services/admin-enrollments";
 
 function formatDate(value: string) {
@@ -26,7 +29,15 @@ function formatAmount(paise: number, currency = "INR") {
   }).format(paise / 100);
 }
 
-export default function EnrollmentsAdminPanel({ enrollments }: { enrollments: AdminEnrollment[] }) {
+export default function EnrollmentsAdminPanel({
+  enrollments,
+  progressMap,
+  progressReady,
+}: {
+  enrollments: AdminEnrollment[];
+  progressMap: Map<EnrollmentProgressKey, CourseProgressSummary>;
+  progressReady: boolean;
+}) {
   const courses = getCourses();
   const [query, setQuery] = useState("");
   const [courseFilter, setCourseFilter] = useState("All");
@@ -88,12 +99,18 @@ export default function EnrollmentsAdminPanel({ enrollments }: { enrollments: Ad
       </div>
 
       <section className="mt-6 grid gap-4">
-        {filtered.map((enrollment) => (
+        {filtered.map((enrollment) => {
+          const progressKey =
+            enrollment.user_id ? enrollmentProgressKey(enrollment.user_id, enrollment.course_slug) : null;
+          const progress = progressKey ? progressMap.get(progressKey) : undefined;
+          const percent = progress?.percent ?? 0;
+
+          return (
           <article
             key={enrollment.id}
             className="rounded-3xl border border-zinc-200 bg-white p-5 shadow-sm dark:border-white/10 dark:bg-white/5 sm:p-6"
           >
-            <div className="grid gap-5 lg:grid-cols-[1fr_auto] lg:items-center">
+            <div className="grid gap-5 lg:grid-cols-[1fr_auto] lg:items-start">
               <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
                 <div>
                   <p className="flex items-center gap-2 text-xs font-black uppercase tracking-[0.18em] text-zinc-500">
@@ -152,8 +169,32 @@ export default function EnrollmentsAdminPanel({ enrollments }: { enrollments: Ad
                 </button>
               </div>
             </div>
+            {progressReady && enrollment.user_id && enrollment.status === "paid" ? (
+              <div className="mt-4 border-t border-zinc-100 pt-4 dark:border-white/10">
+                <div className="flex flex-wrap items-center justify-between gap-3">
+                  <div className="min-w-[140px] flex-1">
+                    <p className="text-xs font-black uppercase tracking-[0.18em] text-zinc-500">Course progress</p>
+                    <div className="mt-2 flex items-center gap-3">
+                      <div className="h-2 flex-1 overflow-hidden rounded-full bg-zinc-200 dark:bg-zinc-800">
+                        <div
+                          className="h-full rounded-full bg-gradient-to-r from-violet-500 to-teal-400"
+                          style={{ width: `${percent}%` }}
+                        />
+                      </div>
+                      <span className="text-xs font-black text-zinc-600 dark:text-zinc-400">{percent}%</span>
+                    </div>
+                  </div>
+                  <EnrollmentCompleteButton
+                    enrollmentId={enrollment.id}
+                    percent={percent}
+                    disabled={!enrollment.user_id}
+                  />
+                </div>
+              </div>
+            ) : null}
           </article>
-        ))}
+          );
+        })}
       </section>
     </>
   );

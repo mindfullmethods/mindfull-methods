@@ -3,6 +3,7 @@ import { isCertificatesTableReady } from "@/lib/certificates-schema";
 import {
   isContactInquiriesTableReady,
   isContactInquiryAdminNotesReady,
+  isContactInquiryLinkedEnrollmentReady,
   isContactInquiryStatusReady,
 } from "@/lib/contact-inquiries-schema";
 import { isCourseProgressTableReady } from "@/lib/course-progress-schema";
@@ -38,6 +39,7 @@ export async function getPlatformSetupChecks(): Promise<SetupCheck[]> {
     inquiriesReady,
     inquiryStatusReady,
     inquiryNotesReady,
+    inquiryLinkedEnrollmentReady,
     certificatesReady,
   ] = await Promise.all([
     isEnrollmentsTableReady(),
@@ -46,6 +48,7 @@ export async function getPlatformSetupChecks(): Promise<SetupCheck[]> {
     isContactInquiriesTableReady(),
     isContactInquiryStatusReady(),
     isContactInquiryAdminNotesReady(),
+    isContactInquiryLinkedEnrollmentReady(),
     isCertificatesTableReady(),
   ]);
 
@@ -152,7 +155,15 @@ export async function getPlatformSetupChecks(): Promise<SetupCheck[]> {
       id: "inquiry-notes",
       label: "Inquiry admin notes",
       ready: inquiryNotesReady,
-      detail: inquiryNotesReady ? "Save follow-up notes on inquiries" : "Run supabase/admin-dashboard-extensions.sql",
+      detail: inquiryNotesReady ? "Save follow-up notes on inquiries" : "Run supabase/admin-dashboard-extensions.sql (admin_notes)",
+    },
+    {
+      id: "inquiry-linked-enrollment",
+      label: "Inquiry enrollment link",
+      ready: inquiryLinkedEnrollmentReady,
+      detail: inquiryLinkedEnrollmentReady
+        ? "Link inquiries to paid enrollments"
+        : "Run supabase/contact-inquiries-linked-enrollment.sql",
     },
     {
       id: "certificates-table",

@@ -59,4 +59,5 @@ Ensure these have been run:
 - `supabase/contact-inquiries-schema.sql`
 - `supabase/contact-inquiries-status.sql`
 - `supabase/admin-dashboard-extensions.sql`
+- `supabase/contact-inquiries-linked-enrollment.sql`
 - `supabase/certificates-schema.sql`

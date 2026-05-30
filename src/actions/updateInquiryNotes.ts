@@ -57,6 +57,12 @@ export async function linkInquiryToEnrollment(inquiryId: string, enrollmentId: s
 
   if (error) {
     console.error("[linkInquiryToEnrollment]", error);
+    if (isMissingColumnError(error.message, "linked_enrollment_id")) {
+      return {
+        ok: false as const,
+        error: "Enrollment link column missing — run the SQL from the yellow banner on this page, then refresh.",
+      };
+    }
     return { ok: false as const, error: error.message };
   }
 

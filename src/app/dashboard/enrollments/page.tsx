@@ -5,8 +5,10 @@ import EnrollmentsSchemaBanner from "@/components/components/dashboard/Enrollmen
 import ExportCsvButton from "@/components/components/dashboard/ExportCsvButton";
 import ManualEnrollmentForm from "@/components/components/dashboard/ManualEnrollmentForm";
 import { getAllEnrollments } from "@/Services/admin-enrollments";
+import { getAdminProgressForEnrollments } from "@/Services/admin-course-progress";
 import { requireAdmin } from "@/lib/auth";
 import { isEnrollmentsTableReady } from "@/lib/enrollments-schema";
+import { isCourseProgressTableReady } from "@/lib/course-progress-schema";
 
 function formatAmount(paise: number, currency = "INR") {
   return new Intl.NumberFormat("en-IN", {
@@ -19,7 +21,12 @@ function formatAmount(paise: number, currency = "INR") {
 export default async function AdminEnrollmentsPage() {
   await requireAdmin();
   const tableReady = await isEnrollmentsTableReady();
+  const progressReady = await isCourseProgressTableReady();
   const enrollments = tableReady ? await getAllEnrollments() : [];
+  const progressMap =
+    tableReady && progressReady && enrollments.length > 0
+      ? await getAdminProgressForEnrollments(enrollments)
+      : new Map();
 
   const paidEnrollments = enrollments.filter((e) => e.status === "paid");
   const revenue = paidEnrollments.reduce((sum, e) => sum + e.amount_paise, 0);
@@ -32,7 +39,7 @@ export default async function AdminEnrollmentsPage() {
             <p className="text-sm font-black uppercase tracking-[0.28em] text-zinc-500">Enrollments</p>
             <h1 className="mt-4 text-4xl font-black tracking-tight sm:text-6xl">Paid course enrollments</h1>
             <p className="mt-5 max-w-2xl text-sm leading-7 text-zinc-600 dark:text-zinc-400">
-              Filter by course, resend receipts, and mark refunds when needed.
+              Filter by course, track student progress, mark courses complete, resend receipts, and handle refunds.
             </p>
           </div>
           <div className="flex flex-col items-end gap-3">
@@ -66,7 +73,11 @@ export default async function AdminEnrollmentsPage() {
           </p>
         </div>
       ) : (
-        <EnrollmentsAdminPanel enrollments={enrollments} />
+        <EnrollmentsAdminPanel
+          enrollments={enrollments}
+          progressMap={progressMap}
+          progressReady={progressReady}
+        />
       )}
     </main>
   );

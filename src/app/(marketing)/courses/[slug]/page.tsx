@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Link from "next/link";
 import { notFound } from "next/navigation";
 import { CheckCircle2, Download, Sparkles } from "lucide-react";
 
@@ -7,6 +8,7 @@ import Button from "@/components/marketing/Button";
 import Badge from "@/components/marketing/Badge";
 import FAQAccordion from "@/components/marketing/FAQAccordion";
 import JsonLd from "@/components/marketing/JsonLd";
+import { isEnrolledInCourse, getCourseProgress } from "@/Services/course-progress";
 import { getCourseBySlug, getCourseSlugs } from "@/lib/courses";
 import { isRazorpayConfigured } from "@/lib/razorpay";
 import { absoluteUrl, courseJsonLd } from "@/lib/seo";
@@ -67,6 +69,9 @@ export default async function CourseDetailsPage({
 
   const paymentsEnabled = isRazorpayConfigured();
   const pdfAvailable = hasSyllabusPdf(course.slug);
+  const enrolled = await isEnrolledInCourse(slug);
+  const progress = enrolled ? await getCourseProgress(slug) : null;
+  const percent = progress?.percent ?? 0;
 
   return (
     <>
@@ -87,6 +92,7 @@ export default async function CourseDetailsPage({
             <Badge tone="violet">{course.mode}</Badge>
             <Badge tone="neutral">{course.duration}</Badge>
             <Badge tone="neutral">{course.level}</Badge>
+            {enrolled ? <Badge tone="violet">Enrolled</Badge> : null}
           </div>
           <h1 className="mt-4 max-w-3xl text-3xl font-black tracking-tight text-white sm:text-5xl">{course.title}</h1>
         </div>
@@ -124,7 +130,36 @@ export default async function CourseDetailsPage({
               <p className="mt-2 text-2xl font-black mm-heading">{course.priceLabel}</p>
 
               <div className="mt-5 flex flex-col gap-3">
-                {paymentsEnabled ? (
+                {enrolled ? (
+                  <>
+                    {percent > 0 && percent < 100 ? (
+                      <div className="rounded-2xl border border-emerald-200 bg-emerald-50 p-4 dark:border-emerald-400/20 dark:bg-emerald-400/10">
+                        <div className="flex items-center justify-between text-xs font-black text-emerald-800 dark:text-emerald-200">
+                          <span>Your progress</span>
+                          <span>{percent}%</span>
+                        </div>
+                        <div className="mt-2 h-2 overflow-hidden rounded-full bg-emerald-200 dark:bg-emerald-900/40">
+                          <div
+                            className="h-full rounded-full bg-emerald-500"
+                            style={{ width: `${percent}%` }}
+                          />
+                        </div>
+                      </div>
+                    ) : null}
+                    <Link
+                      href={percent >= 100 ? `/dashboard/my-courses/${course.slug}/certificate` : `/dashboard/my-courses/${course.slug}`}
+                      className="inline-flex items-center justify-center rounded-xl bg-emerald-600 px-5 py-4 text-sm font-black text-white transition hover:bg-emerald-700"
+                    >
+                      {percent >= 100 ? "View certificate" : "Continue learning"}
+                    </Link>
+                    <Link
+                      href="/dashboard/my-courses"
+                      className="inline-flex items-center justify-center rounded-xl border border-zinc-200 bg-white px-5 py-4 text-sm font-black mm-heading dark:border-white/15 dark:bg-white/5"
+                    >
+                      Go to my courses
+                    </Link>
+                  </>
+                ) : paymentsEnabled ? (
                   <EnrollButton
                     courseSlug={course.slug}
                     courseTitle={course.title}

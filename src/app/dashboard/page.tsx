@@ -3,6 +3,7 @@ import { ArrowRight, BookOpen, BriefcaseBusiness, ClipboardList, GraduationCap, 
 import AnalyticsChart from "@/components/components/dashboard/AnalyticsChart";
 import DashboardCourseCard from "@/components/components/dashboard/DashboardCourseCard";
 import InternshipList from "@/components/components/dashboard/InternshipList";
+import ResumeLearningBanner, { findResumeCourse } from "@/components/components/dashboard/ResumeLearningBanner";
 import { getInternships } from "@/Services/Internships";
 import { getMyApplications } from "@/Services/applications";
 import { getStudentApplicationChart, getOverallCourseProgressPercent } from "@/Services/admin-analytics";
@@ -32,6 +33,8 @@ export default async function DashboardPage() {
       : new Map();
 
   const overallProgress = getOverallCourseProgressPercent([...progressMap.values()]);
+  const resumeCourse =
+    progressReady && enrollments.length > 0 ? findResumeCourse(enrollments, progressMap) : null;
 
   const metrics = [
     {
@@ -126,6 +129,8 @@ export default async function DashboardPage() {
           </div>
         </div>
       </section>
+
+      {resumeCourse ? <ResumeLearningBanner course={resumeCourse} /> : null}
 
       <section className="mt-6 grid gap-4 md:grid-cols-2 xl:grid-cols-4">
         {metrics.map((metric) => {

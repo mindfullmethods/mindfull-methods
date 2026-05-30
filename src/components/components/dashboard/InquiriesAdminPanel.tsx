@@ -88,11 +88,13 @@ export default function InquiriesAdminPanel({
   enrollments,
   statusReady,
   adminNotesReady,
+  linkedEnrollmentReady,
 }: {
   inquiries: ContactInquiry[];
   enrollments: AdminEnrollment[];
   statusReady: boolean;
   adminNotesReady: boolean;
+  linkedEnrollmentReady: boolean;
 }) {
   const [query, setQuery] = useState("");
   const [statusFilter, setStatusFilter] = useState<(typeof statusFilters)[number]>("All");
@@ -217,6 +219,7 @@ export default function InquiriesAdminPanel({
                 inquiryEmail={inquiry.email}
                 enrollments={enrollments}
                 linkedEnrollmentId={inquiry.linked_enrollment_id}
+                disabled={!linkedEnrollmentReady}
               />
             </article>
           );

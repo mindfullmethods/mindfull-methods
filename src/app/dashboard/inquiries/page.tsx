@@ -1,6 +1,7 @@
 import { MessageSquare } from "lucide-react";
 
 import ContactInquiriesAdminNotesBanner from "@/components/components/dashboard/ContactInquiriesAdminNotesBanner";
+import ContactInquiriesLinkedEnrollmentBanner from "@/components/components/dashboard/ContactInquiriesLinkedEnrollmentBanner";
 import ContactInquiriesSchemaBanner from "@/components/components/dashboard/ContactInquiriesSchemaBanner";
 import ContactInquiriesStatusBanner from "@/components/components/dashboard/ContactInquiriesStatusBanner";
 import ExportCsvButton from "@/components/components/dashboard/ExportCsvButton";
@@ -8,14 +9,15 @@ import InquiriesAdminPanel from "@/components/components/dashboard/InquiriesAdmi
 import { getAllEnrollments } from "@/Services/admin-enrollments";
 import { getContactInquiries } from "@/Services/contact-inquiries";
 import { requireAdmin } from "@/lib/auth";
-import { isContactInquiriesTableReady, isContactInquiryAdminNotesReady, isContactInquiryStatusReady } from "@/lib/contact-inquiries-schema";
+import { isContactInquiriesTableReady, isContactInquiryAdminNotesReady, isContactInquiryLinkedEnrollmentReady, isContactInquiryStatusReady } from "@/lib/contact-inquiries-schema";
 
 export default async function ContactInquiriesPage() {
   await requireAdmin();
-  const [tableReady, statusReady, adminNotesReady] = await Promise.all([
+  const [tableReady, statusReady, adminNotesReady, linkedEnrollmentReady] = await Promise.all([
     isContactInquiriesTableReady(),
     isContactInquiryStatusReady(),
     isContactInquiryAdminNotesReady(),
+    isContactInquiryLinkedEnrollmentReady(),
   ]);
   const [inquiries, enrollments] = tableReady
     ? await Promise.all([getContactInquiries(), getAllEnrollments()])
@@ -54,6 +56,7 @@ export default async function ContactInquiriesPage() {
       {!tableReady ? <div className="mt-8"><ContactInquiriesSchemaBanner /></div> : null}
       {tableReady && !statusReady ? <div className="mt-8"><ContactInquiriesStatusBanner /></div> : null}
       {tableReady && !adminNotesReady ? <div className="mt-8"><ContactInquiriesAdminNotesBanner /></div> : null}
+      {tableReady && !linkedEnrollmentReady ? <div className="mt-8"><ContactInquiriesLinkedEnrollmentBanner /></div> : null}
 
       {inquiries.length === 0 ? (
         <div className="mt-8 rounded-3xl border border-dashed border-zinc-300 bg-white p-12 text-center dark:border-white/10 dark:bg-white/5">
@@ -69,6 +72,7 @@ export default async function ContactInquiriesPage() {
           enrollments={enrollments}
           statusReady={statusReady}
           adminNotesReady={adminNotesReady}
+          linkedEnrollmentReady={linkedEnrollmentReady}
         />
       )}
     </main>
