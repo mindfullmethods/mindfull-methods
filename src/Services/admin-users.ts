@@ -9,6 +9,7 @@ export type AdminUserRow = {
   applicationCount: number;
   enrollmentCount: number;
   lastActivity: string | null;
+  role: string | null;
 };
 
 export async function getAdminUsers(): Promise<AdminUserRow[]> {
@@ -19,11 +20,21 @@ export async function getAdminUsers(): Promise<AdminUserRow[]> {
     return [];
   }
 
-  const [profilesResult, applications, enrollments] = await Promise.all([
+  const [profilesResult, applications, enrollments, authUsersResult] = await Promise.all([
     admin.from("profiles").select("id, full_name, email").order("full_name", { ascending: true }),
     getApplications(),
     getAllEnrollments(),
+    admin.auth.admin.listUsers({ page: 1, perPage: 1000 }),
   ]);
+
+  const roleById = new Map<string, string | null>();
+  for (const authUser of authUsersResult.data.users) {
+    const role =
+      (authUser.app_metadata?.role as string | undefined) ??
+      (authUser.user_metadata?.role as string | undefined) ??
+      null;
+    roleById.set(authUser.id, role);
+  }
 
   const profiles = profilesResult.data ?? [];
   const appCounts = new Map<string, number>();
@@ -55,5 +66,6 @@ export async function getAdminUsers(): Promise<AdminUserRow[]> {
     applicationCount: appCounts.get(p.id) ?? 0,
     enrollmentCount: enrollCounts.get(p.id) ?? 0,
     lastActivity: lastActivity.get(p.id) ?? null,
+    role: roleById.get(p.id) ?? null,
   }));
 }

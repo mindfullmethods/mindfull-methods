@@ -5,6 +5,7 @@ import { useMemo, useState, useTransition } from "react";
 import { Mail, MessageSquare, Phone, Search, UserRound } from "lucide-react";
 
 import InquiryStatusControl from "@/components/components/dashboard/InquiryStatusControl";
+import InquiryEnrollmentLink from "@/components/components/dashboard/InquiryEnrollmentLink";
 import { updateInquiryNotes } from "@/actions/updateInquiryNotes";
 import type { ContactInquiry } from "@/Services/contact-inquiries";
 import type { AdminEnrollment } from "@/Services/admin-enrollments";
@@ -210,6 +211,12 @@ export default function InquiriesAdminPanel({
                 inquiryId={inquiry.id}
                 initialNotes={inquiry.admin_notes}
                 disabled={!adminNotesReady}
+              />
+              <InquiryEnrollmentLink
+                inquiryId={inquiry.id}
+                inquiryEmail={inquiry.email}
+                enrollments={enrollments}
+                linkedEnrollmentId={inquiry.linked_enrollment_id}
               />
             </article>
           );

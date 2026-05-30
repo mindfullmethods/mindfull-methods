@@ -11,3 +11,7 @@ export function formatCertificateDate(value: string | Date) {
     year: "numeric",
   }).format(typeof value === "string" ? new Date(value) : value);
 }
+
+export function certificateVerifyPath(certificateId: string) {
+  return `/certificates/verify/${certificateId}`;
+}

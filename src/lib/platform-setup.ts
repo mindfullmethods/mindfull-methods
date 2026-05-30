@@ -1,5 +1,10 @@
 import { isApplicationsStatusReady } from "@/lib/applications-schema";
-import { isContactInquiriesTableReady, isContactInquiryStatusReady } from "@/lib/contact-inquiries-schema";
+import { isCertificatesTableReady } from "@/lib/certificates-schema";
+import {
+  isContactInquiriesTableReady,
+  isContactInquiryAdminNotesReady,
+  isContactInquiryStatusReady,
+} from "@/lib/contact-inquiries-schema";
 import { isCourseProgressTableReady } from "@/lib/course-progress-schema";
 import { isEnrollmentsTableReady } from "@/lib/enrollments-schema";
 import { isRazorpayConfigured } from "@/lib/razorpay";
@@ -32,12 +37,16 @@ export async function getPlatformSetupChecks(): Promise<SetupCheck[]> {
     progressReady,
     inquiriesReady,
     inquiryStatusReady,
+    inquiryNotesReady,
+    certificatesReady,
   ] = await Promise.all([
     isEnrollmentsTableReady(),
     isApplicationsStatusReady(),
     isCourseProgressTableReady(),
     isContactInquiriesTableReady(),
     isContactInquiryStatusReady(),
+    isContactInquiryAdminNotesReady(),
+    isCertificatesTableReady(),
   ]);
 
   return [
@@ -102,10 +111,12 @@ export async function getPlatformSetupChecks(): Promise<SetupCheck[]> {
     },
     {
       id: "domain",
-      label: "Custom domain",
+      label: "Custom domain (attach when ready)",
       ready: customDomain,
-      detail: customDomain ? siteUrl : `Still on ${siteUrl} — connect mindfullmethods.com in Vercel`,
-      action: "Vercel → Domains → add DNS records at your registrar",
+      detail: customDomain
+        ? siteUrl
+        : `Using ${siteUrl} for now — attach mindfullmethods.com after final QA`,
+      action: "Optional until launch: Vercel → Domains → DNS at registrar",
     },
     {
       id: "enrollments-table",
@@ -136,6 +147,18 @@ export async function getPlatformSetupChecks(): Promise<SetupCheck[]> {
       label: "Inquiry status column",
       ready: inquiryStatusReady,
       detail: inquiryStatusReady ? "Track New → Contacted → Enrolled → Closed" : "Run supabase/contact-inquiries-status.sql",
+    },
+    {
+      id: "inquiry-notes",
+      label: "Inquiry admin notes",
+      ready: inquiryNotesReady,
+      detail: inquiryNotesReady ? "Save follow-up notes on inquiries" : "Run supabase/admin-dashboard-extensions.sql",
+    },
+    {
+      id: "certificates-table",
+      label: "Certificate verification",
+      ready: certificatesReady,
+      detail: certificatesReady ? "Public verify page + stored certificate IDs" : "Run supabase/certificates-schema.sql",
     },
   ];
 }

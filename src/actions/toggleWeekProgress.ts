@@ -3,15 +3,36 @@
 import { revalidatePath } from "next/cache";
 
 import { getCourseBySlug } from "@/lib/courses";
+import { notifyCourseCompleted } from "@/lib/email";
+import { formatCertificateId } from "@/lib/certificates";
+import { absoluteUrl } from "@/lib/seo";
+import { issueCertificateIfComplete } from "@/Services/certificates";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { isSupabaseSchemaError } from "@/lib/applications-schema-sql";
 import { createClient } from "@/lib/supabase/server";
+
+async function getStudentName(user: { id: string; email?: string; user_metadata?: Record<string, unknown> }) {
+  try {
+    const admin = createAdminClient();
+    const { data: profile } = await admin.from("profiles").select("full_name").eq("id", user.id).maybeSingle();
+    if (profile?.full_name) return profile.full_name as string;
+  } catch {
+    // ignore
+  }
+
+  return (
+    (user.user_metadata?.full_name as string | undefined) ??
+    (user.user_metadata?.name as string | undefined) ??
+    user.email?.split("@")[0] ??
+    "Student"
+  );
+}
 
 export async function toggleWeekProgressAction(
   courseSlug: string,
   weekIndex: number,
   completed: boolean
-): Promise<{ ok: true } | { ok: false; error: string }> {
+): Promise<{ ok: true; justCompleted?: boolean } | { ok: false; error: string }> {
   const course = getCourseBySlug(courseSlug);
   if (!course) {
     return { ok: false, error: "Course not found." };
@@ -79,9 +100,46 @@ export async function toggleWeekProgressAction(
     }
   }
 
+  let justCompleted = false;
+
+  if (completed) {
+    const { data: rows } = await admin
+      .from("course_progress")
+      .select("course_slug, week_index, completed_at")
+      .eq("user_id", user.id)
+      .eq("course_slug", courseSlug);
+
+    const progressRows = rows ?? [];
+    if (progressRows.length >= course.curriculum.length) {
+      justCompleted = true;
+      const studentName = await getStudentName(user);
+      const certificate = await issueCertificateIfComplete({
+        userId: user.id,
+        courseSlug,
+        studentName,
+        progressRows,
+      });
+
+      const certificateId = certificate?.id ?? formatCertificateId(user.id, courseSlug);
+      const verifyUrl = absoluteUrl(`/certificates/verify/${certificateId}`);
+
+      if (user.email) {
+        void notifyCourseCompleted({
+          studentName,
+          studentEmail: user.email,
+          courseTitle: course.title,
+          courseSlug,
+          certificateId,
+          verifyUrl,
+        }).catch((err) => console.error("[toggleWeekProgress] completion email", err));
+      }
+    }
+  }
+
   revalidatePath("/dashboard/my-courses");
   revalidatePath(`/dashboard/my-courses/${courseSlug}`);
+  revalidatePath("/dashboard/certificates");
   revalidatePath("/dashboard");
 
-  return { ok: true };
+  return { ok: true, justCompleted };
 }

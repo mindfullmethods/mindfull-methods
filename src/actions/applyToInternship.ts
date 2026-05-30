@@ -73,12 +73,38 @@ export async function applyToInternshipAction(internshipId: string): Promise<App
 
   const { data: existingApplications } = await admin
     .from("applications")
-    .select("id")
+    .select("id, status")
     .eq("user_id", user.id)
     .eq("internship_id", internshipId);
 
-  if (existingApplications?.length) {
+  const activeApplication = existingApplications?.find(
+    (app) => (app.status ?? "Pending").toLowerCase() !== "withdrawn"
+  );
+
+  if (activeApplication) {
     return { ok: false, error: "You already applied to this internship.", code: "duplicate" };
+  }
+
+  const withdrawnApplication = existingApplications?.find(
+    (app) => (app.status ?? "").toLowerCase() === "withdrawn"
+  );
+
+  if (withdrawnApplication) {
+    const { error: reopenError } = await admin
+      .from("applications")
+      .update({ status: "Pending" })
+      .eq("id", withdrawnApplication.id);
+
+    if (reopenError) {
+      return { ok: false, error: reopenError.message, code: "unknown" };
+    }
+
+    revalidatePath("/dashboard/my-applications");
+    revalidatePath("/dashboard/applications");
+    revalidatePath("/dashboard");
+    revalidatePath(`/dashboard/internships/${internshipId}`);
+
+    return { ok: true, message: "Application submitted successfully." };
   }
 
   const fullName =

@@ -1,35 +1,38 @@
 # Mindfull Methods
 
-A full-stack mentorship and internship platform built with Next.js, TypeScript, Tailwind CSS, Supabase, and Vercel.
+Full-stack mentorship platform: marketing site, student dashboard, payments, internships, and admin operations.
 
-**Live site:** https://mindfull-methods.vercel.app
+**Live:** https://mindfull-methods.vercel.app
 
 ---
 
 ## Features
 
-### Marketing site
-- Home, courses catalog (search + filters), course detail pages
-- About, contact, privacy, terms, custom 404
-- SEO: metadata, sitemap, robots.txt, Open Graph
-- Contact form with Resend email delivery
-- Syllabus download per course
+### Marketing
+- Home, courses catalog, course detail + syllabus, blog, about, contact, privacy, terms
+- Light/dark theme, SEO (sitemap, robots, JSON-LD, Open Graph), Vercel Analytics + Speed Insights
+- Optional GA4 via `NEXT_PUBLIC_GA_ID`
 
-### Student platform
-- Supabase authentication (login / signup)
-- Dashboard: internships, applications, admin studio
-- Course-aware signup flow (`/signup?course=slug`)
+### Students
+- Auth (login/signup), settings (name + password)
+- Pay & enroll (Razorpay + promo codes: `LAUNCH10`, `MENTOR500`, `STUDENT15`)
+- My courses, weekly progress with resources, certificates hub
+- Public certificate verification + QR codes
+- Internships apply, track status, withdraw applications
+
+### Admin
+- Admin home, analytics, students (role toggle)
+- Applications (search, bulk approve/reject)
+- Inquiries (notes, enrollment linking)
+- Enrollments (filter, refund, resend receipt, **complimentary grant**)
+- Admin Studio (internships CRUD, tags, draft/publish)
+- Daily digest email (cron + manual)
 
 ---
 
 ## Tech stack
 
-| Layer | Tools |
-|-------|-------|
-| Frontend | Next.js 16, React 19, TypeScript, Tailwind CSS 4 |
-| Backend | Supabase (auth + PostgreSQL), Next.js API routes |
-| Email | Resend |
-| Hosting | Vercel + Analytics |
+Next.js 16 · React 19 · TypeScript · Tailwind CSS 4 · Supabase · Razorpay · Resend · Vercel
 
 ---
 
@@ -40,79 +43,46 @@ git clone https://github.com/mindfullmethods/mindfull-methods.git
 cd mindfull-methods
 npm install
 cp .env.example .env.local
-```
-
-Fill in `.env.local`:
-
-```env
-NEXT_PUBLIC_SUPABASE_URL=your_supabase_url
-NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
-NEXT_PUBLIC_SITE_URL=http://localhost:3000
-RESEND_API_KEY=your_resend_key          # optional locally
-CONTACT_TO_EMAIL=support@mindfullmethods.com
-CONTACT_FROM_EMAIL=onboarding@resend.dev
-```
-
-Run the dev server:
-
-```bash
 npm run dev
 ```
 
-Open http://localhost:3000
+Fill `.env.local` — see `.env.example` for all variables.
 
 ---
 
-## Deploy to Vercel
+## Supabase SQL (run in order)
 
-1. Push to GitHub (connected to Vercel)
-2. Add the same env vars in **Vercel → Settings → Environment Variables**
-3. Set `NEXT_PUBLIC_SITE_URL` to your production URL
-4. Redeploy after changing env vars
-
-### Required env vars (production)
-
-| Variable | Required |
-|----------|----------|
-| `NEXT_PUBLIC_SUPABASE_URL` | Yes |
-| `NEXT_PUBLIC_SUPABASE_ANON_KEY` | Yes |
-| `NEXT_PUBLIC_SITE_URL` | Yes |
-| `RESEND_API_KEY` | For contact emails |
-| `CONTACT_TO_EMAIL` | For contact emails |
-| `CONTACT_FROM_EMAIL` | For contact emails |
+| File | Purpose |
+|------|---------|
+| `supabase/enrollments-schema.sql` | Paid enrollments |
+| `supabase/course-progress-schema.sql` | Weekly milestones |
+| `supabase/applications-status-only.sql` | Application status |
+| `supabase/contact-inquiries-schema.sql` | Contact form storage |
+| `supabase/contact-inquiries-status.sql` | Inquiry status |
+| `supabase/admin-dashboard-extensions.sql` | Inquiry notes, internship tags |
+| `supabase/certificates-schema.sql` | Certificate verification |
 
 ---
 
 ## Scripts
 
 ```bash
-npm run dev      # Start dev server
+npm run dev      # Development server
 npm run build    # Production build
-npm run start    # Start production server
 npm run lint     # ESLint
+node scripts/smoke-routes.mjs   # Quick route health check
 ```
+
+See `docs/SMOKE_TEST.md` for full manual QA checklist.
 
 ---
 
-## Project structure
+## Deploy (Vercel)
 
-```
-src/
-├── app/
-│   ├── (marketing)/     # Public site pages
-│   ├── (auth)/          # Login & signup
-│   ├── dashboard/       # Student & admin dashboard
-│   └── api/             # Contact & syllabus APIs
-├── components/
-│   ├── marketing/       # Navbar, Footer, course cards, etc.
-│   └── components/      # Dashboard UI
-└── lib/                 # Courses, email, site config
-public/
-└── brand-assets/        # Logo files
-```
+1. Connect GitHub repo
+2. Add env vars from `.env.example`
+3. Set `NEXT_PUBLIC_SITE_URL` to your Vercel URL (switch to custom domain later)
+4. Run Supabase migrations above
+5. Optional: `CRON_SECRET` for daily admin digest
 
----
-
-## License
-
-Private — Mindfull Methods
+Custom domain (`mindfullmethods.com`) can be attached after final QA — see `/dashboard/setup`.

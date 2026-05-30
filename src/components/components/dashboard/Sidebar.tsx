@@ -17,6 +17,7 @@ import {
   Menu,
   PanelLeftClose,
   Rocket,
+  Settings,
   ShieldCheck,
   Users,
 } from "lucide-react";
@@ -32,6 +33,7 @@ const studentLinks = [
   { label: "Certificates", href: "/dashboard/certificates", icon: Award },
   { label: "Internships", href: "/dashboard/internships", icon: BriefcaseBusiness },
   { label: "My applications", href: "/dashboard/my-applications", icon: ClipboardList },
+  { label: "Settings", href: "/dashboard/settings", icon: Settings },
 ];
 
 const adminLinks = [

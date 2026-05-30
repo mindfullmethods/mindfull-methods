@@ -9,11 +9,18 @@ export async function POST(req: Request) {
       return NextResponse.json({ ok: false, error: "Payments are not configured yet." }, { status: 503 });
     }
 
-    const body = (await req.json()) as { courseSlug?: string; customerEmail?: string };
+    const body = (await req.json()) as { courseSlug?: string; customerEmail?: string; promoCode?: string };
     const course = body.courseSlug ? getCourseBySlug(body.courseSlug) : null;
 
     if (!course) {
       return NextResponse.json({ ok: false, error: "Course not found." }, { status: 404 });
+    }
+
+    const { applyPromoCode } = await import("@/lib/promo-codes");
+    const promo = applyPromoCode(body.promoCode, course.priceInPaise);
+
+    if ("error" in promo && promo.error) {
+      return NextResponse.json({ ok: false, error: promo.error }, { status: 400 });
     }
 
     const notes: Record<string, string> = {
@@ -25,9 +32,13 @@ export async function POST(req: Request) {
       notes.customer_email = body.customerEmail.trim();
     }
 
+    if (promo.code) {
+      notes.promo_code = promo.code;
+    }
+
     const razorpay = getRazorpayClient();
     const order = await razorpay.orders.create({
-      amount: course.priceInPaise,
+      amount: promo.finalAmount,
       currency: "INR",
       receipt: `course_${course.slug}_${Date.now()}`,
       notes,
@@ -41,6 +52,8 @@ export async function POST(req: Request) {
       keyId: getRazorpayKeyId(),
       courseSlug: course.slug,
       courseTitle: course.title,
+      discountLabel: promo.label,
+      originalAmount: course.priceInPaise,
     });
   } catch (error) {
     console.error("[razorpay/order]", error);

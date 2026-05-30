@@ -3,6 +3,7 @@ import { GraduationCap } from "lucide-react";
 import EnrollmentsAdminPanel from "@/components/components/dashboard/EnrollmentsAdminPanel";
 import EnrollmentsSchemaBanner from "@/components/components/dashboard/EnrollmentsSchemaBanner";
 import ExportCsvButton from "@/components/components/dashboard/ExportCsvButton";
+import ManualEnrollmentForm from "@/components/components/dashboard/ManualEnrollmentForm";
 import { getAllEnrollments } from "@/Services/admin-enrollments";
 import { requireAdmin } from "@/lib/auth";
 import { isEnrollmentsTableReady } from "@/lib/enrollments-schema";
@@ -53,6 +54,8 @@ export default async function AdminEnrollmentsPage() {
       </section>
 
       {!tableReady ? <div className="mt-8"><EnrollmentsSchemaBanner /></div> : null}
+
+      {tableReady ? <ManualEnrollmentForm /> : null}
 
       {enrollments.length === 0 ? (
         <div className="mt-8 rounded-3xl border border-dashed border-zinc-300 bg-white p-12 text-center dark:border-white/10 dark:bg-white/5">

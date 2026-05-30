@@ -5,6 +5,7 @@ import { notFound, redirect } from "next/navigation";
 import CourseProgressTracker from "@/components/components/dashboard/CourseProgressTracker";
 import CourseProgressSchemaBanner from "@/components/components/dashboard/CourseProgressSchemaBanner";
 import { getCourseProgress, isEnrolledInCourse } from "@/Services/course-progress";
+import { getWeekResources } from "@/lib/course-resources";
 import { getCourseBySlug } from "@/lib/courses";
 import { requireUser } from "@/lib/auth";
 import { isCourseProgressTableReady } from "@/lib/course-progress-schema";
@@ -28,6 +29,7 @@ export default async function CourseProgressPage({ params }: { params: Promise<{
     index,
     label: item.week,
     topics: item.topics,
+    resources: getWeekResources(slug, index, item.week),
   }));
 
   const percent = progress?.percent ?? 0;

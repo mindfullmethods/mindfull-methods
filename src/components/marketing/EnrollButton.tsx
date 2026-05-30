@@ -41,6 +41,7 @@ export default function EnrollButton({
   const [error, setError] = useState("");
   const [sessionEmail, setSessionEmail] = useState<string | null>(null);
   const [guestEmail, setGuestEmail] = useState("");
+  const [promoCode, setPromoCode] = useState("");
   const [checkingSession, setCheckingSession] = useState(true);
 
   useEffect(() => {
@@ -74,6 +75,7 @@ export default function EnrollButton({
         body: JSON.stringify({
           courseSlug,
           customerEmail: checkoutEmail,
+          promoCode: promoCode.trim() || undefined,
         }),
       });
 
@@ -152,6 +154,18 @@ export default function EnrollButton({
             onChange={(e) => setGuestEmail(e.target.value)}
             placeholder="you@example.com"
             className="mt-2 w-full rounded-xl border border-zinc-200 bg-white px-4 py-3 text-sm font-semibold outline-none focus:border-violet-400 dark:border-white/10 dark:bg-white/5"
+          />
+        </label>
+      ) : null}
+      {!checkingSession ? (
+        <label className="block">
+          <span className="text-xs font-black uppercase tracking-[0.18em] text-zinc-500">Promo code (optional)</span>
+          <input
+            type="text"
+            value={promoCode}
+            onChange={(e) => setPromoCode(e.target.value.toUpperCase())}
+            placeholder="LAUNCH10"
+            className="mt-2 w-full rounded-xl border border-zinc-200 bg-white px-4 py-3 text-sm font-semibold uppercase outline-none focus:border-violet-400 dark:border-white/10 dark:bg-white/5"
           />
         </label>
       ) : null}

@@ -338,6 +338,20 @@ export default function HomePageContent() {
         </div>
       </section>
 
+      {/* Blog */}
+      <section className="mx-auto max-w-7xl px-5 py-20 sm:px-8 lg:px-10">
+        <SectionHeader
+          eyebrow="From the blog"
+          title="Guides for your next step"
+          description="Choosing a track, week-one expectations, and how mentorship accelerates outcomes."
+        />
+        <div className="mt-8">
+          <Button href="/blog" variant="gradient" size="lg">
+            Read the blog
+          </Button>
+        </div>
+      </section>
+
       {/* FAQ */}
       <section className="border-y mm-border mm-section-muted px-5 py-20 sm:px-8 lg:px-10">
         <div className="mx-auto grid max-w-7xl gap-10 lg:grid-cols-[0.9fr_1.1fr] lg:items-start">

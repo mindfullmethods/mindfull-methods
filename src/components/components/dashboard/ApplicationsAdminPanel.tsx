@@ -12,11 +12,12 @@ import type { ApplicationStatus } from "@/actions/updateApplicationStatus";
 import type { AdminApplication } from "@/Services/getApplications";
 import type { ApplicationsSchemaIssue } from "@/lib/applications-schema";
 
-const statusFilters = ["All", "Pending", "Submitted", "Approved", "Rejected"] as const;
+const statusFilters = ["All", "Pending", "Submitted", "Approved", "Rejected", "Withdrawn"] as const;
 
 function statusClass(status?: string | null) {
   if (status === "Approved") return "bg-emerald-50 text-emerald-700 dark:bg-emerald-400/10 dark:text-emerald-300";
   if (status === "Rejected") return "bg-red-50 text-red-700 dark:bg-red-400/10 dark:text-red-300";
+  if (status === "Withdrawn") return "bg-zinc-100 text-zinc-600 dark:bg-white/10 dark:text-zinc-400";
   if (status === "Submitted") return "bg-sky-50 text-sky-700 dark:bg-sky-400/10 dark:text-sky-300";
   return "bg-amber-50 text-amber-700 dark:bg-amber-400/10 dark:text-amber-300";
 }

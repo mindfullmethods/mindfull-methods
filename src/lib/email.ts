@@ -243,6 +243,40 @@ export async function notifyEnrollmentCompleted(payload: {
   ]);
 }
 
+export async function notifyCourseCompleted(payload: {
+  studentName: string;
+  studentEmail: string;
+  courseTitle: string;
+  courseSlug: string;
+  certificateId: string;
+  verifyUrl: string;
+}) {
+  const certUrl = `${siteConfig.url}/dashboard/my-courses/${payload.courseSlug}/certificate`;
+
+  await sendEmail({
+    to: payload.studentEmail,
+    subject: `Course complete — your ${payload.courseTitle} certificate is ready`,
+    text: [
+      `Hi ${payload.studentName},`,
+      "",
+      `Congratulations! You completed all milestones in ${payload.courseTitle}.`,
+      "",
+      `View certificate: ${certUrl}`,
+      `Verify online: ${payload.verifyUrl}`,
+      "",
+      `Certificate ID: ${payload.certificateId}`,
+    ].join("\n"),
+    html: `
+      <p>Hi ${escapeHtml(payload.studentName)},</p>
+      <h2>Course complete!</h2>
+      <p>You finished all milestones in <strong>${escapeHtml(payload.courseTitle)}</strong>. Your certificate is ready.</p>
+      <p><a href="${certUrl}">View certificate →</a></p>
+      <p><a href="${payload.verifyUrl}">Verify certificate online →</a></p>
+      <p><strong>Certificate ID:</strong> ${escapeHtml(payload.certificateId)}</p>
+    `,
+  });
+}
+
 export async function notifyAdminDigest(payload: {
   pendingApplications: number;
   newInquiries: number;

@@ -2,6 +2,7 @@ import Link from "next/link";
 import { BriefcaseBusiness, Clock, FileText } from "lucide-react";
 
 import Button from "@/components/marketing/Button";
+import WithdrawApplicationButton from "@/components/components/dashboard/WithdrawApplicationButton";
 import { requireUser } from "@/lib/auth";
 import { getMyApplicationsWithDetails } from "@/Services/my-applications";
 
@@ -16,6 +17,7 @@ function formatDate(value: string) {
 function statusClass(status?: string) {
   if (status === "Approved") return "bg-emerald-50 text-emerald-700 dark:bg-emerald-400/10 dark:text-emerald-300";
   if (status === "Rejected") return "bg-red-50 text-red-700 dark:bg-red-400/10 dark:text-red-300";
+  if (status === "Withdrawn") return "bg-zinc-100 text-zinc-600 dark:bg-white/10 dark:text-zinc-400";
   if (status === "Submitted") return "bg-sky-50 text-sky-700 dark:bg-sky-400/10 dark:text-sky-300";
   return "bg-amber-50 text-amber-700 dark:bg-amber-400/10 dark:text-amber-300";
 }
@@ -86,18 +88,18 @@ export default async function MyApplicationsPage({
                           {[internship.duration, internship.stipend].filter(Boolean).join(" · ")}
                         </p>
                       ) : null}
-                      {app.created_at ? (
-                        <p className="mt-2 text-xs font-bold text-zinc-500">
-                          Submitted {formatDate(app.created_at)}
-                        </p>
-                      ) : null}
                     </div>
                     <div className="flex flex-col items-start gap-3 md:items-end">
                       <span
                         className={`inline-flex rounded-full px-3 py-2 text-xs font-black ${statusClass(app.status)}`}
                       >
-                        {app.status ?? "Submitted"}
+                        {app.status ?? "Pending"}
                       </span>
+                      <div className="rounded-xl border border-zinc-200 px-3 py-2 text-xs dark:border-white/10">
+                        <p className="font-black text-zinc-500">Timeline</p>
+                        <p className="mt-1 font-bold">Submitted {app.created_at ? formatDate(app.created_at) : "—"}</p>
+                        <p className="mt-1 font-bold">Current: {app.status ?? "Pending"}</p>
+                      </div>
                       {app.internship_id ? (
                         <Link
                           href={`/dashboard/internships/${app.internship_id}`}
@@ -107,6 +109,12 @@ export default async function MyApplicationsPage({
                         </Link>
                       ) : null}
                     </div>
+                  </div>
+                  <div className="mt-5 flex flex-col gap-3 border-t border-zinc-200 pt-5 dark:border-white/10 sm:flex-row sm:items-center sm:justify-between">
+                    <p className="text-xs font-bold text-zinc-500">
+                      Need to back out? You can withdraw at any time unless already withdrawn.
+                    </p>
+                    <WithdrawApplicationButton applicationId={app.id} status={app.status} />
                   </div>
                 </article>
               );

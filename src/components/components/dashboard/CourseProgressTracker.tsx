@@ -1,16 +1,18 @@
 "use client";
 
-import { useRouter } from "next/navigation";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useState, useTransition } from "react";
-import { Award, CheckCircle2, Circle, Loader2 } from "lucide-react";
+import { Award, CheckCircle2, Circle, ExternalLink, Loader2, PlayCircle } from "lucide-react";
 
 import { toggleWeekProgressAction } from "@/actions/toggleWeekProgress";
+import type { CourseResource } from "@/lib/course-resources";
 
 export type WeekItem = {
   index: number;
   label: string;
   topics: string[];
+  resources?: CourseResource[];
 };
 
 export default function CourseProgressTracker({
@@ -136,6 +138,22 @@ export default function CourseProgressTracker({
                 <span className="mt-1 block text-sm text-zinc-600 dark:text-zinc-400">
                   {week.topics.join(" · ")}
                 </span>
+                {week.resources?.length ? (
+                  <span className="mt-3 flex flex-wrap gap-2">
+                    {week.resources.map((resource) => (
+                      <a
+                        key={resource.url + resource.title}
+                        href={resource.url}
+                        target={resource.url.startsWith("http") ? "_blank" : undefined}
+                        rel={resource.url.startsWith("http") ? "noopener noreferrer" : undefined}
+                        className="inline-flex items-center gap-1 rounded-lg border border-zinc-200 bg-white px-2.5 py-1.5 text-xs font-bold text-violet-700 dark:border-white/10 dark:bg-zinc-950 dark:text-violet-300"
+                      >
+                        {resource.type === "video" ? <PlayCircle size={12} /> : <ExternalLink size={12} />}
+                        {resource.title}
+                      </a>
+                    ))}
+                  </span>
+                ) : null}
               </span>
             </label>
           );
