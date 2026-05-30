@@ -4,6 +4,7 @@ import { revalidatePath } from "next/cache";
 
 import { requireAdmin } from "@/lib/auth";
 import { createAdminClient } from "@/lib/supabase/admin";
+import { isMissingColumnError } from "@/lib/supabase/column-errors";
 
 export async function updateInquiryNotes(inquiryId: string, adminNotes: string) {
   await requireAdmin();
@@ -23,10 +24,10 @@ export async function updateInquiryNotes(inquiryId: string, adminNotes: string) 
 
   if (error) {
     console.error("[updateInquiryNotes]", error);
-    if (error.message.includes("admin_notes")) {
+    if (isMissingColumnError(error.message, "admin_notes")) {
       return {
         ok: false as const,
-        error: "Run supabase/admin-dashboard-extensions.sql in Supabase SQL Editor to add admin notes.",
+        error: "Admin notes column missing — run the SQL from the yellow banner on this page, then refresh.",
       };
     }
     return { ok: false as const, error: error.message };

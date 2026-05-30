@@ -28,7 +28,15 @@ function formatDate(value: string) {
   }).format(new Date(value));
 }
 
-function InquiryNotes({ inquiryId, initialNotes }: { inquiryId: string; initialNotes?: string | null }) {
+function InquiryNotes({
+  inquiryId,
+  initialNotes,
+  disabled,
+}: {
+  inquiryId: string;
+  initialNotes?: string | null;
+  disabled?: boolean;
+}) {
   const [notes, setNotes] = useState(initialNotes ?? "");
   const [saved, setSaved] = useState(false);
   const [error, setError] = useState("");
@@ -54,14 +62,15 @@ function InquiryNotes({ inquiryId, initialNotes }: { inquiryId: string; initialN
         value={notes}
         onChange={(e) => setNotes(e.target.value)}
         rows={3}
-        placeholder="Follow-up notes, call summary, next steps…"
-        className="mt-2 w-full resize-none rounded-xl border border-zinc-200 bg-white px-4 py-3 text-sm dark:border-white/10 dark:bg-zinc-950"
+        disabled={disabled}
+        placeholder={disabled ? "Run the admin notes SQL in Supabase first (see banner above)." : "Follow-up notes, call summary, next steps…"}
+        className="mt-2 w-full resize-none rounded-xl border border-zinc-200 bg-white px-4 py-3 text-sm disabled:cursor-not-allowed disabled:opacity-60 dark:border-white/10 dark:bg-zinc-950"
       />
       <div className="mt-2 flex items-center gap-3">
         <button
           type="button"
           onClick={save}
-          disabled={isPending}
+          disabled={isPending || disabled}
           className="rounded-xl bg-zinc-950 px-4 py-2 text-xs font-black text-white disabled:opacity-60 dark:bg-white dark:text-zinc-950"
         >
           {isPending ? "Saving…" : "Save notes"}
@@ -77,10 +86,12 @@ export default function InquiriesAdminPanel({
   inquiries,
   enrollments,
   statusReady,
+  adminNotesReady,
 }: {
   inquiries: ContactInquiry[];
   enrollments: AdminEnrollment[];
   statusReady: boolean;
+  adminNotesReady: boolean;
 }) {
   const [query, setQuery] = useState("");
   const [statusFilter, setStatusFilter] = useState<(typeof statusFilters)[number]>("All");
@@ -195,7 +206,11 @@ export default function InquiriesAdminPanel({
                 </p>
                 <p className="mt-3 whitespace-pre-wrap text-sm leading-7">{inquiry.message}</p>
               </div>
-              <InquiryNotes inquiryId={inquiry.id} initialNotes={inquiry.admin_notes} />
+              <InquiryNotes
+                inquiryId={inquiry.id}
+                initialNotes={inquiry.admin_notes}
+                disabled={!adminNotesReady}
+              />
             </article>
           );
         })}

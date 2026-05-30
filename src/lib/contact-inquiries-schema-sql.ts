@@ -25,3 +25,15 @@ alter table public.contact_inquiries
 create index if not exists contact_inquiries_status_idx on public.contact_inquiries (status);
 
 notify pgrst, 'reload schema';`;
+
+export const CONTACT_INQUIRIES_ADMIN_NOTES_SQL = `-- Run in Supabase → SQL Editor
+alter table public.contact_inquiries
+  add column if not exists admin_notes text;
+
+notify pgrst, 'reload schema';`;
+
+export const CONTACT_INQUIRIES_LINKED_ENROLLMENT_SQL = `-- Optional — run after enrollments table exists
+alter table public.contact_inquiries
+  add column if not exists linked_enrollment_id uuid references public.enrollments (id) on delete set null;
+
+notify pgrst, 'reload schema';`;
