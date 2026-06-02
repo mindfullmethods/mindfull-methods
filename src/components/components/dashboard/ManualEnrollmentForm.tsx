@@ -16,11 +16,12 @@ export default function ManualEnrollmentForm() {
       onSubmit={(event) => {
         event.preventDefault();
         setMessage("");
-        const formData = new FormData(event.currentTarget);
+        const form = event.currentTarget;
+        const formData = new FormData(form);
         startTransition(async () => {
           const result = await grantManualEnrollment(formData);
           setMessage(result.ok ? "Complimentary enrollment granted." : result.error);
-          if (result.ok) event.currentTarget.reset();
+          if (result.ok) form.reset();
         });
       }}
     >

@@ -2,6 +2,7 @@ import { createAdminClient } from "@/lib/supabase/admin";
 import { formatCertificateId } from "@/lib/certificates";
 import { getCourseBySlug } from "@/lib/courses";
 import { buildProgressSummary } from "@/lib/course-progress-schema";
+import { isCompletionApproved } from "@/Services/completion-verifications";
 
 export type StoredCertificate = {
   id: string;
@@ -33,12 +34,19 @@ export async function issueCertificateIfComplete(params: {
   courseSlug: string;
   studentName: string;
   progressRows: { course_slug: string; week_index: number; completed_at: string }[];
+  requireApproval?: boolean;
 }): Promise<StoredCertificate | null> {
   const course = getCourseBySlug(params.courseSlug);
   if (!course) return null;
 
   const summary = buildProgressSummary(params.courseSlug, course.curriculum.length, params.progressRows);
   if (summary.percent < 100) return null;
+
+  const needsApproval = params.requireApproval ?? true;
+  if (needsApproval) {
+    const approved = await isCompletionApproved(params.userId, params.courseSlug);
+    if (!approved) return null;
+  }
 
   const certificateId = formatCertificateId(params.userId, params.courseSlug);
   const issuedAt = summary.completedAt ?? new Date().toISOString();

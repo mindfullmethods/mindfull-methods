@@ -1,8 +1,10 @@
+import { cache } from "react";
+
 import { createAdminClient } from "@/lib/supabase/admin";
 
 export { COURSE_PROGRESS_TABLE_SQL } from "@/lib/course-progress-schema-sql";
 
-export async function isCourseProgressTableReady() {
+export const isCourseProgressTableReady = cache(async () => {
   try {
     const supabase = createAdminClient();
     const { error } = await supabase.from("course_progress").select("id").limit(1);
@@ -10,7 +12,7 @@ export async function isCourseProgressTableReady() {
   } catch {
     return false;
   }
-}
+});
 
 export type ProgressRow = {
   course_slug: string;

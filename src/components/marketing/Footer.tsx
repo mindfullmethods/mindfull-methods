@@ -23,7 +23,8 @@ const legalLinks = [
 
 export default function Footer() {
   return (
-    <footer className="border-t border-zinc-200 bg-white px-5 py-12 text-sm text-zinc-600 dark:border-white/10 dark:bg-zinc-950 dark:text-white/70 sm:px-8 lg:px-10">
+    <footer className="relative border-t border-zinc-200 bg-white px-5 py-12 text-sm text-zinc-600 dark:border-white/10 dark:bg-zinc-950 dark:text-white/70 sm:px-8 lg:px-10">
+      <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-violet-400/30 to-transparent" />
       <div className="mx-auto grid max-w-7xl gap-10 md:grid-cols-[1.2fr_0.8fr_0.8fr_0.8fr]">
         <div className="max-w-sm">
           <Link href="/" className="inline-flex">

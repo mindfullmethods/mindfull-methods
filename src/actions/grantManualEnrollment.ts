@@ -79,6 +79,7 @@ export async function grantManualEnrollment(formData: FormData) {
   revalidatePath("/dashboard/enrollments");
   revalidatePath("/dashboard/my-courses");
   revalidatePath("/dashboard/admin-home");
+  if (userId) revalidatePath(`/dashboard/users/${userId}`);
 
   return { ok: true as const };
 }

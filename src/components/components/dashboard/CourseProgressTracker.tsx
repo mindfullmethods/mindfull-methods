@@ -61,13 +61,13 @@ export default function CourseProgressTracker({
         <div className="mb-6 rounded-2xl border border-emerald-200 bg-emerald-50 p-5 dark:border-emerald-400/20 dark:bg-emerald-400/10">
           <p className="flex items-center gap-2 text-sm font-black text-emerald-800 dark:text-emerald-200">
             <Award size={18} />
-            Course complete — your certificate is ready!
+            All milestones complete — certificate review pending
           </p>
           <Link
             href={`/dashboard/my-courses/${courseSlug}/certificate`}
             className="mt-3 inline-flex rounded-xl bg-emerald-600 px-4 py-2.5 text-sm font-black text-white transition hover:bg-emerald-700"
           >
-            View certificate
+            View certificate status
           </Link>
         </div>
       ) : null}

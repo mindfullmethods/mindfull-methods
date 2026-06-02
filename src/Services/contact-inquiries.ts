@@ -1,5 +1,7 @@
 import { createAdminClient } from "@/lib/supabase/admin";
 
+import type { InquiryStatusEvent } from "@/lib/inquiry-status-history";
+
 export type ContactInquiry = {
   id: string;
   name: string;
@@ -11,6 +13,7 @@ export type ContactInquiry = {
   status?: string | null;
   admin_notes?: string | null;
   linked_enrollment_id?: string | null;
+  status_history?: InquiryStatusEvent[] | null;
   created_at: string;
 };
 

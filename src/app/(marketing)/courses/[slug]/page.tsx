@@ -8,8 +8,11 @@ import Button from "@/components/marketing/Button";
 import Badge from "@/components/marketing/Badge";
 import FAQAccordion from "@/components/marketing/FAQAccordion";
 import JsonLd from "@/components/marketing/JsonLd";
+import SectionHeader from "@/components/marketing/SectionHeader";
 import { isEnrolledInCourse, getCourseProgress } from "@/Services/course-progress";
-import { getCourseBySlug, getCourseSlugs } from "@/lib/courses";
+import { resolveCoursePageSlug } from "@/lib/course-page";
+import { getCourseSlugs } from "@/lib/courses";
+import { getResolvedCourseBySlug, getResolvedCourseSlugs } from "@/lib/platform-content";
 import { isRazorpayConfigured } from "@/lib/razorpay";
 import { absoluteUrl, courseJsonLd } from "@/lib/seo";
 import { contactUrl, pageTitle, signupUrl, syllabusPdfUrl, syllabusPrintUrl, syllabusUrl } from "@/lib/site";
@@ -17,10 +20,15 @@ import { hasSyllabusPdf } from "@/lib/syllabus-files";
 import type { Metadata } from "next";
 
 const linkButtonClass =
-  "inline-flex items-center gap-2 rounded-xl border border-zinc-200 bg-zinc-100 px-4 py-2.5 text-sm font-black text-zinc-950 transition hover:bg-zinc-200 dark:border-white/15 dark:bg-white/10 dark:text-white dark:hover:bg-white/15";
+  "inline-flex items-center gap-2 rounded-xl border border-zinc-200 bg-zinc-100 px-4 py-2.5 text-sm font-semibold text-zinc-950 transition hover:bg-zinc-200 dark:border-white/15 dark:bg-white/10 dark:text-white dark:hover:bg-white/15";
 
-export function generateStaticParams() {
-  return getCourseSlugs().map((slug) => ({ slug }));
+export async function generateStaticParams() {
+  try {
+    const slugs = await getResolvedCourseSlugs();
+    return slugs.map((slug) => ({ slug }));
+  } catch {
+    return getCourseSlugs().map((slug) => ({ slug }));
+  }
 }
 
 export async function generateMetadata({
@@ -29,13 +37,13 @@ export async function generateMetadata({
   params: Promise<{ slug: string }>;
 }): Promise<Metadata> {
   const { slug } = await params;
-  const course = getCourseBySlug(slug);
+  const course = await getResolvedCourseBySlug(slug);
 
   if (!course) {
     return { title: "Course not found" };
   }
 
-  const path = `/courses/${slug}`;
+  const path = `/courses/${course.slug}`;
 
   return {
     title: course.title,
@@ -63,14 +71,13 @@ export default async function CourseDetailsPage({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  const course = getCourseBySlug(slug);
-
+  const course = await resolveCoursePageSlug(slug, "/courses");
   if (!course) notFound();
 
   const paymentsEnabled = isRazorpayConfigured();
   const pdfAvailable = hasSyllabusPdf(course.slug);
-  const enrolled = await isEnrolledInCourse(slug);
-  const progress = enrolled ? await getCourseProgress(slug) : null;
+  const enrolled = await isEnrolledInCourse(course.slug);
+  const progress = enrolled ? await getCourseProgress(course.slug) : null;
   const percent = progress?.percent ?? 0;
 
   return (
@@ -94,11 +101,11 @@ export default async function CourseDetailsPage({
             <Badge tone="neutral">{course.level}</Badge>
             {enrolled ? <Badge tone="violet">Enrolled</Badge> : null}
           </div>
-          <h1 className="mt-4 max-w-3xl text-3xl font-black tracking-tight text-white sm:text-5xl">{course.title}</h1>
+          <h1 className="mt-4 max-w-3xl text-3xl font-bold tracking-tight text-white sm:text-5xl">{course.title}</h1>
         </div>
       </div>
 
-      <section className="mm-card rounded-[2.5rem] p-6 sm:p-8">
+      <section className="mm-card-premium rounded-3xl p-6 sm:p-8">
         <div className="grid gap-8 lg:grid-cols-[1.25fr_0.75fr] lg:items-start">
           <div>
             <p className="text-sm leading-7 mm-muted">{course.longDescription}</p>
@@ -116,7 +123,7 @@ export default async function CourseDetailsPage({
 
             <div className="mt-8 grid gap-4 sm:grid-cols-2">
               {course.learnOutcomes.slice(0, 4).map((o) => (
-                <div key={o} className="flex items-start gap-3 mm-card-muted rounded-2xl p-4">
+                <div key={o} className="flex items-start gap-3 rounded-2xl border mm-border bg-zinc-50/80 p-4 dark:bg-white/[0.02]">
                   <CheckCircle2 size={18} className="mt-0.5 text-emerald-500 dark:text-emerald-400" />
                   <p className="text-sm font-bold text-zinc-800 dark:text-white/80">{o}</p>
                 </div>
@@ -125,16 +132,16 @@ export default async function CourseDetailsPage({
           </div>
 
           <aside className="lg:sticky lg:top-24">
-            <div className="mm-card-muted rounded-3xl p-5 backdrop-blur">
-              <p className="text-sm font-black mm-subtle">Enroll</p>
-              <p className="mt-2 text-2xl font-black mm-heading">{course.priceLabel}</p>
+            <div className="mm-glass-premium rounded-3xl p-5">
+              <p className="text-sm font-semibold mm-subtle">Enroll</p>
+              <p className="mt-2 text-2xl font-bold mm-heading">{course.priceLabel}</p>
 
               <div className="mt-5 flex flex-col gap-3">
                 {enrolled ? (
                   <>
                     {percent > 0 && percent < 100 ? (
                       <div className="rounded-2xl border border-emerald-200 bg-emerald-50 p-4 dark:border-emerald-400/20 dark:bg-emerald-400/10">
-                        <div className="flex items-center justify-between text-xs font-black text-emerald-800 dark:text-emerald-200">
+                        <div className="flex items-center justify-between text-xs font-bold text-emerald-800 dark:text-emerald-200">
                           <span>Your progress</span>
                           <span>{percent}%</span>
                         </div>
@@ -148,13 +155,13 @@ export default async function CourseDetailsPage({
                     ) : null}
                     <Link
                       href={percent >= 100 ? `/dashboard/my-courses/${course.slug}/certificate` : `/dashboard/my-courses/${course.slug}`}
-                      className="inline-flex items-center justify-center rounded-xl bg-emerald-600 px-5 py-4 text-sm font-black text-white transition hover:bg-emerald-700"
+                      className="inline-flex items-center justify-center rounded-xl bg-emerald-600 px-5 py-4 text-sm font-bold text-white transition hover:bg-emerald-700"
                     >
                       {percent >= 100 ? "View certificate" : "Continue learning"}
                     </Link>
                     <Link
                       href="/dashboard/my-courses"
-                      className="inline-flex items-center justify-center rounded-xl border border-zinc-200 bg-white px-5 py-4 text-sm font-black mm-heading dark:border-white/15 dark:bg-white/5"
+                      className="inline-flex items-center justify-center rounded-xl border border-zinc-200 bg-white px-5 py-4 text-sm font-bold mm-heading dark:border-white/15 dark:bg-white/5"
                     >
                       Go to my courses
                     </Link>
@@ -175,7 +182,7 @@ export default async function CourseDetailsPage({
                   Book a call
                 </Button>
 
-                <div className="mm-card-muted rounded-2xl p-4">
+                <div className="rounded-2xl border mm-border bg-zinc-50/80 p-4 dark:bg-white/[0.02]">
                   <div className="flex items-center gap-2">
                     <Download size={16} className="mm-muted" />
                     <p className="text-sm font-bold text-zinc-800 dark:text-white/80">Course syllabus</p>
@@ -231,11 +238,10 @@ export default async function CourseDetailsPage({
       <section className="mt-12 grid gap-10 lg:grid-cols-[0.95fr_1.05fr]">
         <div className="space-y-10">
           <div>
-            <p className="mm-eyebrow">Overview</p>
-            <h2 className="mt-4 text-3xl font-black tracking-tight mm-heading">What you’ll learn</h2>
+            <SectionHeader eyebrow="Overview" title="What you'll learn" />
             <ul className="mt-6 space-y-3">
               {course.learnOutcomes.map((o) => (
-                <li key={o} className="flex items-start gap-3 mm-card-muted rounded-2xl p-4">
+                <li key={o} className="flex items-start gap-3 rounded-2xl border mm-border bg-zinc-50/80 p-4 dark:bg-white/[0.02]">
                   <CheckCircle2 size={18} className="mt-0.5 text-emerald-500 dark:text-emerald-400" />
                   <span className="text-sm font-bold text-zinc-700 dark:text-white/75">{o}</span>
                 </li>
@@ -244,17 +250,16 @@ export default async function CourseDetailsPage({
           </div>
 
           <div>
-            <p className="mm-eyebrow">Curriculum outline</p>
-            <h2 className="mt-4 text-3xl font-black tracking-tight mm-heading">Weekly milestones</h2>
+            <SectionHeader eyebrow="Curriculum outline" title="Weekly milestones" />
             <div className="mt-6 space-y-4">
               {course.curriculum.map((item) => (
                 <details
                   key={item.week}
-                  className="group mm-card-muted rounded-3xl p-5 open:bg-zinc-100 dark:open:bg-white/10"
+                  className="group rounded-3xl border mm-border bg-zinc-50/80 p-5 open:bg-zinc-100 dark:bg-white/[0.02] dark:open:bg-white/10"
                 >
                   <summary className="cursor-pointer list-none">
                     <div className="flex items-center justify-between gap-3">
-                      <p className="text-sm font-black mm-muted">{item.week}</p>
+                      <p className="text-sm font-bold mm-muted">{item.week}</p>
                       <span className="text-xs font-bold mm-subtle transition group-open:mm-muted">
                         View topics
                       </span>
@@ -278,23 +283,22 @@ export default async function CourseDetailsPage({
 
         <div className="space-y-10">
           <div>
-            <p className="mm-eyebrow">Who this is for</p>
-            <h2 className="mt-4 text-3xl font-black tracking-tight mm-heading">A best-fit for {course.level}</h2>
-            <p className="mt-5 text-sm leading-7 mm-muted">
-              This track is built for learners who want {course.shortDescription.toLowerCase()}. You’ll learn with
-              structured milestones and mentor feedback so you always know how to progress.
-            </p>
+            <SectionHeader
+              eyebrow="Who this is for"
+              title={`A best-fit for ${course.level}`}
+              description={`This track is built for learners who want ${course.shortDescription.toLowerCase()}. You'll learn with structured milestones and mentor feedback so you always know how to progress.`}
+            />
 
-            <div className="mt-6 mm-card-muted rounded-3xl p-6">
-              <p className="text-sm font-black text-zinc-800 dark:text-white/80">Mentor support</p>
+            <div className="mt-6 rounded-3xl border mm-border bg-zinc-50/80 p-6 dark:bg-white/[0.02]">
+              <p className="text-sm font-bold text-zinc-800 dark:text-white/80">Mentor support</p>
               <p className="mt-3 text-sm leading-7 mm-muted">
-                You’ll receive regular touchpoints with mentors for review, guidance, and decision-making coaching.
-                The goal is not just completion—it’s building proof.
+                You'll receive regular touchpoints with mentors for review, guidance, and decision-making coaching.
+                The goal is not just completion—it's building proof.
               </p>
 
               <div className="mt-5 flex flex-wrap gap-3">
                 {["Feedback windows", "Milestone check-ins", "Code review style guidance"].map((s) => (
-                  <span key={s} className="mm-card-muted rounded-2xl px-4 py-2 text-xs font-bold mm-muted">
+                  <span key={s} className="rounded-2xl border mm-border bg-white/80 px-4 py-2 text-xs font-semibold mm-muted dark:bg-white/[0.04]">
                     {s}
                   </span>
                 ))}
@@ -303,9 +307,8 @@ export default async function CourseDetailsPage({
           </div>
 
           <div>
-            <p className="mm-eyebrow">FAQs</p>
-            <h2 className="mt-4 text-3xl font-black tracking-tight mm-heading">Common questions</h2>
-            <div className="mt-6 mm-card-muted rounded-3xl p-4 sm:p-6">
+            <SectionHeader eyebrow="FAQs" title="Common questions" />
+            <div className="mt-6 rounded-3xl border mm-border bg-zinc-50/80 p-4 sm:p-6 dark:bg-white/[0.02]">
               <FAQAccordion items={course.faqs} />
             </div>
 

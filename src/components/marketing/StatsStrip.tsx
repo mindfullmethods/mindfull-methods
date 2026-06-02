@@ -13,15 +13,10 @@ export default function StatsStrip({
       {stats.map((s, i) => (
         <div
           key={s.label}
-          className="group mm-glass rounded-2xl p-4 transition hover:border-violet-400/30 dark:hover:bg-white/[0.07]"
+          className="group mm-glass-premium rounded-2xl p-4 transition hover:-translate-y-0.5"
         >
-          <p className="text-xs font-bold uppercase tracking-[0.16em] mm-subtle">{s.label}</p>
-          <p
-            className={cn(
-              "mt-2 text-2xl font-black",
-              i % 2 === 0 ? "mm-heading" : "mm-gradient-text"
-            )}
-          >
+          <p className="text-xs font-semibold uppercase tracking-[0.12em] mm-subtle">{s.label}</p>
+          <p className={cn("mt-2 text-xl font-bold", i % 2 === 0 ? "mm-heading" : "text-violet-700 dark:text-violet-300")}>
             {s.value}
           </p>
         </div>

@@ -1,5 +1,7 @@
 import { isApplicationsStatusReady } from "@/lib/applications-schema";
 import { isCertificatesTableReady } from "@/lib/certificates-schema";
+import { isCompletionVerificationTableReady } from "@/Services/completion-verifications";
+import { isPlatformSettingsReady } from "@/lib/platform-content";
 import {
   isContactInquiriesTableReady,
   isContactInquiryAdminNotesReady,
@@ -41,6 +43,8 @@ export async function getPlatformSetupChecks(): Promise<SetupCheck[]> {
     inquiryNotesReady,
     inquiryLinkedEnrollmentReady,
     certificatesReady,
+    completionVerificationReady,
+    platformSettingsReady,
   ] = await Promise.all([
     isEnrollmentsTableReady(),
     isApplicationsStatusReady(),
@@ -50,6 +54,8 @@ export async function getPlatformSetupChecks(): Promise<SetupCheck[]> {
     isContactInquiryAdminNotesReady(),
     isContactInquiryLinkedEnrollmentReady(),
     isCertificatesTableReady(),
+    isCompletionVerificationTableReady(),
+    isPlatformSettingsReady(),
   ]);
 
   return [
@@ -170,6 +176,22 @@ export async function getPlatformSetupChecks(): Promise<SetupCheck[]> {
       label: "Certificate verification",
       ready: certificatesReady,
       detail: certificatesReady ? "Public verify page + stored certificate IDs" : "Run supabase/certificates-schema.sql",
+    },
+    {
+      id: "completion-verification",
+      label: "Mentor certificate review",
+      ready: completionVerificationReady,
+      detail: completionVerificationReady
+        ? "Students request review; admins approve before certificates issue"
+        : "Run supabase/completion-verifications-schema.sql",
+    },
+    {
+      id: "platform-settings",
+      label: "Content CMS (platform_settings)",
+      ready: platformSettingsReady,
+      detail: platformSettingsReady
+        ? "Admin can edit courses and blog posts without redeploying"
+        : "Run supabase/content-cms-schema.sql",
     },
   ];
 }

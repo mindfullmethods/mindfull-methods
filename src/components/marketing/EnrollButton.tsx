@@ -26,6 +26,18 @@ function isValidEmail(email: string) {
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim());
 }
 
+async function reportPaymentFailed(courseSlug: string, customerEmail: string, reason: string) {
+  try {
+    await fetch("/api/payments/razorpay/notify-failed", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ courseSlug, customerEmail, reason }),
+    });
+  } catch {
+    // Non-blocking — checkout error still shown in UI
+  }
+}
+
 export default function EnrollButton({
   courseSlug,
   courseTitle,
@@ -127,11 +139,21 @@ export default function EnrollButton({
             return;
           }
 
-          setError(verifyData.error ?? "Payment verification failed.");
+          const failureReason = verifyData.error ?? "Payment verification failed.";
+          void reportPaymentFailed(courseSlug, checkoutEmail, failureReason);
+          setError(failureReason);
           setLoading(false);
         },
         modal: {
           ondismiss: () => setLoading(false),
+        },
+        payment: {
+          failed: (response: { error?: { description?: string } }) => {
+            const reason = response.error?.description ?? "Payment failed at checkout.";
+            void reportPaymentFailed(courseSlug, checkoutEmail, reason);
+            setError(reason);
+            setLoading(false);
+          },
         },
       });
 

@@ -7,6 +7,8 @@ Run after deploy on `https://mindfull-methods.vercel.app` (or local `npm run dev
 - [ ] Home page loads, theme toggle works
 - [ ] `/courses` search and filters work
 - [ ] `/courses/frontend-engineering` course detail + syllabus
+- [ ] **Download PDF** on course page (`/syllabi/{slug}.pdf`)
+- [ ] `/courses/frontend-engineering/syllabus` print view
 - [ ] `/blog` and a blog post render
 - [ ] Contact form submits (check admin inquiries + email log)
 - [ ] View page source — JSON-LD present on course pages
@@ -46,12 +48,16 @@ Run after deploy on `https://mindfull-methods.vercel.app` (or local `npm run dev
 ## Automated route check
 
 ```bash
-node scripts/smoke-routes.mjs
+npm run smoke
+# Production (after deploy):
+# SMOKE_BASE_URL=https://mindfull-methods.vercel.app npm run smoke
 ```
+
+Checks: marketing pages, all 6 syllabus PDFs, syllabus `.txt` API, auth redirects, JSON-LD on course pages, contact API validation.
 
 ## SQL migrations (Supabase)
 
-Ensure these have been run:
+Ensure these have been run (verify at `/dashboard/setup`):
 
 - `supabase/enrollments-schema.sql`
 - `supabase/course-progress-schema.sql`
@@ -61,3 +67,5 @@ Ensure these have been run:
 - `supabase/admin-dashboard-extensions.sql`
 - `supabase/contact-inquiries-linked-enrollment.sql`
 - `supabase/certificates-schema.sql`
+- `supabase/completion-verifications-schema.sql`
+- `supabase/content-cms-schema.sql`

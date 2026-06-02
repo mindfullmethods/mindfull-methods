@@ -8,6 +8,7 @@ export default function SectionHeader({
   description,
   align = "left",
   gradientTitle = false,
+  headingLevel = "h2",
   className,
 }: {
   eyebrow?: string;
@@ -15,26 +16,27 @@ export default function SectionHeader({
   description?: string;
   align?: "left" | "center";
   gradientTitle?: boolean;
+  headingLevel?: "h1" | "h2";
   className?: string;
 }) {
+  const Heading = headingLevel ?? "h2";
+
   return (
     <div className={cn(className, align === "center" ? "text-center" : "text-left")}>
-      {eyebrow ? (
-        <p className="inline-flex items-center gap-2 text-sm font-black uppercase tracking-[0.28em] text-violet-700 dark:text-violet-300/90">
-          <span className="h-1.5 w-1.5 rounded-full bg-gradient-to-r from-violet-500 to-teal-400 dark:from-violet-400 dark:to-teal-300" />
-          {eyebrow}
-        </p>
-      ) : null}
-      <h2
+      {eyebrow ? <p className="mm-pro-eyebrow">{eyebrow}</p> : null}
+      <Heading
         className={cn(
-          "mt-4 text-4xl font-black tracking-tight text-zinc-950 sm:text-5xl dark:text-white",
+          "mt-3 font-bold tracking-tight text-zinc-950 dark:text-white",
+          headingLevel === "h1"
+            ? "text-4xl leading-[1.1] sm:text-5xl"
+            : "text-3xl sm:text-4xl",
           gradientTitle && "mm-gradient-text"
         )}
       >
         {title}
-      </h2>
+      </Heading>
       {description ? (
-        <p className={cn("mt-4 max-w-2xl text-base leading-7 mm-muted", align === "center" && "mx-auto")}>
+        <p className={cn("mt-3 max-w-2xl text-[15px] leading-7 mm-muted", align === "center" && "mx-auto")}>
           {description}
         </p>
       ) : null}

@@ -27,7 +27,7 @@ export default function CourseCard({
   return (
     <article
       className={cn(
-        "group overflow-hidden rounded-3xl border border-zinc-200 bg-white shadow-sm backdrop-blur-sm transition duration-300 hover:-translate-y-1.5 hover:border-violet-400/40 hover:shadow-xl hover:shadow-violet-500/10 dark:border-white/10 dark:bg-white/[0.04] dark:hover:border-violet-400/30 dark:hover:bg-white/[0.07] dark:hover:shadow-violet-950/20",
+        "group mm-card-premium overflow-hidden rounded-3xl transition duration-300 hover:-translate-y-1.5",
         className
       )}
     >
@@ -37,7 +37,7 @@ export default function CourseCard({
           <img
             src={course.imageUrl}
             alt={course.title}
-            className="h-52 w-full object-cover transition duration-300 group-hover:scale-[1.03]"
+            className="h-52 w-full object-cover transition duration-500 group-hover:scale-[1.03]"
           />
         ) : (
           <div className="h-52 w-full bg-zinc-200 dark:bg-zinc-800/40" />
@@ -54,7 +54,7 @@ export default function CourseCard({
           {course.duration ? <Badge tone="neutral">{course.duration}</Badge> : null}
         </div>
 
-        <h3 className="mt-4 text-2xl font-black tracking-tight text-zinc-950 dark:text-white">{course.title}</h3>
+        <h3 className="mt-4 text-xl font-bold tracking-tight text-zinc-950 dark:text-white">{course.title}</h3>
         <p className="mt-3 text-sm leading-6 mm-muted">{course.shortDescription}</p>
 
         <div className="mt-5 flex flex-wrap gap-2">
@@ -77,7 +77,7 @@ export default function CourseCard({
 
           <Link
             href={`/courses/${course.slug}`}
-            className="inline-flex items-center gap-2 rounded-xl bg-zinc-950 px-4 py-2 text-sm font-black text-white transition hover:scale-[1.02] dark:bg-white dark:text-zinc-950"
+            className="inline-flex items-center gap-2 rounded-lg bg-zinc-950 px-4 py-2 text-sm font-semibold text-white transition hover:bg-zinc-800 dark:bg-white dark:text-zinc-950 dark:hover:bg-zinc-100"
           >
             View details <ArrowRight size={16} />
           </Link>

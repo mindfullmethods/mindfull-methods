@@ -52,15 +52,34 @@ Fill `.env.local` — see `.env.example` for all variables.
 
 ## Supabase SQL (run in order)
 
+Run each file in the [Supabase SQL Editor](https://supabase.com/dashboard). Verify readiness at `/dashboard/setup`.
+
 | File | Purpose |
 |------|---------|
 | `supabase/enrollments-schema.sql` | Paid enrollments |
 | `supabase/course-progress-schema.sql` | Weekly milestones |
-| `supabase/applications-status-only.sql` | Application status |
+| `supabase/applications-status-only.sql` | Application status column |
 | `supabase/contact-inquiries-schema.sql` | Contact form storage |
 | `supabase/contact-inquiries-status.sql` | Inquiry status |
+| `supabase/contact-inquiries-linked-enrollment.sql` | Link inquiries to enrollments |
 | `supabase/admin-dashboard-extensions.sql` | Inquiry notes, internship tags |
 | `supabase/certificates-schema.sql` | Certificate verification |
+| `supabase/completion-verifications-schema.sql` | Mentor completion review |
+| `supabase/content-cms-schema.sql` | CMS overrides for courses/blog |
+
+---
+
+## Syllabus PDFs
+
+Course pages show **Download PDF** when `public/syllabi/{course-slug}.pdf` exists.
+
+Generate all syllabi from course data:
+
+```bash
+npm run syllabi:generate
+```
+
+Students can also use **View & print** at `/courses/[slug]/syllabus` (browser → Save as PDF).
 
 ---
 
@@ -70,7 +89,8 @@ Fill `.env.local` — see `.env.example` for all variables.
 npm run dev      # Development server
 npm run build    # Production build
 npm run lint     # ESLint
-node scripts/smoke-routes.mjs   # Quick route health check
+npm run smoke    # Quick route health check
+npm run syllabi:generate   # Regenerate public/syllabi/*.pdf
 ```
 
 See `docs/SMOKE_TEST.md` for full manual QA checklist.

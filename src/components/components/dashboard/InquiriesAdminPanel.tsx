@@ -5,6 +5,7 @@ import { useMemo, useState, useTransition } from "react";
 import { Mail, MessageSquare, Phone, Search, UserRound } from "lucide-react";
 
 import InquiryStatusControl from "@/components/components/dashboard/InquiryStatusControl";
+import InquiryStatusTimeline from "@/components/components/dashboard/InquiryStatusTimeline";
 import InquiryEnrollmentLink from "@/components/components/dashboard/InquiryEnrollmentLink";
 import { updateInquiryNotes } from "@/actions/updateInquiryNotes";
 import type { ContactInquiry } from "@/Services/contact-inquiries";
@@ -209,6 +210,7 @@ export default function InquiriesAdminPanel({
                 </p>
                 <p className="mt-3 whitespace-pre-wrap text-sm leading-7">{inquiry.message}</p>
               </div>
+              <InquiryStatusTimeline events={inquiry.status_history} createdAt={inquiry.created_at} />
               <InquiryNotes
                 inquiryId={inquiry.id}
                 initialNotes={inquiry.admin_notes}

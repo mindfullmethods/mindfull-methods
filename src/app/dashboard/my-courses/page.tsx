@@ -2,6 +2,7 @@ import Link from "next/link";
 import { Award, BookOpen, CheckCircle2, Clock, GraduationCap } from "lucide-react";
 
 import Button from "@/components/marketing/Button";
+import DashboardPageHeader from "@/components/components/dashboard/DashboardPageHeader";
 import EnrollmentsSchemaBanner from "@/components/components/dashboard/EnrollmentsSchemaBanner";
 import { getMyEnrollments } from "@/Services/enrollments";
 import { getProgressSummariesForSlugs } from "@/Services/course-progress";
@@ -49,13 +50,11 @@ export default async function MyCoursesPage({
 
   return (
     <main className="min-h-screen px-5 py-8 sm:px-8 xl:px-10">
-      <section className="rounded-3xl border border-zinc-200 bg-white p-6 shadow-sm dark:border-white/10 dark:bg-white/5 sm:p-8">
-        <p className="text-sm font-black uppercase tracking-[0.28em] text-zinc-500">My courses</p>
-        <h1 className="mt-4 text-4xl font-black tracking-tight sm:text-5xl">Your enrolled programs</h1>
-        <p className="mt-4 max-w-2xl text-sm leading-7 text-zinc-600 dark:text-zinc-400">
-          Courses you&apos;ve paid for appear here with access details and syllabus links.
-        </p>
-      </section>
+      <DashboardPageHeader
+        eyebrow="My courses"
+        title="Your enrolled programs"
+        description="Courses you've paid for appear here with access details and syllabus links."
+      />
 
       {enrolled === "1" ? (
         <div className="mt-6 rounded-2xl border border-emerald-200 bg-emerald-50 px-5 py-4 text-sm font-bold text-emerald-800 dark:border-emerald-400/20 dark:bg-emerald-400/10 dark:text-emerald-200">
@@ -70,9 +69,9 @@ export default async function MyCoursesPage({
 
       <section className="mt-8">
         {enrollments.length === 0 ? (
-          <div className="rounded-3xl border border-dashed border-zinc-300 bg-white p-12 text-center dark:border-white/10 dark:bg-white/5">
+          <div className="mm-card-premium rounded-3xl border border-dashed p-12 text-center">
             <GraduationCap className="mx-auto text-zinc-400" size={40} />
-            <h2 className="mt-5 text-3xl font-black">No courses yet</h2>
+            <h2 className="mt-5 text-3xl font-bold mm-heading">No courses yet</h2>
             <p className="mx-auto mt-3 max-w-xl text-sm leading-6 text-zinc-500">
               Browse mentorship tracks and enroll with Pay &amp; enroll on any course page.
             </p>
@@ -92,7 +91,7 @@ export default async function MyCoursesPage({
               return (
                 <article
                   key={enrollment.id}
-                  className="overflow-hidden rounded-3xl border border-zinc-200 bg-white shadow-sm dark:border-white/10 dark:bg-white/5"
+                  className="mm-card-premium overflow-hidden rounded-3xl"
                 >
                   {courseInfo?.imageUrl ? (
                     <img
@@ -102,11 +101,11 @@ export default async function MyCoursesPage({
                     />
                   ) : null}
                   <div className="p-6">
-                    <p className="flex items-center gap-2 text-xs font-black uppercase tracking-[0.18em] text-violet-600 dark:text-violet-300">
+                    <p className="flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.18em] text-violet-600 dark:text-violet-300">
                       <BookOpen size={14} />
                       Enrolled · {formatAmount(enrollment.amount_paise)}
                     </p>
-                    <h2 className="mt-3 text-2xl font-black">
+                    <h2 className="mt-3 text-2xl font-bold mm-heading">
                       {courseInfo?.title ?? enrollment.course_title}
                     </h2>
                     {courseInfo?.shortDescription ? (
@@ -149,7 +148,7 @@ export default async function MyCoursesPage({
                       {percent >= 100 ? (
                         <Link
                           href={`/dashboard/my-courses/${enrollment.course_slug}/certificate`}
-                          className="inline-flex items-center gap-2 rounded-xl bg-emerald-600 px-4 py-2.5 text-sm font-black text-white"
+                          className="inline-flex items-center gap-2 rounded-xl bg-emerald-600 px-4 py-2.5 text-sm font-bold text-white"
                         >
                           <Award size={14} />
                           Certificate
@@ -157,13 +156,13 @@ export default async function MyCoursesPage({
                       ) : null}
                       <Link
                         href={`/dashboard/my-courses/${enrollment.course_slug}`}
-                        className="inline-flex rounded-xl bg-violet-600 px-4 py-2.5 text-sm font-black text-white"
+                        className="inline-flex rounded-xl bg-violet-600 px-4 py-2.5 text-sm font-bold text-white"
                       >
                         Track progress
                       </Link>
                       <Link
                         href={`/courses/${enrollment.course_slug}`}
-                        className="inline-flex rounded-xl bg-zinc-950 px-4 py-2.5 text-sm font-black text-white dark:bg-white dark:text-zinc-950"
+                        className="inline-flex rounded-xl bg-zinc-950 px-4 py-2.5 text-sm font-bold text-white dark:bg-white dark:text-zinc-950"
                       >
                         View course
                       </Link>
@@ -172,14 +171,14 @@ export default async function MyCoursesPage({
                           href={syllabusPdfPublicUrl(enrollment.course_slug)}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="inline-flex rounded-xl border border-violet-200 bg-violet-50 px-4 py-2.5 text-sm font-black text-violet-800 dark:border-violet-400/20 dark:bg-violet-400/10 dark:text-violet-200"
+                          className="inline-flex rounded-xl border border-violet-200 bg-violet-50 px-4 py-2.5 text-sm font-bold text-violet-800 dark:border-violet-400/20 dark:bg-violet-400/10 dark:text-violet-200"
                         >
                           Syllabus PDF
                         </a>
                       ) : (
                         <Link
                           href={`/courses/${enrollment.course_slug}/syllabus`}
-                          className="inline-flex rounded-xl border border-zinc-200 px-4 py-2.5 text-sm font-black dark:border-white/10"
+                          className="inline-flex rounded-xl border mm-border px-4 py-2.5 text-sm font-bold"
                         >
                           Syllabus
                         </Link>

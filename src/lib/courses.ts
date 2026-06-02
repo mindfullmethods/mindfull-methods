@@ -305,6 +305,10 @@ function normalizeSlug(slug: string) {
   return slug.trim().toLowerCase().replace(/_/g, "-");
 }
 
+export function normalizeCourseSlug(slug: string) {
+  return normalizeSlug(slug);
+}
+
 export function getCourseBySlug(slug: string) {
   const normalized = normalizeSlug(slug);
   return courses.find((c) => c.slug === normalized) ?? null;

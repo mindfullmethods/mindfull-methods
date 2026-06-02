@@ -3,7 +3,7 @@ import BrandWordmark from "@/components/marketing/BrandWordmark";
 import SyllabusActions from "@/components/marketing/SyllabusActions";
 import { getCourseBySlug, getCourseSlugs } from "@/lib/courses";
 import { hasSyllabusPdf, syllabusPdfPublicUrl } from "@/lib/syllabus-files";
-import { syllabusUrl } from "@/lib/site";
+import { siteConfig, syllabusUrl } from "@/lib/site";
 import type { Metadata } from "next";
 
 export function generateStaticParams() {
@@ -35,8 +35,8 @@ export default async function SyllabusPage({ params }: { params: Promise<{ slug:
 
       <header className="border-b border-zinc-200 pb-8">
         <BrandWordmark size="md" />
-        <p className="mt-6 text-sm font-black uppercase tracking-[0.24em] text-violet-600">Course syllabus</p>
-        <h1 className="mt-3 text-4xl font-black tracking-tight">{course.title}</h1>
+        <p className="mt-6 text-sm font-semibold uppercase tracking-[0.2em] text-violet-600">Course syllabus</p>
+        <h1 className="mt-3 text-4xl font-bold tracking-tight">{course.title}</h1>
         <p className="mt-4 text-sm leading-7 text-zinc-600">{course.longDescription}</p>
         <dl className="mt-6 grid gap-3 text-sm sm:grid-cols-2">
           <div>
@@ -84,7 +84,7 @@ export default async function SyllabusPage({ params }: { params: Promise<{ slug:
       </section>
 
       <footer className="mt-12 border-t border-zinc-200 pt-6 text-xs text-zinc-500 print:fixed print:bottom-0 print:left-0 print:right-0 print:bg-white print:py-4">
-        Mindfull Methods · mindfullmethods.com · support@mindfullmethods.com
+        Mindfull Methods · {siteConfig.url.replace(/^https?:\/\//, "")} · {siteConfig.supportEmail}
       </footer>
       </div>
     </div>

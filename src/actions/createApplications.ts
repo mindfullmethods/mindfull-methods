@@ -47,12 +47,24 @@ export async function createApplication(formData: FormData) {
     redirect(`/dashboard/apply/${encodeURIComponent(internship_id)}?error=config`);
   }
 
+  const resumeRaw = String(resume ?? "").trim();
+  if (resumeRaw) {
+    try {
+      const url = new URL(resumeRaw);
+      if (url.protocol !== "http:" && url.protocol !== "https:") {
+        redirect(`/dashboard/apply/${encodeURIComponent(internship_id)}?error=resume`);
+      }
+    } catch {
+      redirect(`/dashboard/apply/${encodeURIComponent(internship_id)}?error=resume`);
+    }
+  }
+
   const error = await insertApplicationForm(admin, [
     {
       internship_id,
       student_name,
       email,
-      resume,
+      resume: resumeRaw || resume,
       user_id: user?.id ?? null,
       status: "Pending",
     },
@@ -60,7 +72,7 @@ export async function createApplication(formData: FormData) {
       internship_id,
       student_name,
       email,
-      resume,
+      resume: resumeRaw || resume,
       user_id: user?.id ?? null,
     },
     {

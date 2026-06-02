@@ -32,25 +32,25 @@ const benefits = [
     title: "Real mentor feedback",
     description: "Weekly coaching and targeted reviews so you improve fast.",
     icon: ShieldCheck,
-    accent: "from-violet-500/20 to-violet-500/5",
+    accent: "from-violet-600/15 to-violet-600/5",
   },
   {
     title: "Structured milestones",
     description: "Clear outcomes and step-by-step guidance from day one.",
     icon: Sparkles,
-    accent: "from-fuchsia-500/20 to-fuchsia-500/5",
+    accent: "from-violet-600/15 to-violet-600/5",
   },
   {
     title: "Practical projects",
     description: "Ship guided work and build proof with a capstone result.",
     icon: BriefcaseBusiness,
-    accent: "from-teal-500/20 to-teal-500/5",
+    accent: "from-violet-600/15 to-violet-600/5",
   },
   {
     title: "Career-ready delivery",
     description: "Present your outcomes in a portfolio format recruiters understand.",
     icon: BarChart3,
-    accent: "from-sky-500/20 to-sky-500/5",
+    accent: "from-violet-600/15 to-violet-600/5",
   },
 ];
 
@@ -81,15 +81,15 @@ export default function HomePageContent() {
   return (
     <>
       {/* Hero */}
-      <section className="relative overflow-hidden border-b mm-border px-5 pb-20 pt-12 sm:px-8 sm:pt-16 lg:px-10 lg:pb-28">
-        <div className="pointer-events-none absolute inset-0 mm-grid-bg opacity-60" />
-        <div className="pointer-events-none absolute -left-24 top-0 h-72 w-72 rounded-full bg-violet-600/30 blur-[100px]" />
-        <div className="pointer-events-none absolute -right-16 top-24 h-80 w-80 rounded-full bg-teal-500/20 blur-[110px]" />
-        <div className="pointer-events-none absolute bottom-0 left-1/3 h-64 w-64 rounded-full bg-fuchsia-500/10 blur-[90px]" />
+      <section className="relative overflow-hidden border-b mm-border px-5 pb-12 pt-8 sm:px-8 sm:pb-20 sm:pt-12 lg:px-10 lg:pb-28 lg:pt-16">
+        <div className="pointer-events-none absolute inset-0 mm-grid-bg opacity-40" />
+        <div className="pointer-events-none absolute -left-24 top-0 h-64 w-64 rounded-full bg-violet-600/15 blur-[100px]" />
+        <div className="pointer-events-none absolute -right-16 top-24 h-72 w-72 rounded-full bg-violet-600/10 blur-[110px]" />
 
-        <div className="relative mx-auto grid max-w-7xl items-center gap-12 lg:grid-cols-[1.05fr_0.95fr] lg:gap-16">
+        <div className="relative mx-auto grid max-w-7xl items-start gap-8 sm:gap-10 lg:grid-cols-[1.05fr_0.95fr] lg:items-center lg:gap-16">
+          {/* Copy */}
           <div>
-            <div className="flex flex-wrap items-center gap-3">
+            <div className="flex flex-wrap items-center gap-2.5 sm:gap-3">
               <Badge tone="violet">Mentorship-first learning</Badge>
               <span className="inline-flex items-center gap-2 rounded-full mm-pill px-3 py-1.5 text-xs font-bold">
                 <Star size={12} className="fill-amber-300 text-amber-300" />
@@ -97,17 +97,17 @@ export default function HomePageContent() {
               </span>
             </div>
 
-            <h1 className="mt-7 text-4xl font-black leading-[1.05] tracking-tight sm:text-5xl lg:text-6xl xl:text-7xl">
+            <h1 className="mt-4 text-3xl font-bold leading-[1.12] tracking-tight text-zinc-950 sm:mt-6 sm:text-5xl lg:text-[3.25rem] dark:text-white">
               Learn courses{" "}
               <span className="mm-gradient-text">the way mentors teach</span>
             </h1>
 
-            <p className="mt-6 max-w-xl text-base leading-8 mm-muted sm:text-lg">
+            <p className="mt-4 max-w-xl text-[15px] leading-7 mm-muted sm:mt-5 sm:text-base sm:leading-8">
               Mindfull Methods offers structured certification programs with live mentorship, milestone
               guidance, and practical outcomes—so you finish with proof, not just certificates.
             </p>
 
-            <div className="mt-8 flex flex-wrap items-center gap-3">
+            <div className="mt-6 flex flex-wrap items-center gap-3 sm:mt-8">
               <Button href={signupUrl()} variant="gradient" size="lg">
                 Get started free <ArrowRight size={18} />
               </Button>
@@ -116,70 +116,81 @@ export default function HomePageContent() {
               </Button>
             </div>
 
-            <div className="mt-10 flex flex-wrap items-center gap-5">
+            <div className="mt-5 flex flex-wrap items-center gap-3 sm:mt-6 sm:gap-5">
               <div className="flex -space-x-3">
                 {["A", "M", "J", "S"].map((initial) => (
                   <span
                     key={initial}
-                    className="flex h-10 w-10 items-center justify-center rounded-full border-2 border-[#f7f8f5] bg-gradient-to-br from-violet-500 to-teal-400 text-xs font-black text-white dark:border-zinc-950"
+                    className="flex h-9 w-9 items-center justify-center rounded-full border-2 border-[#f7f8f5] bg-gradient-to-br from-violet-500 to-teal-400 text-xs font-black text-white sm:h-10 sm:w-10 dark:border-zinc-950"
                   >
                     {initial}
                   </span>
                 ))}
               </div>
               <div>
-                <p className="text-sm font-black mm-heading">Trusted by ambitious learners</p>
-                <p className="text-xs font-bold mm-subtle">Cohorts · Projects · Career support</p>
+                <p className="text-sm font-semibold mm-heading">Trusted by ambitious learners</p>
+                <p className="text-xs font-medium mm-subtle">Cohorts · Projects · Career support</p>
               </div>
             </div>
 
-            <div className="mt-10 grid gap-3 sm:grid-cols-3">
+            <div className="mt-5 hidden gap-3 sm:mt-8 sm:grid sm:grid-cols-3">
               {[
                 { label: "Mentor sessions", value: "Weekly" },
                 { label: "Project-based", value: "Yes" },
                 { label: "Career support", value: "Included" },
               ].map((s) => (
-                <div key={s.label} className="mm-glass rounded-2xl p-4">
-                  <p className="text-xs font-bold uppercase tracking-[0.14em] mm-subtle">{s.label}</p>
-                  <p className="mt-1 text-xl font-black mm-heading">{s.value}</p>
+                <div key={s.label} className="mm-glass-premium rounded-2xl p-4">
+                  <p className="text-xs font-semibold uppercase tracking-[0.12em] mm-subtle">{s.label}</p>
+                  <p className="mt-1 text-lg font-bold mm-heading">{s.value}</p>
                 </div>
               ))}
             </div>
           </div>
 
+          {/* Visual */}
           <div className="relative">
-            <div className="absolute -inset-8 rounded-[2.5rem] bg-gradient-to-br from-violet-500/25 via-fuchsia-500/10 to-teal-400/20 blur-2xl" />
+            <div className="pointer-events-none absolute -inset-4 hidden rounded-[2rem] bg-violet-600/10 blur-2xl sm:block lg:-inset-8" />
 
-            <div className="mm-gradient-border relative overflow-hidden rounded-[2rem] p-1 shadow-2xl shadow-violet-500/10 dark:shadow-violet-950/40">
-              <div className="overflow-hidden rounded-[1.85rem] bg-zinc-100 p-3 dark:bg-zinc-950/80">
-                <img
-                  src={marketingImages.hero}
-                  alt="Students collaborating during a mentorship session"
-                  className="aspect-[4/3] w-full rounded-2xl object-cover"
-                />
+            <div className="relative">
+              <div className="mm-gradient-border mm-hero-frame relative overflow-hidden rounded-2xl p-0.5 sm:p-1 sm:rounded-[2rem]">
+                <div className="overflow-hidden rounded-[0.85rem] bg-zinc-100 p-1.5 dark:bg-zinc-950/80 sm:rounded-[1.85rem] sm:p-2.5">
+                  <img
+                    src={marketingImages.hero}
+                    alt="Students collaborating during a mentorship session"
+                    className="aspect-[16/10] w-full rounded-xl object-cover ring-1 ring-white/30 sm:aspect-[4/3] sm:rounded-2xl dark:ring-white/10"
+                  />
+                </div>
               </div>
-            </div>
 
-            <div className="mm-animate-float absolute -left-3 top-8 z-10 mm-glass rounded-2xl px-4 py-3 shadow-xl sm:-left-6">
-              <div className="flex items-center gap-3">
-                <ThemedBrandLogo size="sm" />
-                <div>
-                  <p className="text-xs font-black mm-heading">Mindfull Methods</p>
-                  <p className="text-[10px] font-bold uppercase tracking-[0.18em] mm-subtle">
-                    Live cohorts
+              {/* Logo — floats off top-left of frame (outside overflow-hidden) */}
+              <div className="absolute -left-2 top-5 z-20 sm:-left-3 sm:top-8 lg:-left-6">
+                <div className="mm-animate-float mm-glass-premium rounded-xl px-3 py-2.5 shadow-lg sm:rounded-2xl sm:px-4 sm:py-3">
+                  <div className="flex items-center gap-2 sm:gap-3">
+                    <ThemedBrandLogo size="sm" />
+                    <div className="min-w-0">
+                      <p className="truncate text-xs font-semibold mm-heading">Mindfull Methods</p>
+                      <p className="text-[10px] font-medium uppercase tracking-[0.14em] mm-subtle sm:tracking-[0.18em]">
+                        Live cohorts
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Rating — floats off bottom-right of frame */}
+              <div className="absolute -bottom-3 -right-2 z-20 sm:-bottom-4 sm:-right-4 lg:-right-6">
+                <div className="mm-glass-premium rounded-xl px-3 py-2.5 shadow-lg sm:rounded-2xl sm:px-4 sm:py-3">
+                  <p className="text-[10px] font-medium uppercase tracking-[0.14em] mm-subtle sm:tracking-[0.16em]">
+                    Avg. rating
+                  </p>
+                  <p className="mt-0.5 flex items-center gap-1 text-base font-bold mm-heading sm:mt-1 sm:text-lg">
+                    4.9 <Star size={14} className="fill-amber-300 text-amber-300 sm:h-4 sm:w-4" />
                   </p>
                 </div>
               </div>
             </div>
 
-            <div className="absolute -bottom-4 -right-2 z-10 mm-glass rounded-2xl px-4 py-3 shadow-xl sm:-right-4">
-              <p className="text-xs font-bold uppercase tracking-[0.16em] mm-subtle">Avg. rating</p>
-              <p className="mt-1 flex items-center gap-1 text-lg font-black mm-heading">
-                4.9 <Star size={16} className="fill-amber-300 text-amber-300" />
-              </p>
-            </div>
-
-            <div className="mt-5 grid gap-4 sm:grid-cols-2">
+            <div className="mt-3 grid gap-2 sm:mt-4 sm:grid-cols-2 sm:gap-3">
               {[
                 {
                   title: "Structured track",
@@ -192,15 +203,12 @@ export default function HomePageContent() {
                   icon: BarChart3,
                 },
               ].map((card) => (
-                <div
-                  key={card.title}
-                  className="mm-glass rounded-2xl p-4 transition hover:border-violet-400/25"
-                >
+                <div key={card.title} className="mm-glass-premium rounded-xl p-3.5 sm:rounded-2xl sm:p-4">
                   <div className="flex items-center gap-2">
-                    <card.icon size={16} className="text-violet-600 dark:text-violet-300" />
-                    <p className="text-sm font-black mm-heading">{card.title}</p>
+                    <card.icon size={16} className="shrink-0 text-violet-600 dark:text-violet-300" />
+                    <p className="text-sm font-semibold mm-heading">{card.title}</p>
                   </div>
-                  <p className="mt-2 text-sm leading-6 mm-muted">{card.copy}</p>
+                  <p className="mt-1.5 text-xs leading-5 mm-muted sm:mt-2 sm:text-sm sm:leading-6">{card.copy}</p>
                 </div>
               ))}
             </div>
@@ -209,14 +217,11 @@ export default function HomePageContent() {
       </section>
 
       {/* Trust strip */}
-      <section className="border-b mm-border mm-section-muted px-5 py-5 sm:px-8 lg:px-10">
-        <div className="mx-auto flex max-w-7xl flex-wrap items-center justify-center gap-3">
-          {trustBadges.map((badge) => (
-            <span
-              key={badge}
-              className="inline-flex items-center gap-2 rounded-full mm-pill px-4 py-2 text-xs font-bold uppercase tracking-[0.16em]"
-            >
-              <span className="h-1.5 w-1.5 rounded-full bg-gradient-to-r from-violet-400 to-teal-300" />
+      <section className="border-b mm-border bg-zinc-50/80 px-5 py-4 dark:bg-zinc-950/50 sm:px-8 lg:px-10">
+        <div className="mx-auto flex max-w-7xl flex-wrap items-center justify-center gap-x-6 gap-y-2 text-sm font-medium text-zinc-600 dark:text-zinc-400">
+          {trustBadges.map((badge, i) => (
+            <span key={badge} className="inline-flex items-center gap-6">
+              {i > 0 ? <span className="hidden text-zinc-300 sm:inline dark:text-zinc-700">|</span> : null}
               {badge}
             </span>
           ))}
@@ -259,14 +264,14 @@ export default function HomePageContent() {
             {benefits.map((f) => (
               <article
                 key={f.title}
-                className="group mm-glass rounded-3xl p-6 transition hover:-translate-y-1 hover:border-violet-400/30"
+                className="group mm-card-premium rounded-3xl p-6 transition hover:-translate-y-1"
               >
                 <div
                   className={`flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br ${f.accent} text-violet-700 ring-1 ring-violet-200 dark:text-white dark:ring-white/10`}
                 >
                   <f.icon size={22} />
                 </div>
-                <h3 className="mt-5 text-lg font-black mm-heading">{f.title}</h3>
+                <h3 className="mt-5 text-base font-semibold mm-heading">{f.title}</h3>
                 <p className="mt-3 text-sm leading-6 mm-muted">{f.description}</p>
               </article>
             ))}
@@ -340,14 +345,18 @@ export default function HomePageContent() {
 
       {/* Blog */}
       <section className="mx-auto max-w-7xl px-5 py-20 sm:px-8 lg:px-10">
-        <SectionHeader
-          eyebrow="From the blog"
-          title="Guides for your next step"
-          description="Choosing a track, week-one expectations, and how mentorship accelerates outcomes."
-        />
-        <div className="mt-8">
-          <Button href="/blog" variant="gradient" size="lg">
-            Read the blog
+        <div className="mm-card-premium flex flex-col items-start justify-between gap-6 rounded-3xl p-8 sm:flex-row sm:items-center">
+          <div>
+            <p className="mm-pro-eyebrow">From the blog</p>
+            <h2 className="mt-2 text-2xl font-bold tracking-tight text-zinc-950 dark:text-white">
+              Guides for your next step
+            </h2>
+            <p className="mt-3 max-w-lg text-sm leading-7 mm-muted">
+              Choosing a track, week-one expectations, and how mentorship accelerates outcomes.
+            </p>
+          </div>
+          <Button href="/blog" variant="gradient" size="lg" className="shrink-0">
+            Read the blog <ArrowRight size={18} />
           </Button>
         </div>
       </section>
@@ -360,7 +369,7 @@ export default function HomePageContent() {
             title="Questions, answered"
             description="If you're deciding between tracks, these answers will help you choose confidently."
           />
-          <div className="mm-glass rounded-3xl p-6 sm:p-8">
+          <div className="mm-glass-premium rounded-3xl p-6 sm:p-8">
             <FAQAccordion items={faqs.map((f) => ({ question: f.question, answer: f.answer }))} />
           </div>
         </div>
@@ -368,21 +377,20 @@ export default function HomePageContent() {
 
       {/* Final CTA */}
       <section className="px-5 py-20 sm:px-8 lg:px-10">
-        <div className="relative mx-auto max-w-7xl overflow-hidden rounded-[2.5rem] p-[1px] shadow-2xl shadow-violet-500/20 dark:shadow-violet-950/30">
-          <div className="absolute inset-0 bg-gradient-to-r from-violet-500 via-fuchsia-500 to-teal-400 opacity-80" />
-          <div className="relative overflow-hidden rounded-[2.45rem] bg-zinc-950 px-8 py-12 sm:px-12 sm:py-14">
-            <div className="pointer-events-none absolute -right-20 -top-20 h-64 w-64 rounded-full bg-violet-500/20 blur-3xl" />
-            <div className="pointer-events-none absolute -bottom-24 left-10 h-64 w-64 rounded-full bg-teal-400/10 blur-3xl" />
+        <div className="relative mx-auto max-w-7xl overflow-hidden rounded-3xl border border-zinc-200 bg-zinc-950 shadow-xl dark:border-white/10">
+          <div className="relative overflow-hidden px-8 py-12 sm:px-12 sm:py-14">
+            <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-violet-500/40 to-transparent" />
+            <div className="pointer-events-none absolute -right-20 -top-20 h-64 w-64 rounded-full bg-violet-600/15 blur-3xl" />
 
             <div className="relative grid gap-10 lg:grid-cols-[1.05fr_0.95fr] lg:items-center">
               <div>
-                <div className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-2 text-xs font-black uppercase tracking-[0.18em] text-white/70">
+                <div className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-2 text-xs font-semibold uppercase tracking-[0.16em] text-white/70">
                   <Users size={14} />
                   Join the next cohort
                 </div>
-                <h2 className="mt-5 text-4xl font-black tracking-tight text-white sm:text-5xl">
+                <h2 className="mt-5 text-3xl font-bold tracking-tight text-white sm:text-4xl">
                   Get matched to the right course in{" "}
-                  <span className="mm-gradient-text">minutes</span>
+                  <span className="text-violet-300">minutes</span>
                 </h2>
                 <p className="mt-4 max-w-xl text-base leading-7 text-white/70">
                   Share your goals and we'll recommend the best track. No pressure, just mentorship
@@ -394,7 +402,12 @@ export default function HomePageContent() {
                 <Button href={signupUrl()} variant="gradient" size="lg">
                   Get started free <ArrowRight size={18} />
                 </Button>
-                <Button href="/contact" variant="secondary" size="lg">
+                <Button
+                  href="/contact"
+                  variant="secondary"
+                  size="lg"
+                  className="border-white/20 bg-white/10 text-white hover:bg-white/15"
+                >
                   Book a free call
                 </Button>
               </div>
@@ -406,7 +419,7 @@ export default function HomePageContent() {
                 4.9 average rating
               </span>
               <span className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-2">
-                <ShieldCheck size={16} className="text-teal-300" />
+                <ShieldCheck size={16} className="text-violet-300" />
                 Mentor-guided cohorts
               </span>
             </div>

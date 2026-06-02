@@ -3,6 +3,7 @@ import { ArrowLeft, BriefcaseBusiness } from "lucide-react";
 
 import { createApplication } from "@/actions/createApplications";
 import ApplyButton from "@/components/components/dashboard/ApplyButton";
+import ApplyResumeField from "@/components/components/dashboard/ApplyResumeField";
 import { getInternshipById } from "@/Services/internship-details";
 import { getSessionUser, requireUser } from "@/lib/auth";
 import { marketingImages } from "@/lib/images";
@@ -62,6 +63,12 @@ export default async function ApplyPage({
           <h1 className="mt-3 text-3xl font-black sm:text-4xl">{internship.title}</h1>
           <p className="mt-2 text-sm font-bold text-zinc-500">{internship.company}</p>
 
+          {error === "resume" ? (
+            <div className="mt-6 rounded-2xl border border-red-200 bg-red-50 px-4 py-3 text-sm font-bold text-red-700 dark:border-red-400/20 dark:bg-red-400/10 dark:text-red-300">
+              Resume link must be a valid http(s) URL.
+            </div>
+          ) : null}
+
           {error === "1" ? (
             <div className="mt-6 rounded-2xl border border-red-200 bg-red-50 px-4 py-3 text-sm font-bold text-red-700 dark:border-red-400/20 dark:bg-red-400/10 dark:text-red-300">
               Could not submit the form. Try the quick apply button below.
@@ -95,7 +102,6 @@ export default async function ApplyPage({
               {[
                 { label: "Full name", name: "student_name", type: "text", required: true, defaultValue: defaultName },
                 { label: "Email", name: "email", type: "email", required: true, defaultValue: defaultEmail },
-                { label: "Resume link", name: "resume", type: "url", required: false, defaultValue: "" },
               ].map((field) => (
                 <label key={field.name} className="block">
                   <span className="text-sm font-black">{field.label}</span>
@@ -108,6 +114,8 @@ export default async function ApplyPage({
                   />
                 </label>
               ))}
+
+              <ApplyResumeField />
 
               <button
                 type="submit"

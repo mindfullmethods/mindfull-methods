@@ -51,8 +51,16 @@ export async function recordEnrollment(params: {
   userId?: string | null;
   email?: string | null;
   status?: string;
-}) {
+}): Promise<{ enrollment: EnrollmentRecord; isNew: boolean }> {
   const supabase = createAdminClient();
+
+  const { data: existing } = await supabase
+    .from("enrollments")
+    .select("id")
+    .eq("razorpay_order_id", params.razorpayOrderId)
+    .maybeSingle();
+
+  const isNew = !existing;
 
   const { data, error } = await supabase
     .from("enrollments")
@@ -84,7 +92,7 @@ export async function recordEnrollment(params: {
     );
   }
 
-  return data as EnrollmentRecord;
+  return { enrollment: data as EnrollmentRecord, isNew };
 }
 
 export async function linkEnrollmentToUser(orderId: string, userId: string, email?: string | null) {

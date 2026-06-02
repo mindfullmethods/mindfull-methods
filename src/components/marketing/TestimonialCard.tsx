@@ -21,7 +21,7 @@ export default function TestimonialCard({
   return (
     <div
       className={cn(
-        "group mm-glass rounded-3xl p-6 transition hover:-translate-y-1 hover:border-violet-400/25",
+        "group mm-glass-premium rounded-3xl p-6 transition hover:-translate-y-1",
         featured && "md:col-span-2 md:row-span-2 md:p-8",
         className
       )}
@@ -51,8 +51,8 @@ export default function TestimonialCard({
           {name.charAt(0)}
         </span>
         <div>
-          <p className="text-sm font-black mm-heading">{name}</p>
-          {role ? <p className="text-xs font-bold mm-subtle">{role}</p> : null}
+          <p className="text-sm font-semibold mm-heading">{name}</p>
+          {role ? <p className="text-xs font-medium mm-subtle">{role}</p> : null}
         </div>
       </div>
     </div>

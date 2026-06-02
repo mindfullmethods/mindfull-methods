@@ -73,6 +73,18 @@ function SignupPageContent() {
     setLoading(false);
 
     if (data.session) {
+      let welcomeCourse = selectedCourse?.slug ?? courseSlug ?? null;
+
+      if (orderId) {
+        const link = await linkEnrollmentAction(orderId);
+        if (link.ok && link.courseSlug) welcomeCourse = link.courseSlug;
+      }
+
+      if (paid && welcomeCourse) {
+        router.replace(`/dashboard/my-courses/welcome?course=${encodeURIComponent(welcomeCourse)}`);
+        return;
+      }
+
       router.replace(paid ? "/dashboard/my-courses?enrolled=1" : "/dashboard/internships");
       return;
     }

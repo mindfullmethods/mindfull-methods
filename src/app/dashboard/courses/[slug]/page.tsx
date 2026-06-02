@@ -6,7 +6,7 @@ import EnrollButton from "@/components/marketing/EnrollButton";
 import FAQAccordion from "@/components/marketing/FAQAccordion";
 import { isEnrolledInCourse } from "@/Services/course-progress";
 import { requireUser } from "@/lib/auth";
-import { getCourseBySlug } from "@/lib/courses";
+import { resolveCoursePageSlug } from "@/lib/course-page";
 import { isRazorpayConfigured } from "@/lib/razorpay";
 import { contactUrl, syllabusPdfUrl, syllabusPrintUrl, syllabusUrl } from "@/lib/site";
 import { hasSyllabusPdf } from "@/lib/syllabus-files";
@@ -14,13 +14,12 @@ import { hasSyllabusPdf } from "@/lib/syllabus-files";
 export default async function DashboardCourseDetailPage({ params }: { params: Promise<{ slug: string }> }) {
   await requireUser("/dashboard/courses");
   const { slug } = await params;
-  const course = getCourseBySlug(slug);
-
+  const course = await resolveCoursePageSlug(slug, "/dashboard/courses");
   if (!course) notFound();
 
   const paymentsEnabled = isRazorpayConfigured();
   const pdfAvailable = hasSyllabusPdf(course.slug);
-  const enrolled = await isEnrolledInCourse(slug);
+  const enrolled = await isEnrolledInCourse(course.slug);
 
   return (
     <main className="min-h-screen px-5 py-8 sm:px-8 xl:px-10">

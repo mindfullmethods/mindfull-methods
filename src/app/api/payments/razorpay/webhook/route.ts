@@ -1,10 +1,7 @@
 import { NextResponse } from "next/server";
 
-import {
-  getEnrollmentCourseMeta,
-  recordEnrollment,
-  verifyRazorpayWebhookSignature,
-} from "@/lib/enrollments";
+import { finalizePaidEnrollment, resolveEnrollmentCourseMeta } from "@/lib/post-enrollment";
+import { verifyRazorpayWebhookSignature } from "@/lib/enrollments";
 
 export async function POST(req: Request) {
   try {
@@ -34,10 +31,30 @@ export async function POST(req: Request) {
             amount?: number;
             status?: string;
             notes?: Record<string, string>;
+            error_description?: string;
           };
         };
       };
     };
+
+    if (payload.event === "payment.failed") {
+      const payment = payload.payload?.payment?.entity;
+      const courseSlug = payment?.notes?.course_slug;
+      const customerEmail = payment?.notes?.customer_email?.trim();
+      const courseMeta = courseSlug ? await resolveEnrollmentCourseMeta(courseSlug) : null;
+
+      if (customerEmail && courseMeta) {
+        const { notifyPaymentFailed } = await import("@/lib/email");
+        await notifyPaymentFailed({
+          customerEmail,
+          courseTitle: courseMeta.title,
+          courseSlug: courseMeta.slug,
+          reason: payment?.error_description ?? "Payment failed at the gateway.",
+        }).catch((err) => console.error("[razorpay/webhook] payment.failed email", err));
+      }
+
+      return NextResponse.json({ ok: true });
+    }
 
     if (payload.event !== "payment.captured") {
       return NextResponse.json({ ok: true, skipped: true });
@@ -47,22 +64,24 @@ export async function POST(req: Request) {
     const orderId = payment?.order_id;
     const paymentId = payment?.id;
     const courseSlug = payment?.notes?.course_slug;
+    const customerEmail = payment?.notes?.customer_email?.trim() || null;
 
     if (!orderId || !paymentId || !courseSlug) {
       return NextResponse.json({ ok: false, error: "Missing payment metadata." }, { status: 400 });
     }
 
-    const courseMeta = getEnrollmentCourseMeta(courseSlug);
+    const courseMeta = await resolveEnrollmentCourseMeta(courseSlug);
     if (!courseMeta) {
       return NextResponse.json({ ok: false, error: "Unknown course." }, { status: 400 });
     }
 
-    await recordEnrollment({
+    await finalizePaidEnrollment({
       courseSlug: courseMeta.slug,
       courseTitle: courseMeta.title,
       amountPaise: payment.amount ?? courseMeta.amountPaise,
       razorpayOrderId: orderId,
       razorpayPaymentId: paymentId,
+      email: customerEmail,
       status: payment.status === "captured" ? "paid" : "pending",
     });
 

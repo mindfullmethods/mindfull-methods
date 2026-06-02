@@ -1,8 +1,11 @@
+import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
+import { Clock3 } from "lucide-react";
 
 import BrandWordmark from "@/components/marketing/BrandWordmark";
 import CertificateActions from "@/components/components/dashboard/CertificateActions";
-import { issueCertificateIfComplete } from "@/Services/certificates";
+import { getCertificateById, issueCertificateIfComplete } from "@/Services/certificates";
+import { getCompletionVerification } from "@/Services/completion-verifications";
 import { getCourseProgress, getMyProgressRows, isEnrolledInCourse } from "@/Services/course-progress";
 import { getSessionUser, requireUser } from "@/lib/auth";
 import { formatCertificateDate, formatCertificateId } from "@/lib/certificates";
@@ -34,15 +37,47 @@ export default async function CourseCertificatePage({ params }: { params: Promis
     user?.email?.split("@")[0] ??
     "Student";
 
+  const verification = user?.id ? await getCompletionVerification(user.id, slug) : null;
   const rows = await getMyProgressRows();
-  const stored = user?.id
-    ? await issueCertificateIfComplete({
-        userId: user.id,
-        courseSlug: slug,
-        studentName,
-        progressRows: rows.filter((row) => row.course_slug === slug),
-      })
-    : null;
+  const progressRows = rows.filter((row) => row.course_slug === slug);
+
+  const existingCert = user?.id ? await getCertificateById(formatCertificateId(user.id, slug)) : null;
+
+  const stored =
+    user?.id && !existingCert
+      ? await issueCertificateIfComplete({
+          userId: user.id,
+          courseSlug: slug,
+          studentName,
+          progressRows,
+        })
+      : existingCert;
+
+  if (!stored && verification?.status !== "approved") {
+    return (
+      <div className="min-h-screen px-5 py-10 sm:px-8">
+        <div className="mx-auto max-w-2xl rounded-3xl border border-violet-200 bg-violet-50 p-8 text-center dark:border-violet-400/20 dark:bg-violet-400/10">
+          <Clock3 className="mx-auto text-violet-600" size={40} />
+          <h1 className="mt-4 text-3xl font-black">Certificate under review</h1>
+          <p className="mt-4 text-sm leading-7 text-zinc-600 dark:text-zinc-300">
+            You completed all milestones in <strong>{course.title}</strong>. A mentor is reviewing your progress —
+            your certificate will appear here once approved (usually within 1–2 business days).
+          </p>
+          {verification?.status === "rejected" ? (
+            <p className="mt-4 rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm font-bold text-red-700 dark:border-red-400/20 dark:bg-red-400/10 dark:text-red-200">
+              Your submission needs more work. Check your email or contact support for details.
+            </p>
+          ) : null}
+          <Link
+            href={`/dashboard/my-courses/${slug}`}
+            className="mt-6 inline-flex rounded-xl bg-violet-600 px-5 py-3 text-sm font-black text-white"
+          >
+            Back to course progress
+          </Link>
+        </div>
+      </div>
+    );
+  }
 
   const certificateId = stored?.id ?? (user?.id ? formatCertificateId(user.id, slug) : "MM-UNKNOWN");
   const issuedDate = formatCertificateDate(stored?.issued_at ?? progress.completedAt ?? new Date());
@@ -50,7 +85,7 @@ export default async function CourseCertificatePage({ params }: { params: Promis
   return (
     <div className="min-h-screen bg-white text-zinc-950 print:bg-white">
       <div className="certificate-print mx-auto max-w-3xl px-5 py-10 sm:px-8">
-        <CertificateActions courseSlug={slug} certificateId={certificateId} />
+        <CertificateActions courseSlug={slug} courseTitle={course.title} certificateId={certificateId} />
 
         <article className="rounded-[2rem] border-4 border-violet-200 bg-gradient-to-br from-violet-50 via-white to-teal-50 p-8 shadow-xl sm:p-12 print:border-violet-300 print:shadow-none">
           <div className="flex flex-col items-center text-center">

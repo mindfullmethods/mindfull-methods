@@ -10,9 +10,9 @@ export default function DashboardShell({
   isAdmin: boolean;
 }) {
   return (
-    <div className="min-h-screen bg-[#f7f8f5] text-zinc-950 dark:bg-zinc-950 dark:text-white">
+    <div className="mm-dashboard-shell">
       <Sidebar isAdmin={isAdmin} />
-      <main className="min-h-screen lg:pl-80">{children}</main>
+      <main className="relative min-h-screen lg:pl-80">{children}</main>
     </div>
   );
 }

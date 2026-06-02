@@ -18,7 +18,40 @@ function fromEmail() {
   return process.env.CONTACT_FROM_EMAIL ?? "onboarding@resend.dev";
 }
 
-async function sendEmail(params: {
+export function renderEmailLayout(title: string, bodyHtml: string) {
+  const siteUrl = siteConfig.url;
+  return `
+    <!DOCTYPE html>
+    <html>
+      <body style="margin:0;padding:0;background:#f4f4f5;font-family:Arial,sans-serif;color:#18181b;">
+        <table width="100%" cellpadding="0" cellspacing="0" style="background:#f4f4f5;padding:32px 16px;">
+          <tr>
+            <td align="center">
+              <table width="100%" cellpadding="0" cellspacing="0" style="max-width:560px;background:#ffffff;border-radius:16px;overflow:hidden;border:1px solid #e4e4e7;">
+                <tr>
+                  <td style="padding:24px 28px;background:#7c3aed;color:#ffffff;">
+                    <p style="margin:0;font-size:12px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;opacity:0.85;">Mindfull Methods</p>
+                    <h1 style="margin:8px 0 0;font-size:22px;line-height:1.3;">${escapeHtml(title)}</h1>
+                  </td>
+                </tr>
+                <tr>
+                  <td style="padding:28px;font-size:15px;line-height:1.7;">${bodyHtml}</td>
+                </tr>
+                <tr>
+                  <td style="padding:0 28px 28px;font-size:12px;color:#71717a;">
+                    <p style="margin:0;">Questions? Reply to this email or visit <a href="${siteUrl}" style="color:#7c3aed;">${escapeHtml(siteConfig.name)}</a>.</p>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+        </table>
+      </body>
+    </html>
+  `;
+}
+
+export async function sendEmail(params: {
   to: string | string[];
   subject: string;
   text: string;
@@ -80,16 +113,18 @@ export async function sendContactEmail(payload: ContactPayload) {
     ]
       .filter(Boolean)
       .join("\n"),
-    html: `
-      <h2>New contact form submission</h2>
+    html: renderEmailLayout(
+      "New contact form submission",
+      `
       <p><strong>Name:</strong> ${escapeHtml(payload.name)}</p>
       <p><strong>Email:</strong> ${escapeHtml(payload.email)}</p>
       ${payload.phone ? `<p><strong>Phone:</strong> ${escapeHtml(payload.phone)}</p>` : ""}
       <p><strong>Interest:</strong> ${escapeHtml(interest)}</p>
-      <hr />
+      <hr style="border:none;border-top:1px solid #e4e4e7;margin:20px 0;" />
       <p><strong>Message</strong></p>
       <p>${escapeHtml(payload.message).replace(/\n/g, "<br />")}</p>
-    `,
+    `
+    ),
   });
 }
 
@@ -118,14 +153,16 @@ export async function notifyApplicationSubmitted(payload: {
       ]
         .filter(Boolean)
         .join("\n"),
-      html: `
-        <h2>New internship application</h2>
+      html: renderEmailLayout(
+        "New internship application",
+        `
         <p><strong>Student:</strong> ${escapeHtml(payload.studentName)}</p>
         <p><strong>Email:</strong> ${escapeHtml(payload.studentEmail)}</p>
         <p><strong>Internship:</strong> ${escapeHtml(payload.internshipTitle)}${payload.company ? ` at ${escapeHtml(payload.company)}` : ""}</p>
         ${payload.resume ? `<p><strong>Resume:</strong> <a href="${escapeHtml(payload.resume)}">${escapeHtml(payload.resume)}</a></p>` : ""}
-        <p><a href="${dashboardUrl}">Open applications dashboard →</a></p>
-      `,
+        <p><a href="${dashboardUrl}" style="color:#7c3aed;font-weight:700;">Open applications dashboard →</a></p>
+      `
+      ),
     }),
     sendEmail({
       to: payload.studentEmail,
@@ -138,12 +175,15 @@ export async function notifyApplicationSubmitted(payload: {
         "",
         `Track status: ${siteConfig.url}/dashboard/my-applications`,
       ].join("\n"),
-      html: `
+      html: renderEmailLayout(
+        "Application received",
+        `
         <p>Hi ${escapeHtml(payload.studentName)},</p>
         <p>We received your application for <strong>${escapeHtml(payload.internshipTitle)}</strong>${payload.company ? ` at ${escapeHtml(payload.company)}` : ""}.</p>
         <p>We'll review it and update the status in your dashboard.</p>
-        <p><a href="${siteConfig.url}/dashboard/my-applications">View my applications →</a></p>
-      `,
+        <p><a href="${siteConfig.url}/dashboard/my-applications" style="color:#7c3aed;font-weight:700;">View my applications →</a></p>
+      `
+      ),
     }),
   ]);
 }
@@ -178,12 +218,14 @@ export async function notifyApplicationStatusChange(payload: {
       "",
       `View status: ${dashboardUrl}`,
     ].join("\n"),
-    html: `
+    html: renderEmailLayout(
+      headline,
+      `
       <p>Hi ${escapeHtml(payload.studentName)},</p>
-      <h2>${headline}</h2>
       <p>${escapeHtml(body)}</p>
-      <p><a href="${dashboardUrl}">View my applications →</a></p>
-    `,
+      <p><a href="${dashboardUrl}" style="color:#7c3aed;font-weight:700;">View my applications →</a></p>
+    `
+    ),
   });
 }
 
@@ -194,7 +236,8 @@ export async function notifyEnrollmentCompleted(payload: {
   courseSlug: string;
   amountLabel: string;
 }) {
-  const courseUrl = `${siteConfig.url}/courses/${payload.courseSlug}`;
+  const courseUrl = `${siteConfig.url}/dashboard/my-courses/welcome?course=${payload.courseSlug}`;
+  const trackUrl = `${siteConfig.url}/dashboard/my-courses/${payload.courseSlug}`;
   const myCoursesUrl = `${siteConfig.url}/dashboard/my-courses`;
   const adminUrl = `${siteConfig.url}/dashboard/enrollments`;
 
@@ -211,14 +254,16 @@ export async function notifyEnrollmentCompleted(payload: {
         "",
         `View: ${adminUrl}`,
       ].join("\n"),
-      html: `
-        <h2>New paid enrollment</h2>
+      html: renderEmailLayout(
+        "New paid enrollment",
+        `
         <p><strong>Student:</strong> ${escapeHtml(payload.studentName)}</p>
         <p><strong>Email:</strong> ${escapeHtml(payload.studentEmail)}</p>
         <p><strong>Course:</strong> ${escapeHtml(payload.courseTitle)}</p>
         <p><strong>Amount:</strong> ${escapeHtml(payload.amountLabel)}</p>
-        <p><a href="${adminUrl}">Open enrollments dashboard →</a></p>
-      `,
+        <p><a href="${adminUrl}" style="color:#7c3aed;font-weight:700;">Open enrollments dashboard →</a></p>
+      `
+      ),
     }),
     payload.studentEmail.includes("@")
       ? sendEmail({
@@ -229,15 +274,20 @@ export async function notifyEnrollmentCompleted(payload: {
             "",
             `Your payment for ${payload.courseTitle} (${payload.amountLabel}) is confirmed.`,
             "",
-            `Course: ${courseUrl}`,
+            `Get started: ${courseUrl}`,
+            `Track progress: ${trackUrl}`,
             `My courses: ${myCoursesUrl}`,
           ].join("\n"),
-          html: `
+          html: renderEmailLayout(
+            `Welcome to ${payload.courseTitle}`,
+            `
         <p>Hi ${escapeHtml(payload.studentName)},</p>
         <p>Your payment for <strong>${escapeHtml(payload.courseTitle)}</strong> (${escapeHtml(payload.amountLabel)}) is confirmed. Welcome to Mindfull Methods!</p>
-        <p><a href="${courseUrl}">View course →</a></p>
-        <p><a href="${myCoursesUrl}">Open my courses →</a></p>
-      `,
+        <p><a href="${courseUrl}" style="color:#7c3aed;font-weight:700;">Start week 1 →</a></p>
+        <p><a href="${trackUrl}" style="color:#7c3aed;">Track progress →</a></p>
+        <p><a href="${myCoursesUrl}" style="color:#7c3aed;">Open my courses →</a></p>
+      `
+          ),
         })
       : Promise.resolve(),
   ]);
@@ -266,14 +316,60 @@ export async function notifyCourseCompleted(payload: {
       "",
       `Certificate ID: ${payload.certificateId}`,
     ].join("\n"),
-    html: `
+    html: renderEmailLayout(
+      "Course complete!",
+      `
       <p>Hi ${escapeHtml(payload.studentName)},</p>
-      <h2>Course complete!</h2>
       <p>You finished all milestones in <strong>${escapeHtml(payload.courseTitle)}</strong>. Your certificate is ready.</p>
-      <p><a href="${certUrl}">View certificate →</a></p>
-      <p><a href="${payload.verifyUrl}">Verify certificate online →</a></p>
+      <p><a href="${certUrl}" style="color:#7c3aed;font-weight:700;">View certificate →</a></p>
+      <p><a href="${payload.verifyUrl}" style="color:#7c3aed;">Verify certificate online →</a></p>
       <p><strong>Certificate ID:</strong> ${escapeHtml(payload.certificateId)}</p>
-    `,
+    `
+    ),
+  });
+}
+
+export async function notifyProgressReminder(payload: {
+  studentName: string;
+  studentEmail: string;
+  courseTitle: string;
+  courseSlug: string;
+  percent: number;
+  kind: "start" | "continue";
+}) {
+  const trackUrl = `${siteConfig.url}/dashboard/my-courses/${payload.courseSlug}`;
+  const welcomeUrl = `${siteConfig.url}/dashboard/my-courses/welcome?course=${payload.courseSlug}`;
+
+  const subject =
+    payload.kind === "start"
+      ? `Ready to start ${payload.courseTitle}?`
+      : `Continue ${payload.courseTitle} — you're ${payload.percent}% done`;
+
+  const body =
+    payload.kind === "start"
+      ? `You enrolled in ${payload.courseTitle} a few days ago. Week 1 is waiting — open your course and check off your first milestone when you're ready.`
+      : `You're ${payload.percent}% through ${payload.courseTitle}. Pick up where you left off and keep building toward your certificate.`;
+
+  const primaryUrl = payload.kind === "start" ? welcomeUrl : trackUrl;
+  const cta = payload.kind === "start" ? "Start week 1" : "Continue learning";
+
+  await sendEmail({
+    to: payload.studentEmail,
+    subject,
+    text: [
+      `Hi ${payload.studentName},`,
+      "",
+      body,
+      "",
+      `${cta}: ${primaryUrl}`,
+      `My courses: ${siteConfig.url}/dashboard/my-courses`,
+    ].join("\n"),
+    html: renderEmailLayout(subject, `
+      <p>Hi ${escapeHtml(payload.studentName)},</p>
+      <p>${escapeHtml(body)}</p>
+      <p><a href="${primaryUrl}" style="color:#7c3aed;font-weight:700;">${escapeHtml(cta)} →</a></p>
+      <p><a href="${siteConfig.url}/dashboard/my-courses" style="color:#7c3aed;">Open my courses →</a></p>
+    `),
   });
 }
 
@@ -306,16 +402,199 @@ export async function notifyAdminDigest(payload: {
       "",
       `Open admin home: ${dashboardUrl}`,
     ].join("\n"),
-    html: `
-      <h2>Admin digest</h2>
-      <ul>
+    html: renderEmailLayout(
+      "Admin digest",
+      `
+      <ul style="padding-left:20px;">
         <li><strong>Pending applications:</strong> ${payload.pendingApplications}</li>
         <li><strong>New inquiries:</strong> ${payload.newInquiries}</li>
         <li><strong>Paid enrollments:</strong> ${payload.paidEnrollments}</li>
         <li><strong>Revenue (paid):</strong> ${escapeHtml(revenue)}</li>
         <li><strong>Launch setup:</strong> ${payload.setupPercent}% complete</li>
       </ul>
-      <p><a href="${dashboardUrl}">Open admin home →</a></p>
-    `,
+      <p><a href="${dashboardUrl}" style="color:#7c3aed;font-weight:700;">Open admin home →</a></p>
+    `
+    ),
   });
+}
+
+export async function notifyInquiryStatusChange(payload: {
+  name: string;
+  email: string;
+  interest: string;
+  status: string;
+}) {
+  if (!payload.email.includes("@")) return;
+
+  const inquiriesUrl = `${siteConfig.url}/contact`;
+  const dashboardUrl = `${siteConfig.url}/dashboard/inquiries`;
+
+  const statusMessages: Record<string, string> = {
+    Contacted: "We've reviewed your inquiry and will follow up with next steps soon.",
+    Enrolled: "Great news — you're enrolled! Check your dashboard for course access and week-one guidance.",
+    Closed: "We've closed this inquiry for now. You're welcome to reach out again anytime.",
+  };
+
+  const body =
+    statusMessages[payload.status] ??
+    `Your inquiry status is now: ${payload.status}. We'll keep you posted on next steps.`;
+
+  await Promise.all([
+    sendEmail({
+      to: payload.email,
+      subject: `Update on your Mindfull Methods inquiry`,
+      text: [
+        `Hi ${payload.name},`,
+        "",
+        body,
+        "",
+        `Interest: ${payload.interest}`,
+        "",
+        `Questions: ${inquiriesUrl}`,
+      ].join("\n"),
+      html: renderEmailLayout(
+        "Inquiry update",
+        `
+        <p>Hi ${escapeHtml(payload.name)},</p>
+        <p>${escapeHtml(body)}</p>
+        <p><strong>Interest:</strong> ${escapeHtml(payload.interest)}</p>
+        <p><a href="${inquiriesUrl}" style="color:#7c3aed;font-weight:700;">Contact us →</a></p>
+      `
+      ),
+    }),
+    sendEmail({
+      to: adminEmail(),
+      subject: `[Mindfull Methods] Inquiry status → ${payload.status}`,
+      text: [
+        `Inquiry from ${payload.name} (${payload.email})`,
+        `Interest: ${payload.interest}`,
+        `New status: ${payload.status}`,
+        "",
+        `Review: ${dashboardUrl}`,
+      ].join("\n"),
+      html: renderEmailLayout(
+        "Inquiry status updated",
+        `
+        <p><strong>Contact:</strong> ${escapeHtml(payload.name)} (${escapeHtml(payload.email)})</p>
+        <p><strong>Interest:</strong> ${escapeHtml(payload.interest)}</p>
+        <p><strong>Status:</strong> ${escapeHtml(payload.status)}</p>
+        <p><a href="${dashboardUrl}" style="color:#7c3aed;font-weight:700;">Open inquiries →</a></p>
+      `
+      ),
+    }),
+  ]);
+}
+
+export async function notifyPaymentFailed(payload: {
+  customerEmail: string;
+  courseTitle: string;
+  courseSlug: string;
+  reason: string;
+}) {
+  const courseUrl = `${siteConfig.url}/courses/${payload.courseSlug}`;
+  const enrollmentsUrl = `${siteConfig.url}/dashboard/enrollments`;
+
+  await Promise.all([
+    sendEmail({
+      to: payload.customerEmail,
+      subject: `Payment not completed — ${payload.courseTitle}`,
+      text: [
+        `Hi,`,
+        "",
+        `Your payment for ${payload.courseTitle} did not go through.`,
+        `Reason: ${payload.reason}`,
+        "",
+        `You can try again here: ${courseUrl}`,
+        "",
+        `If you were charged, reply to this email and we'll help.`,
+      ].join("\n"),
+      html: renderEmailLayout(
+        "Payment not completed",
+        `
+        <p>Your payment for <strong>${escapeHtml(payload.courseTitle)}</strong> did not go through.</p>
+        <p><strong>Details:</strong> ${escapeHtml(payload.reason)}</p>
+        <p>You can return to the course page and try checkout again.</p>
+        <p><a href="${courseUrl}" style="color:#7c3aed;font-weight:700;">Try again →</a></p>
+        <p style="font-size:13px;color:#71717a;">If money was deducted, reply to this email and we'll resolve it promptly.</p>
+      `
+      ),
+    }),
+    sendEmail({
+      to: adminEmail(),
+      replyTo: payload.customerEmail,
+      subject: `[Mindfull Methods] Payment failed — ${payload.courseTitle}`,
+      text: [
+        `Email: ${payload.customerEmail}`,
+        `Course: ${payload.courseTitle}`,
+        `Reason: ${payload.reason}`,
+        "",
+        enrollmentsUrl,
+      ].join("\n"),
+      html: renderEmailLayout(
+        "Payment failed",
+        `
+        <p><strong>Email:</strong> ${escapeHtml(payload.customerEmail)}</p>
+        <p><strong>Course:</strong> ${escapeHtml(payload.courseTitle)}</p>
+        <p><strong>Reason:</strong> ${escapeHtml(payload.reason)}</p>
+        <p><a href="${enrollmentsUrl}" style="color:#7c3aed;font-weight:700;">Open enrollments →</a></p>
+      `
+      ),
+    }),
+  ]);
+}
+
+export async function notifyCompletionPendingReview(payload: {
+  studentName: string;
+  studentEmail: string;
+  courseTitle: string;
+  courseSlug: string;
+  userId?: string;
+}) {
+  const trackUrl = `${siteConfig.url}/dashboard/my-courses/${payload.courseSlug}`;
+  const adminReviewUrl = payload.userId
+    ? `${siteConfig.url}/dashboard/users/${payload.userId}`
+    : `${siteConfig.url}/dashboard/analytics`;
+
+  await Promise.all([
+    sendEmail({
+      to: payload.studentEmail,
+      subject: `All milestones complete — ${payload.courseTitle}`,
+      text: [
+        `Hi ${payload.studentName},`,
+        "",
+        `You've completed every week in ${payload.courseTitle}. A mentor will review your progress and release your certificate shortly.`,
+        "",
+        `Track status: ${trackUrl}`,
+      ].join("\n"),
+      html: renderEmailLayout(
+        "Milestone review pending",
+        `
+        <p>Hi ${escapeHtml(payload.studentName)},</p>
+        <p>You've completed every week in <strong>${escapeHtml(payload.courseTitle)}</strong>.</p>
+        <p>A mentor will review your progress and release your certificate shortly — usually within 1–2 business days.</p>
+        <p><a href="${trackUrl}" style="color:#7c3aed;font-weight:700;">View course progress →</a></p>
+      `
+      ),
+    }),
+    sendEmail({
+      to: adminEmail(),
+      subject: `[Mindfull Methods] Certificate review — ${payload.courseTitle}`,
+      text: [
+        `Student: ${payload.studentName}`,
+        `Email: ${payload.studentEmail}`,
+        `Course: ${payload.courseTitle}`,
+        "",
+        `Approve from analytics or student profile: ${adminReviewUrl}`,
+      ].join("\n"),
+      html: renderEmailLayout(
+        "Certificate review needed",
+        `
+        <p><strong>Student:</strong> ${escapeHtml(payload.studentName)} (${escapeHtml(payload.studentEmail)})</p>
+        <p><strong>Course:</strong> ${escapeHtml(payload.courseTitle)}</p>
+        <p>All milestones are complete. Approve to issue the certificate.</p>
+        <p><a href="${adminReviewUrl}" style="color:#7c3aed;font-weight:700;">Open admin dashboard →</a></p>
+      `
+      ),
+    }),
+  ]);
 }

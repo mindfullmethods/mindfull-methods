@@ -1,5 +1,6 @@
 import { createClient } from "@/lib/supabase/server";
 import { getCourseBySlug } from "@/lib/courses";
+import { linkOrphanEnrollmentsByEmail } from "@/lib/enrollments";
 import {
   buildProgressSummary,
   type CourseProgressSummary,
@@ -61,12 +62,19 @@ export async function isEnrolledInCourse(courseSlug: string) {
 
   if (!user) return false;
 
+  const course = getCourseBySlug(courseSlug);
+  if (!course) return false;
+
+  if (user.email) {
+    await linkOrphanEnrollmentsByEmail(user.id, user.email);
+  }
+
   const { data } = await supabase
     .from("enrollments")
     .select("id")
-    .eq("user_id", user.id)
-    .eq("course_slug", courseSlug)
+    .eq("course_slug", course.slug)
     .eq("status", "paid")
+    .eq("user_id", user.id)
     .limit(1);
 
   return Boolean(data?.length);

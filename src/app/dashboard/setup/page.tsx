@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { ArrowRight, CheckCircle2, Circle, Rocket } from "lucide-react";
 
+import DashboardPageHeader from "@/components/components/dashboard/DashboardPageHeader";
 import { requireAdmin } from "@/lib/auth";
 import { getPlatformSetupChecks, getSetupProgress } from "@/lib/platform-setup";
 
@@ -11,33 +12,28 @@ export default async function LaunchSetupPage() {
 
   return (
     <main className="min-h-screen px-5 py-8 sm:px-8 xl:px-10">
-      <section className="rounded-3xl bg-zinc-950 p-6 text-white shadow-xl sm:p-8">
-        <p className="text-sm font-black uppercase tracking-[0.28em] text-white/50">Launch setup</p>
-        <div className="mt-5 flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
-          <div>
-            <h1 className="max-w-3xl text-4xl font-black tracking-tight sm:text-6xl">
-              Everything to finish before you go live.
-            </h1>
-            <p className="mt-5 max-w-2xl text-sm leading-7 text-white/65 sm:text-base">
-              Checklist for email, payments, domain, and Supabase tables. Complete these before your final push to
-              production.
-            </p>
+      <DashboardPageHeader
+        variant="hero"
+        eyebrow="Launch setup"
+        title="Everything to finish before you go live."
+        description="Checklist for email, payments, domain, and Supabase tables. Complete these before your final push to production."
+      >
+        <div className="mt-7 flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
+          <div className="h-2 flex-1 overflow-hidden rounded-full bg-white/10 lg:max-w-md">
+            <div
+              className="h-full rounded-full bg-gradient-to-r from-violet-400 to-teal-300 transition-all"
+              style={{ width: `${progress.percent}%` }}
+            />
           </div>
           <div className="rounded-2xl bg-violet-600 px-6 py-4 text-white">
-            <p className="text-xs font-black uppercase tracking-[0.2em] opacity-80">Ready</p>
-            <p className="mt-1 text-4xl font-black">
+            <p className="text-xs font-semibold uppercase tracking-[0.2em] opacity-80">Ready</p>
+            <p className="mt-1 text-4xl font-bold">
               {progress.ready}/{progress.total}
             </p>
-            <p className="mt-1 text-sm font-bold opacity-90">{progress.percent}% complete</p>
+            <p className="mt-1 text-sm font-semibold opacity-90">{progress.percent}% complete</p>
           </div>
         </div>
-        <div className="mt-6 h-2 overflow-hidden rounded-full bg-white/10">
-          <div
-            className="h-full rounded-full bg-gradient-to-r from-violet-400 to-teal-300 transition-all"
-            style={{ width: `${progress.percent}%` }}
-          />
-        </div>
-      </section>
+      </DashboardPageHeader>
 
       <section className="mt-8 grid gap-4">
         {checks.map((check) => (

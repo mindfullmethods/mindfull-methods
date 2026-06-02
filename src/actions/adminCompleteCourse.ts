@@ -9,6 +9,7 @@ import { notifyCourseCompleted } from "@/lib/email";
 import { isSupabaseSchemaError } from "@/lib/applications-schema-sql";
 import { absoluteUrl } from "@/lib/seo";
 import { issueCertificateIfComplete } from "@/Services/certificates";
+import { ensureCompletionApproved } from "@/Services/completion-verifications";
 import { createAdminClient } from "@/lib/supabase/admin";
 
 async function getStudentName(userId: string, fallbackEmail?: string | null) {
@@ -97,6 +98,12 @@ export async function adminCompleteEnrollmentCourse(enrollmentId: string) {
     enrollment.email,
   );
 
+  try {
+    await ensureCompletionApproved(enrollment.user_id, enrollment.course_slug, "Marked complete by admin");
+  } catch {
+    // Table may not exist yet — certificate still issues via requireApproval: false
+  }
+
   const certificate = await issueCertificateIfComplete({
     userId: enrollment.user_id,
     courseSlug: enrollment.course_slug,
@@ -106,6 +113,7 @@ export async function adminCompleteEnrollmentCourse(enrollmentId: string) {
       week_index: row.week_index,
       completed_at: row.completed_at,
     })),
+    requireApproval: false,
   });
 
   const certificateId = certificate?.id ?? formatCertificateId(enrollment.user_id, enrollment.course_slug);
@@ -127,6 +135,7 @@ export async function adminCompleteEnrollmentCourse(enrollmentId: string) {
   revalidatePath(`/dashboard/my-courses/${enrollment.course_slug}`);
   revalidatePath("/dashboard/certificates");
   revalidatePath("/dashboard");
+  revalidatePath(`/dashboard/users/${enrollment.user_id}`);
 
   return { ok: true as const, certificateId };
 }

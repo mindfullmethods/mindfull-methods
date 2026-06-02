@@ -3,10 +3,9 @@
 import { revalidatePath } from "next/cache";
 
 import { getCourseBySlug } from "@/lib/courses";
-import { notifyCourseCompleted } from "@/lib/email";
-import { formatCertificateId } from "@/lib/certificates";
-import { absoluteUrl } from "@/lib/seo";
-import { issueCertificateIfComplete } from "@/Services/certificates";
+import { linkOrphanEnrollmentsByEmail } from "@/lib/enrollments";
+import { notifyCompletionPendingReview } from "@/lib/email";
+import { requestCompletionVerification } from "@/Services/completion-verifications";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { isSupabaseSchemaError } from "@/lib/applications-schema-sql";
 import { createClient } from "@/lib/supabase/server";
@@ -49,6 +48,10 @@ export async function toggleWeekProgressAction(
 
   if (!user) {
     return { ok: false, error: "Please sign in." };
+  }
+
+  if (user.email) {
+    await linkOrphanEnrollmentsByEmail(user.id, user.email);
   }
 
   const { data: enrollment } = await supabase
@@ -113,25 +116,21 @@ export async function toggleWeekProgressAction(
     if (progressRows.length >= course.curriculum.length) {
       justCompleted = true;
       const studentName = await getStudentName(user);
-      const certificate = await issueCertificateIfComplete({
-        userId: user.id,
-        courseSlug,
-        studentName,
-        progressRows,
-      });
 
-      const certificateId = certificate?.id ?? formatCertificateId(user.id, courseSlug);
-      const verifyUrl = absoluteUrl(`/certificates/verify/${certificateId}`);
+      try {
+        await requestCompletionVerification(user.id, courseSlug);
+      } catch (err) {
+        console.error("[toggleWeekProgress] verification request", err);
+      }
 
       if (user.email) {
-        void notifyCourseCompleted({
+        void notifyCompletionPendingReview({
           studentName,
           studentEmail: user.email,
           courseTitle: course.title,
           courseSlug,
-          certificateId,
-          verifyUrl,
-        }).catch((err) => console.error("[toggleWeekProgress] completion email", err));
+          userId: user.id,
+        }).catch((err) => console.error("[toggleWeekProgress] pending email", err));
       }
     }
   }
@@ -140,6 +139,8 @@ export async function toggleWeekProgressAction(
   revalidatePath(`/dashboard/my-courses/${courseSlug}`);
   revalidatePath("/dashboard/certificates");
   revalidatePath("/dashboard");
+  revalidatePath("/dashboard/analytics");
+  revalidatePath("/dashboard/users");
 
   return { ok: true, justCompleted };
 }

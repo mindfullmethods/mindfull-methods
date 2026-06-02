@@ -11,6 +11,7 @@ import {
 } from "lucide-react";
 
 import SendDigestButton from "@/components/components/dashboard/SendDigestButton";
+import DashboardPageHeader from "@/components/components/dashboard/DashboardPageHeader";
 import { getAdminHomeSummary } from "@/Services/admin-home";
 import { requireAdmin } from "@/lib/auth";
 
@@ -47,24 +48,22 @@ export default async function AdminHomePage() {
 
   return (
     <main className="min-h-screen px-5 py-8 sm:px-8 xl:px-10">
-      <section className="rounded-3xl bg-zinc-950 p-6 text-white shadow-xl sm:p-8">
-        <p className="text-sm font-black uppercase tracking-[0.28em] text-white/50">Admin home</p>
-        <div className="mt-5 flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
+      <DashboardPageHeader
+        variant="hero"
+        eyebrow="Admin home"
+        title="Today at a glance"
+        description="Pending work, revenue, and launch readiness — one screen for daily admin."
+      >
+        <div className="mt-7 inline-flex rounded-2xl bg-violet-600 px-6 py-4">
           <div>
-            <h1 className="text-4xl font-black tracking-tight sm:text-6xl">Today at a glance</h1>
-            <p className="mt-4 max-w-2xl text-sm leading-7 text-white/65">
-              Pending work, revenue, and launch readiness — one screen for daily admin.
-            </p>
-          </div>
-          <div className="rounded-2xl bg-violet-600 px-6 py-4">
-            <p className="text-xs font-black uppercase tracking-[0.2em] opacity-80">Launch ready</p>
-            <p className="mt-1 text-4xl font-black">{setup.percent}%</p>
-            <p className="text-sm font-bold opacity-90">
+            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-white/80">Launch ready</p>
+            <p className="mt-1 text-4xl font-bold text-white">{setup.percent}%</p>
+            <p className="text-sm font-semibold text-white/90">
               {setup.ready}/{setup.total} checks
             </p>
           </div>
         </div>
-      </section>
+      </DashboardPageHeader>
 
       <section className="mt-8 grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
         {[
@@ -73,12 +72,9 @@ export default async function AdminHomePage() {
           { label: "Paid enrollments", value: analytics.totals.paidEnrollments },
           { label: "Revenue", value: formatAmount(analytics.totals.revenuePaise) },
         ].map((stat) => (
-          <div
-            key={stat.label}
-            className="rounded-3xl border border-zinc-200 bg-white p-5 dark:border-white/10 dark:bg-white/5"
-          >
-            <p className="text-xs font-black uppercase tracking-[0.18em] text-zinc-500">{stat.label}</p>
-            <p className="mt-2 text-3xl font-black">{stat.value}</p>
+          <div key={stat.label} className="mm-metric-glow p-5">
+            <p className="text-xs font-semibold uppercase tracking-[0.18em] mm-subtle">{stat.label}</p>
+            <p className="mt-2 text-3xl font-bold mm-heading">{stat.value}</p>
           </div>
         ))}
       </section>
@@ -88,28 +84,28 @@ export default async function AdminHomePage() {
           <Link
             key={link.href}
             href={link.href}
-            className="flex items-center justify-between rounded-3xl border border-zinc-200 bg-white p-5 transition hover:border-violet-300 dark:border-white/10 dark:bg-white/5"
+            className="mm-card-premium flex items-center justify-between p-5 transition hover:-translate-y-0.5"
           >
             <span className="flex items-center gap-3">
               <span className="flex h-11 w-11 items-center justify-center rounded-xl bg-zinc-950 text-white dark:bg-white dark:text-zinc-950">
                 <link.icon size={20} />
               </span>
-              <span className="font-black">{link.label}</span>
+              <span className="font-bold mm-heading">{link.label}</span>
             </span>
             {link.badge != null && link.badge > 0 ? (
-              <span className="rounded-full bg-amber-100 px-3 py-1 text-xs font-black text-amber-800 dark:bg-amber-400/20 dark:text-amber-200">
+              <span className="rounded-full bg-amber-100 px-3 py-1 text-xs font-bold text-amber-800 dark:bg-amber-400/20 dark:text-amber-200">
                 {link.badge}
               </span>
             ) : (
-              <ArrowRight size={18} className="text-zinc-400" />
+              <ArrowRight size={18} className="mm-subtle" />
             )}
           </Link>
         ))}
       </section>
 
       <section className="mt-8 grid gap-6 xl:grid-cols-3">
-        <div className="rounded-3xl border border-zinc-200 bg-white p-5 dark:border-white/10 dark:bg-white/5 sm:p-6">
-          <h2 className="text-lg font-black">Recent applications</h2>
+        <div className="mm-section-panel">
+          <h2 className="text-lg font-bold mm-heading">Recent applications</h2>
           <ul className="mt-4 space-y-3">
             {summary.recentApplications.map((a) => (
               <li key={a.id} className="text-sm">
@@ -120,8 +116,8 @@ export default async function AdminHomePage() {
             {!summary.recentApplications.length ? <p className="text-sm text-zinc-500">None yet</p> : null}
           </ul>
         </div>
-        <div className="rounded-3xl border border-zinc-200 bg-white p-5 dark:border-white/10 dark:bg-white/5 sm:p-6">
-          <h2 className="text-lg font-black">Recent inquiries</h2>
+        <div className="mm-section-panel">
+          <h2 className="text-lg font-bold mm-heading">Recent inquiries</h2>
           <ul className="mt-4 space-y-3">
             {summary.recentInquiries.map((i) => (
               <li key={i.id} className="text-sm">
@@ -132,8 +128,8 @@ export default async function AdminHomePage() {
             {!summary.recentInquiries.length ? <p className="text-sm text-zinc-500">None yet</p> : null}
           </ul>
         </div>
-        <div className="rounded-3xl border border-zinc-200 bg-white p-5 dark:border-white/10 dark:bg-white/5 sm:p-6">
-          <h2 className="text-lg font-black">Recent enrollments</h2>
+        <div className="mm-section-panel">
+          <h2 className="text-lg font-bold mm-heading">Recent enrollments</h2>
           <ul className="mt-4 space-y-3">
             {summary.recentEnrollments.map((e) => (
               <li key={e.id} className="text-sm">
@@ -146,9 +142,9 @@ export default async function AdminHomePage() {
         </div>
       </section>
 
-      <section className="mt-8 flex flex-col gap-6 rounded-3xl border border-zinc-200 bg-white p-6 dark:border-white/10 dark:bg-white/5 sm:flex-row sm:items-center sm:justify-between">
+      <section className="mt-8 mm-section-panel flex flex-col gap-6 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <p className="flex items-center gap-2 text-xs font-black uppercase tracking-[0.2em] text-zinc-500">
+          <p className="flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.2em] mm-subtle">
             <BarChart3 size={14} /> Notifications
           </p>
           <p className="mt-2 text-sm leading-6 text-zinc-600 dark:text-zinc-400">

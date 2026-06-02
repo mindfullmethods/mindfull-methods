@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 
-import { getCourseBySlug } from "@/lib/courses";
-import { getRazorpayClient, getRazorpayKeyId, isRazorpayConfigured } from "@/lib/razorpay";
+import { getResolvedCourseBySlug } from "@/lib/platform-content";
+import { buildRazorpayReceipt, formatRazorpayOrderError, getRazorpayClient, getRazorpayKeyId, isRazorpayConfigured } from "@/lib/razorpay";
 
 export async function POST(req: Request) {
   try {
@@ -10,7 +10,7 @@ export async function POST(req: Request) {
     }
 
     const body = (await req.json()) as { courseSlug?: string; customerEmail?: string; promoCode?: string };
-    const course = body.courseSlug ? getCourseBySlug(body.courseSlug) : null;
+    const course = body.courseSlug ? await getResolvedCourseBySlug(body.courseSlug) : null;
 
     if (!course) {
       return NextResponse.json({ ok: false, error: "Course not found." }, { status: 404 });
@@ -40,7 +40,7 @@ export async function POST(req: Request) {
     const order = await razorpay.orders.create({
       amount: promo.finalAmount,
       currency: "INR",
-      receipt: `course_${course.slug}_${Date.now()}`,
+      receipt: buildRazorpayReceipt("mm"),
       notes,
     });
 
@@ -57,6 +57,6 @@ export async function POST(req: Request) {
     });
   } catch (error) {
     console.error("[razorpay/order]", error);
-    return NextResponse.json({ ok: false, error: "Could not create payment order." }, { status: 500 });
+    return NextResponse.json({ ok: false, error: formatRazorpayOrderError(error) }, { status: 500 });
   }
 }

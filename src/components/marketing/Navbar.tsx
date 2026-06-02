@@ -37,7 +37,7 @@ export default function Navbar() {
   }, [pathname]);
 
   return (
-    <header className="sticky top-0 z-50 border-b border-zinc-200/80 bg-white/85 backdrop-blur-xl dark:border-white/10 dark:bg-zinc-950/75 supports-[backdrop-filter]:bg-white/70 dark:supports-[backdrop-filter]:bg-zinc-950/55">
+    <header className="sticky top-0 z-50 mm-nav-glass">
       <div className="mx-auto flex max-w-7xl items-center justify-between px-5 py-4 sm:px-8 lg:px-10">
         <Link
           href="/"
@@ -48,7 +48,7 @@ export default function Navbar() {
           <ThemedBrandLogo size="md" className="max-w-[min(200px,52vw)]" />
         </Link>
 
-        <nav className="hidden items-center gap-7 md:flex" aria-label="Primary navigation">
+        <nav className="hidden items-center gap-1 md:flex" aria-label="Primary navigation">
           {navItems.map((item) => {
             const active = item.label === activeLabel;
             return (
@@ -57,8 +57,8 @@ export default function Navbar() {
                 href={item.href}
                 className={
                   active
-                    ? "text-sm font-bold text-zinc-950 dark:text-white"
-                    : "text-sm font-bold text-zinc-600 transition hover:text-zinc-950 dark:text-white/70 dark:hover:text-white"
+                    ? "rounded-lg bg-zinc-950/5 px-3.5 py-2 text-sm font-semibold text-zinc-950 dark:bg-white/10 dark:text-white"
+                    : "rounded-lg px-3.5 py-2 text-sm font-medium text-zinc-600 transition hover:bg-zinc-950/[0.04] hover:text-zinc-950 dark:text-zinc-400 dark:hover:bg-white/5 dark:hover:text-white"
                 }
                 aria-current={active ? "page" : undefined}
               >
@@ -73,7 +73,7 @@ export default function Navbar() {
           <NavAuth />
           <Link
             href="/contact"
-            className="inline-flex items-center justify-center rounded-xl bg-zinc-950 px-5 py-2.5 text-sm font-black text-white transition hover:scale-[1.02] dark:bg-white dark:text-zinc-950"
+            className="mm-btn-glow inline-flex items-center justify-center rounded-lg px-5 py-2.5 text-sm font-semibold"
           >
             Book Free Call
           </Link>
@@ -138,7 +138,7 @@ export default function Navbar() {
             <Link
               href="/contact"
               onClick={() => setOpen(false)}
-              className="mt-2 inline-flex items-center justify-center rounded-xl bg-zinc-950 px-4 py-3 text-sm font-black text-white dark:bg-white dark:text-zinc-950"
+              className="mt-2 inline-flex items-center justify-center rounded-xl mm-btn-glow px-4 py-3 text-sm font-black"
             >
               Book Free Call
             </Link>

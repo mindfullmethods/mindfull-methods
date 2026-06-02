@@ -5,6 +5,7 @@ import { Suspense, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { ArrowRight, BriefcaseBusiness, LockKeyhole, Mail } from "lucide-react";
 import { supabase } from "@/lib/supabase";
+import { linkEnrollmentAction } from "@/actions/linkEnrollment";
 import BrandLogo from "@/components/marketing/BrandLogo";
 import ThemedBrandLogo from "@/components/marketing/ThemedBrandLogo";
 import ThemeToggle from "@/components/ThemeToggle";
@@ -26,6 +27,9 @@ function LoginPageContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const nextPath = searchParams.get("next") ?? "/dashboard";
+  const paid = searchParams.get("paid") === "1";
+  const orderId = searchParams.get("order");
+  const courseSlug = searchParams.get("course");
 
   async function handleLogin(event: React.FormEvent) {
     event.preventDefault();
@@ -43,8 +47,21 @@ function LoginPageContent() {
       return;
     }
 
+    let destination = nextPath.startsWith("/") ? nextPath : "/dashboard";
+
+    if (orderId) {
+      const link = await linkEnrollmentAction(orderId);
+      if (link.ok && link.courseSlug) {
+        destination = paid
+          ? `/dashboard/my-courses/welcome?course=${encodeURIComponent(link.courseSlug)}`
+          : `/dashboard/my-courses?enrolled=1&course=${encodeURIComponent(link.courseSlug)}`;
+      }
+    } else if (paid && courseSlug) {
+      destination = `/dashboard/my-courses/welcome?course=${encodeURIComponent(courseSlug)}`;
+    }
+
     setLoading(false);
-    router.replace(nextPath.startsWith("/") ? nextPath : "/dashboard");
+    router.replace(destination);
   }
 
   return (
