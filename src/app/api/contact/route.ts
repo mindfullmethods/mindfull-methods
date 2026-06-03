@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 
 import { saveContactInquiry } from "@/lib/contact-inquiries";
 import { sendContactEmail } from "@/lib/email";
+import { isEmailRateLimited } from "@/lib/rate-limit-inquiry";
 
 type ContactRequest = {
   name: string;
@@ -31,9 +32,18 @@ export async function POST(req: Request) {
       return NextResponse.json({ ok: false, error: "Message is too short." }, { status: 400 });
     }
 
+    const email = body.email.trim().toLowerCase();
+
+    if (await isEmailRateLimited(email, "contact_inquiries")) {
+      return NextResponse.json(
+        { ok: false, error: "Too many messages from this email. Try again in about an hour." },
+        { status: 429 }
+      );
+    }
+
     const payload = {
       name: body.name.trim(),
-      email: body.email.trim(),
+      email,
       phone: body.phone?.trim(),
       interest: body.interest?.trim() || "general",
       message: body.message.trim(),

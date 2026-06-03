@@ -22,10 +22,8 @@ import TestimonialCard from "@/components/marketing/TestimonialCard";
 import { getCourses, getFeaturedCourses } from "@/lib/courses";
 import { getFaqs } from "@/lib/faqs";
 import { marketingImages } from "@/lib/images";
-import { getTestimonials } from "@/lib/testimonials";
+import { getSiteContent } from "@/lib/site-content";
 import { signupUrl } from "@/lib/site";
-
-const trustBadges = ["10K+ learners", "Weekly mentorship", "Portfolio projects", "Career support"];
 
 const benefits = [
   {
@@ -54,10 +52,11 @@ const benefits = [
   },
 ];
 
-export default function HomePageContent() {
+export default async function HomePageContent() {
   const featured = getFeaturedCourses();
   const courses = getCourses();
-  const testimonials = getTestimonials();
+  const site = await getSiteContent();
+  const { trustBadges, stats: siteStats, testimonials } = site;
   const faqs = getFaqs();
 
   const steps: StepModel[] = [
@@ -103,8 +102,8 @@ export default function HomePageContent() {
             </h1>
 
             <p className="mt-4 max-w-xl text-[15px] leading-7 mm-muted sm:mt-5 sm:text-base sm:leading-8">
-              Mindfull Methods offers structured certification programs with live mentorship, milestone
-              guidance, and practical outcomes—so you finish with proof, not just certificates.
+              Master Generative AI, agents, prompt engineering, and automation through structured cohorts with
+              live mentorship—so you finish with capstone proof, not just certificates.
             </p>
 
             <div className="mt-6 flex flex-wrap items-center gap-3 sm:mt-8">
@@ -238,14 +237,7 @@ export default function HomePageContent() {
             description="From enrollment to final capstone, you'll get coaching designed to move you forward."
           />
           <div className="w-full max-w-2xl">
-            <StatsStrip
-              stats={[
-                { label: "Courses available", value: String(courses.length) },
-                { label: "Student outcomes", value: "Portfolio-ready" },
-                { label: "Mentor touchpoints", value: "Weekly" },
-                { label: "Average rating", value: "4.9" },
-              ]}
-            />
+            <StatsStrip stats={siteStats} />
           </div>
         </div>
       </section>

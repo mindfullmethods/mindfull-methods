@@ -114,12 +114,12 @@ export default function AdminUsersTable({
 
       {selected.size > 0 ? (
         <div className="mb-4 rounded-2xl border border-violet-200 bg-violet-50 p-4 dark:border-violet-400/20 dark:bg-violet-400/10">
-          <p className="text-sm font-black text-violet-800 dark:text-violet-200">{selected.size} selected</p>
+          <p className="text-sm font-bold text-violet-800 dark:text-violet-200">{selected.size} selected</p>
           <div className="mt-3 flex flex-wrap gap-2">
             <button
               type="button"
               onClick={exportEmails}
-              className="inline-flex items-center gap-2 rounded-xl bg-zinc-950 px-4 py-2 text-xs font-black text-white dark:bg-white dark:text-zinc-950"
+              className="inline-flex items-center gap-2 rounded-xl bg-zinc-950 px-4 py-2 text-xs font-bold text-white dark:bg-white dark:text-zinc-950"
             >
               <Download size={14} />
               Export emails
@@ -144,7 +144,7 @@ export default function AdminUsersTable({
             type="button"
             disabled={isPending}
             onClick={sendBulk}
-            className="mt-3 inline-flex items-center gap-2 rounded-xl bg-violet-600 px-4 py-2 text-xs font-black text-white disabled:opacity-60"
+            className="mt-3 inline-flex items-center gap-2 rounded-xl bg-violet-600 px-4 py-2 text-xs font-bold text-white disabled:opacity-60"
           >
             <Mail size={14} />
             {isPending ? "Sending…" : "Email selected"}
@@ -164,13 +164,13 @@ export default function AdminUsersTable({
                   aria-label="Select all"
                 />
               </th>
-              <th className="px-5 py-4 font-black">Name</th>
-              <th className="px-5 py-4 font-black">Email</th>
-              <th className="px-5 py-4 font-black">Applications</th>
-              <th className="px-5 py-4 font-black">Enrollments</th>
-              <th className="px-5 py-4 font-black">Last activity</th>
-              <th className="px-5 py-4 font-black">Role</th>
-              <th className="px-5 py-4 font-black" aria-label="View profile" />
+              <th className="px-5 py-4 font-bold">Name</th>
+              <th className="px-5 py-4 font-bold">Email</th>
+              <th className="px-5 py-4 font-bold">Applications</th>
+              <th className="px-5 py-4 font-bold">Enrollments</th>
+              <th className="px-5 py-4 font-bold">Last activity</th>
+              <th className="px-5 py-4 font-bold">Role</th>
+              <th className="px-5 py-4 font-bold" aria-label="View profile" />
             </tr>
           </thead>
           <tbody>
@@ -216,7 +216,7 @@ export default function AdminUsersTable({
                           setMessage(result.ok ? "Role updated." : result.error);
                         });
                       }}
-                      className={`inline-flex items-center gap-2 rounded-xl px-3 py-2 text-xs font-black ${
+                      className={`inline-flex items-center gap-2 rounded-xl px-3 py-2 text-xs font-bold ${
                         admin
                           ? "bg-violet-600 text-white"
                           : "border border-zinc-200 bg-white dark:border-white/10"
@@ -229,7 +229,7 @@ export default function AdminUsersTable({
                   <td className="px-5 py-4">
                     <Link
                       href={`/dashboard/users/${user.id}`}
-                      className="inline-flex items-center gap-1 text-xs font-black text-violet-600 hover:underline dark:text-violet-300"
+                      className="inline-flex items-center gap-1 text-xs font-bold text-violet-600 hover:underline dark:text-violet-300"
                     >
                       View
                       <ChevronRight size={14} />

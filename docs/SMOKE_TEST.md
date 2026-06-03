@@ -1,14 +1,18 @@
 # Mindfull Methods — Smoke Test Checklist
 
-Run after deploy on `https://mindfull-methods.vercel.app` (or local `npm run dev`).
+Run after deploy on `https://mindfull-methods.vercel.app` (or local `npm run dev` / `npm run start`).
+
+**Before smoke:** ensure Supabase migrations are applied — `npm run setup:check` (see `docs/LOCAL_MIGRATIONS.md`).
+
+**Full local gate:** `npm run qa` (setup + smoke). **Signed-in walkthrough:** `docs/QA_MANUAL.md`. **Browser E2E:** `npm run test:e2e`.
 
 ## Marketing
 
 - [ ] Home page loads, theme toggle works
 - [ ] `/courses` search and filters work
-- [ ] `/courses/frontend-engineering` course detail + syllabus
+- [ ] `/courses/generative-ai-llms` course detail + syllabus
 - [ ] **Download PDF** on course page (`/syllabi/{slug}.pdf`)
-- [ ] `/courses/frontend-engineering/syllabus` print view
+- [ ] `/courses/prompt-engineering/syllabus` print view
 - [ ] `/blog` and a blog post render
 - [ ] Contact form submits (check admin inquiries + email log)
 - [ ] View page source — JSON-LD present on course pages
@@ -25,8 +29,10 @@ Run after deploy on `https://mindfull-methods.vercel.app` (or local `npm run dev
 - [ ] Pay & enroll (Razorpay test mode) or use admin complimentary grant
 - [ ] `/dashboard/my-courses` shows enrollment
 - [ ] Track progress — check off weeks, resources links open
-- [ ] At 100% — certificate page, QR verify link works
-- [ ] `/certificates/verify/[id]` shows valid certificate
+- [ ] At 100% — certificate page shows “mentor review” until admin approves
+- [ ] Admin approves on **Users → student** or **Analytics** — student can **Download PDF**
+- [ ] `/certificates/verify/[id]` shows valid certificate after approval
+- [ ] Admin **Preview certificate PDF** link works after approve
 - [ ] Apply to internship → appears in my applications
 - [ ] Withdraw application (non-approved)
 
@@ -45,10 +51,21 @@ Run after deploy on `https://mindfull-methods.vercel.app` (or local `npm run dev
 - [ ] `LAUNCH10` — 10% off order amount
 - [ ] Invalid code shows error
 
+## Admin (local, signed in as admin)
+
+- [ ] `/dashboard/setup` — migration checklist; `npm run setup:check` matches green items
+- [ ] `/dashboard/admin/site` — edit promo + marketing copy (requires `content-cms-schema.sql`)
+
 ## Automated route check
 
 ```bash
+# Terminal 1
+npm run dev
+# or: npm run build && npm run start
+
+# Terminal 2
 npm run smoke
+
 # Production (after deploy):
 # SMOKE_BASE_URL=https://mindfull-methods.vercel.app npm run smoke
 ```

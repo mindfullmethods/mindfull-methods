@@ -1,5 +1,6 @@
 import Link from "next/link";
 
+import NewsletterSignup from "@/components/marketing/NewsletterSignup";
 import ThemedBrandLogo from "@/components/marketing/ThemedBrandLogo";
 import { siteConfig } from "@/lib/site";
 
@@ -34,6 +35,7 @@ export default function Footer() {
           <p className="mt-4 leading-6 text-zinc-600 dark:text-white/60">
             Build career-ready skills with structured courses, mentor support, and practical projects.
           </p>
+          <NewsletterSignup />
         </div>
 
         <div>

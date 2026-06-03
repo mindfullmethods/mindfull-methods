@@ -12,30 +12,30 @@ const base = process.env.SMOKE_BASE_URL ?? "http://localhost:3000";
 const publicRoutes = [
   "/",
   "/courses",
-  "/courses/frontend-engineering",
-  "/courses/frontend-engineering/syllabus",
-  "/courses/product-design",
-  "/courses/data-analytics",
+  "/courses/prompt-engineering",
+  "/courses/prompt-engineering/syllabus",
+  "/courses/generative-ai-llms",
+  "/courses/ai-agents",
   "/blog",
   "/blog/how-mentorship-accelerates-your-career",
   "/about",
   "/contact",
   "/login",
   "/signup",
+  "/forgot-password",
   "/privacy",
   "/terms",
   "/robots.txt",
   "/sitemap.xml",
+  "/certificates/verify/MM-E2E-SMOKE-TEST",
 ];
 
 const assetRoutes = [
-  { path: "/syllabi/frontend-engineering.pdf", kind: "pdf" },
-  { path: "/syllabi/product-design.pdf", kind: "pdf" },
-  { path: "/syllabi/data-analytics.pdf", kind: "pdf" },
-  { path: "/syllabi/full-stack-development.pdf", kind: "pdf" },
-  { path: "/syllabi/digital-marketing.pdf", kind: "pdf" },
-  { path: "/syllabi/machine-learning.pdf", kind: "pdf" },
-  { path: "/api/syllabus/frontend-engineering", kind: "txt" },
+  { path: "/syllabi/prompt-engineering.pdf", kind: "pdf" },
+  { path: "/syllabi/generative-ai-llms.pdf", kind: "pdf" },
+  { path: "/syllabi/ai-agents.pdf", kind: "pdf" },
+  { path: "/syllabi/ai-automation.pdf", kind: "pdf" },
+  { path: "/api/syllabus/prompt-engineering", kind: "txt" },
 ];
 
 const authRedirectRoutes = [
@@ -44,15 +44,16 @@ const authRedirectRoutes = [
   "/dashboard/courses",
   "/dashboard/settings",
   "/dashboard/admin-home",
+  "/dashboard/admin/site",
+  "/dashboard/setup",
+  "/dashboard/my-applications",
 ];
 
 const courseSlugs = [
-  "frontend-engineering",
-  "product-design",
-  "data-analytics",
-  "full-stack-development",
-  "digital-marketing",
-  "machine-learning",
+  "prompt-engineering",
+  "generative-ai-llms",
+  "ai-agents",
+  "ai-automation",
 ];
 
 async function fetchRoute(path, init = {}) {
@@ -94,11 +95,23 @@ async function checkAuthRedirect(path) {
 }
 
 async function checkJsonLd() {
-  const path = "/courses/frontend-engineering";
+  const path = "/courses/generative-ai-llms";
   const res = await fetchRoute(path, { redirect: "follow" });
   const html = await res.text();
   const ok = res.status === 200 && html.includes("application/ld+json");
   log(ok, `JSON-LD ${path}`, ok ? "found" : "missing");
+  return ok;
+}
+
+async function checkCertificateVerifyPage() {
+  const path = "/certificates/verify/MM-E2E-SMOKE-TEST";
+  const res = await fetchRoute(path, { redirect: "follow" });
+  const html = await res.text();
+  const ok =
+    res.status === 200 &&
+    html.includes("Certificate not found") &&
+    (html.includes("Mindfull Methods") || html.includes("logo-full"));
+  log(ok, `${res.status} ${path}`, ok ? "branding + not-found state" : "missing expected content");
   return ok;
 }
 
@@ -141,6 +154,7 @@ async function main() {
 
   console.log("\n— SEO / API —");
   await run("JSON-LD", checkJsonLd);
+  await run("certificate verify page", checkCertificateVerifyPage);
   await run("contact validation", checkContactApiValidation);
 
   console.log(`\n${passed}/${total} checks passed`);

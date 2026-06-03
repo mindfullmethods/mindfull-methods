@@ -1,7 +1,8 @@
 import Link from "next/link";
-import { BriefcaseBusiness, Clock, FileText } from "lucide-react";
+import { BriefcaseBusiness, CheckCircle2, Clock, FileText, Mail } from "lucide-react";
 
 import Button from "@/components/marketing/Button";
+import DashboardPageHeader from "@/components/components/dashboard/DashboardPageHeader";
 import WithdrawApplicationButton from "@/components/components/dashboard/WithdrawApplicationButton";
 import { requireUser } from "@/lib/auth";
 import { getMyApplicationsWithDetails } from "@/Services/my-applications";
@@ -33,26 +34,59 @@ export default async function MyApplicationsPage({
 
   return (
     <main className="min-h-screen px-5 py-8 sm:px-8 xl:px-10">
-      <section className="rounded-3xl border border-zinc-200 bg-white p-6 shadow-sm dark:border-white/10 dark:bg-white/5 sm:p-8">
-        <p className="text-sm font-black uppercase tracking-[0.28em] text-zinc-500">My applications</p>
-        <h1 className="mt-4 text-4xl font-black tracking-tight sm:text-5xl">Your internship submissions</h1>
-        <p className="mt-4 max-w-2xl text-sm leading-7 text-zinc-600 dark:text-zinc-400">
-          Track programs you&apos;ve applied to and check their status.
-        </p>
-      </section>
+      <DashboardPageHeader
+        eyebrow="My applications"
+        title="Your internship submissions"
+        description="Track programs you've applied to and check their status."
+      />
 
       {submitted === "1" ? (
-        <div className="mt-6 rounded-2xl border border-emerald-200 bg-emerald-50 px-5 py-4 text-sm font-bold text-emerald-800 dark:border-emerald-400/20 dark:bg-emerald-400/10 dark:text-emerald-200">
-          Application submitted — we&apos;ll update the status here once reviewed.
+        <div className="mt-6 mm-section-panel border-emerald-200/80 bg-emerald-50/80 dark:border-emerald-400/20 dark:bg-emerald-400/5">
+          <div className="relative flex flex-col gap-4 sm:flex-row sm:items-start">
+            <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-emerald-600 text-white">
+              <CheckCircle2 size={22} />
+            </div>
+            <div>
+              <p className="text-lg font-bold text-emerald-900 dark:text-emerald-100">Application submitted</p>
+              <p className="mt-2 text-sm leading-6 text-emerald-800/90 dark:text-emerald-200/90">
+                We sent a confirmation email with next steps. Status updates appear here — typically within a few
+                business days.
+              </p>
+              <ol className="mt-4 space-y-2 text-sm font-semibold text-emerald-800 dark:text-emerald-200">
+                <li className="flex items-start gap-2">
+                  <span className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-emerald-600/15 text-xs font-bold text-emerald-700 dark:text-emerald-300">
+                    1
+                  </span>
+                  Our team reviews your profile and resume link (if provided).
+                </li>
+                <li className="flex items-start gap-2">
+                  <span className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-emerald-600/15 text-xs font-bold text-emerald-700 dark:text-emerald-300">
+                    2
+                  </span>
+                  You&apos;ll get email when status moves to Approved or needs more info.
+                </li>
+                <li className="flex items-start gap-2">
+                  <span className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-emerald-600/15 text-xs font-bold text-emerald-700 dark:text-emerald-300">
+                    3
+                  </span>
+                  Check this page anytime — no need to re-apply.
+                </li>
+              </ol>
+              <p className="mt-4 flex items-center gap-2 text-xs font-semibold text-emerald-700/80 dark:text-emerald-300/80">
+                <Mail size={14} />
+                Didn&apos;t get the email? Check spam or contact us from Settings.
+              </p>
+            </div>
+          </div>
         </div>
       ) : null}
 
       <section className="mt-8">
         {applications.length === 0 ? (
-          <div className="rounded-3xl border border-dashed border-zinc-300 bg-white p-12 text-center dark:border-white/10 dark:bg-white/5">
+          <div className="mm-section-panel border-dashed text-center">
             <FileText className="mx-auto text-zinc-400" size={40} />
-            <h2 className="mt-5 text-3xl font-black">No applications yet</h2>
-            <p className="mx-auto mt-3 max-w-xl text-sm leading-6 text-zinc-500">
+            <h2 className="mt-5 text-2xl font-bold mm-heading">No applications yet</h2>
+            <p className="mx-auto mt-3 max-w-xl text-sm leading-6 mm-muted">
               Browse internships and submit your first application from the internships catalog.
             </p>
             <div className="mt-8">
@@ -66,24 +100,21 @@ export default async function MyApplicationsPage({
             {applications.map((app) => {
               const internship = app.internships;
               return (
-                <article
-                  key={app.id}
-                  className="rounded-2xl border border-zinc-200 bg-white p-5 dark:border-white/10 dark:bg-white/5 sm:p-6"
-                >
-                  <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+                <article key={app.id} className="mm-section-panel">
+                  <div className="relative flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
                     <div>
-                      <p className="flex items-center gap-2 text-xs font-black uppercase tracking-[0.18em] text-zinc-500">
+                      <p className="flex items-center gap-2 text-xs font-bold uppercase tracking-[0.18em] mm-subtle">
                         <BriefcaseBusiness size={15} />
                         Internship
                       </p>
-                      <h2 className="mt-2 text-2xl font-black">
+                      <h2 className="mt-2 text-2xl font-bold mm-heading">
                         {internship?.title ?? "Internship application"}
                       </h2>
                       {internship?.company ? (
-                        <p className="mt-1 text-sm font-bold text-zinc-500">{internship.company}</p>
+                        <p className="mt-1 text-sm font-semibold mm-muted">{internship.company}</p>
                       ) : null}
                       {internship?.duration || internship?.stipend ? (
-                        <p className="mt-3 flex flex-wrap items-center gap-2 text-sm text-zinc-500">
+                        <p className="mt-3 flex flex-wrap items-center gap-2 text-sm mm-muted">
                           <Clock size={14} />
                           {[internship.duration, internship.stipend].filter(Boolean).join(" · ")}
                         </p>
@@ -91,27 +122,29 @@ export default async function MyApplicationsPage({
                     </div>
                     <div className="flex flex-col items-start gap-3 md:items-end">
                       <span
-                        className={`inline-flex rounded-full px-3 py-2 text-xs font-black ${statusClass(app.status)}`}
+                        className={`inline-flex rounded-full px-3 py-2 text-xs font-bold ${statusClass(app.status)}`}
                       >
                         {app.status ?? "Pending"}
                       </span>
-                      <div className="rounded-xl border border-zinc-200 px-3 py-2 text-xs dark:border-white/10">
-                        <p className="font-black text-zinc-500">Timeline</p>
-                        <p className="mt-1 font-bold">Submitted {app.created_at ? formatDate(app.created_at) : "—"}</p>
-                        <p className="mt-1 font-bold">Current: {app.status ?? "Pending"}</p>
+                      <div className="rounded-xl border mm-border px-3 py-2 text-xs">
+                        <p className="font-bold mm-subtle">Timeline</p>
+                        <p className="mt-1 font-semibold mm-heading">
+                          Submitted {app.created_at ? formatDate(app.created_at) : "—"}
+                        </p>
+                        <p className="mt-1 font-semibold mm-muted">Current: {app.status ?? "Pending"}</p>
                       </div>
                       {app.internship_id ? (
                         <Link
                           href={`/dashboard/internships/${app.internship_id}`}
-                          className="text-sm font-black text-violet-600 hover:underline dark:text-violet-300"
+                          className="text-sm font-bold text-violet-600 hover:underline dark:text-violet-300"
                         >
                           View internship →
                         </Link>
                       ) : null}
                     </div>
                   </div>
-                  <div className="mt-5 flex flex-col gap-3 border-t border-zinc-200 pt-5 dark:border-white/10 sm:flex-row sm:items-center sm:justify-between">
-                    <p className="text-xs font-bold text-zinc-500">
+                  <div className="relative mt-5 flex flex-col gap-3 border-t mm-border pt-5 sm:flex-row sm:items-center sm:justify-between">
+                    <p className="text-xs font-semibold mm-muted">
                       Need to back out? You can withdraw at any time unless already withdrawn.
                     </p>
                     <WithdrawApplicationButton applicationId={app.id} status={app.status} />

@@ -2,6 +2,7 @@ import Link from "next/link";
 import * as React from "react";
 import { ArrowRight } from "lucide-react";
 
+import CourseCardImage from "@/components/marketing/CourseCardImage";
 import { cn } from "@/lib/utils";
 import Badge from "@/components/marketing/Badge";
 
@@ -33,9 +34,9 @@ export default function CourseCard({
     >
       <div className="relative">
         {course.imageUrl ? (
-          // eslint-disable-next-line @next/next/no-img-element
-          <img
+          <CourseCardImage
             src={course.imageUrl}
+            slug={course.slug}
             alt={course.title}
             className="h-52 w-full object-cover transition duration-500 group-hover:scale-[1.03]"
           />

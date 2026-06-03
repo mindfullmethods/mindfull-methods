@@ -1,4 +1,5 @@
--- Platform content overrides (blog + course spotlight) — run once in Supabase SQL Editor
+-- Platform CMS: courses/blog overrides, site marketing copy, promo codes (admin → Site & promos)
+-- Run once in Supabase SQL Editor after core tables (see docs/LOCAL_MIGRATIONS.md)
 
 create table if not exists public.platform_settings (
   key text primary key,

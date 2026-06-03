@@ -12,6 +12,7 @@ export async function sendEnrollmentConfirmation(params: {
   courseSlug: string;
   courseTitle: string;
   amountPaise: number;
+  razorpayOrderId: string;
   email?: string | null;
   name?: string | null;
 }) {
@@ -23,6 +24,7 @@ export async function sendEnrollmentConfirmation(params: {
     courseTitle: params.courseTitle,
     courseSlug: params.courseSlug,
     amountLabel: enrollmentAmountLabel(params.courseSlug, params.amountPaise),
+    razorpayOrderId: params.razorpayOrderId,
   });
 }
 
@@ -48,11 +50,18 @@ export async function finalizePaidEnrollment(params: {
     status: params.status ?? "paid",
   });
 
+  const { markCheckoutCompleted } = await import("@/lib/checkout-intents");
+  void markCheckoutCompleted(params.razorpayOrderId);
+
+  const { markReferralCompleted } = await import("@/lib/referral-events");
+  void markReferralCompleted(params.razorpayOrderId);
+
   if (isNew) {
     void sendEnrollmentConfirmation({
       courseSlug: params.courseSlug,
       courseTitle: params.courseTitle,
       amountPaise: params.amountPaise,
+      razorpayOrderId: params.razorpayOrderId,
       email: params.email,
       name: params.name,
     }).catch((err) => console.error("[finalizePaidEnrollment] email", err));

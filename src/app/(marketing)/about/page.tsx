@@ -1,11 +1,14 @@
 import type { Metadata } from "next";
-import { BarChart3, BriefcaseBusiness, GraduationCap, Sparkles } from "lucide-react";
+import Image from "next/image";
+import { BarChart3, BriefcaseBusiness, GraduationCap, Mail, Sparkles } from "lucide-react";
 
 import Button from "@/components/marketing/Button";
 import MarketingPageHero from "@/components/marketing/MarketingPageHero";
 import SectionHeader from "@/components/marketing/SectionHeader";
 import StepsTimeline, { type StepModel } from "@/components/marketing/StepsTimeline";
+import { getBookingUrl } from "@/lib/booking-url";
 import { marketingPageMetadata } from "@/lib/seo";
+import { getSiteContent } from "@/lib/site-content";
 
 export const metadata: Metadata = marketingPageMetadata({
   path: "/about",
@@ -14,7 +17,10 @@ export const metadata: Metadata = marketingPageMetadata({
     "Mindfull Methods helps learners build career-ready skills through structured mentorship, milestone guidance, and portfolio projects.",
 });
 
-export default function AboutPage() {
+export default async function AboutPage() {
+  const { mentor } = await getSiteContent();
+  const bookingUrl = getBookingUrl();
+
   const steps: StepModel[] = [
     {
       title: "Apply & align",
@@ -44,7 +50,7 @@ export default function AboutPage() {
           <Button href="/courses" variant="primary" size="lg">
             Explore courses
           </Button>
-          <Button href="/contact" variant="secondary" size="lg">
+          <Button href={bookingUrl} variant="secondary" size="lg">
             Book a free call
           </Button>
         </div>
@@ -74,6 +80,59 @@ export default function AboutPage() {
 
         <section className="mt-12">
           <SectionHeader
+            eyebrow="Who we are"
+            title="Built by practitioners, for career switchers and upskillers"
+            description="Mindfull Methods started with a simple idea: learners do not need more videos — they need structure, feedback, and proof."
+          />
+          <div className="mt-8 grid gap-6 lg:grid-cols-[0.95fr_1.05fr] lg:items-start">
+            <div className="mm-card-premium overflow-hidden rounded-3xl">
+              <div className="relative aspect-[4/5] w-full sm:aspect-[3/4]">
+                <Image
+                  src={mentor.imageUrl}
+                  alt={mentor.name}
+                  fill
+                  className="object-cover"
+                  sizes="(max-width: 1024px) 100vw, 480px"
+                  priority
+                />
+              </div>
+              <div className="p-6 sm:p-8">
+                <p className="mm-pro-eyebrow">Lead mentor</p>
+                <h3 className="mt-2 text-2xl font-bold mm-heading">{mentor.name}</h3>
+                <p className="mt-1 text-sm font-semibold text-violet-600 dark:text-violet-300">{mentor.title}</p>
+                <a
+                  href={`mailto:${mentor.email}`}
+                  className="mt-3 inline-flex items-center gap-2 text-sm font-bold text-violet-600 hover:underline dark:text-violet-300"
+                >
+                  <Mail size={14} />
+                  {mentor.email}
+                </a>
+              </div>
+            </div>
+            <div className="mm-section-panel">
+              <p className="text-sm leading-7 mm-muted">{mentor.bio}</p>
+              <ul className="mt-6 space-y-4 text-sm leading-7 mm-muted">
+                <li>
+                  <strong className="mm-heading">Weekly clarity</strong> — always know the next milestone and what good
+                  looks like.
+                </li>
+                <li>
+                  <strong className="mm-heading">Mentor reviews</strong> — feedback on real deliverables, not quizzes.
+                </li>
+                <li>
+                  <strong className="mm-heading">Portfolio proof</strong> — capstones and verified certificates.
+                </li>
+                <li>
+                  <strong className="mm-heading">Career momentum</strong> — internships and applications in your
+                  dashboard.
+                </li>
+              </ul>
+            </div>
+          </div>
+        </section>
+
+        <section className="mt-12">
+          <SectionHeader
             eyebrow="How we teach"
             title="A simple rhythm you can follow"
             description="Apply, learn through weekly milestones, and build proof with mentor guidance until you're ready for your next step."
@@ -92,7 +151,7 @@ export default function AboutPage() {
                 description="If you're unsure which track fits, tell us your goals. We'll recommend the best path forward."
               />
               <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-end lg:flex-col lg:justify-start">
-                <Button href="/contact" variant="primary" size="lg">
+                <Button href={bookingUrl} variant="primary" size="lg">
                   Book Free Call
                 </Button>
                 <Button href="/courses" variant="secondary" size="lg">

@@ -72,7 +72,7 @@ export default function EnrollmentsAdminPanel({
 
   return (
     <>
-      <div className="mt-8 flex flex-col gap-4 rounded-3xl border border-zinc-200 bg-white p-4 dark:border-white/10 dark:bg-white/5 sm:p-5">
+      <div className="mm-section-panel flex flex-col gap-4">
         <div className="relative">
           <Search size={18} className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-zinc-400" />
           <input
@@ -108,39 +108,39 @@ export default function EnrollmentsAdminPanel({
           return (
           <article
             key={enrollment.id}
-            className="rounded-3xl border border-zinc-200 bg-white p-5 shadow-sm dark:border-white/10 dark:bg-white/5 sm:p-6"
+            className="rounded-2xl border mm-border bg-zinc-50/80 p-5 dark:bg-white/[0.02] sm:p-6"
           >
             <div className="grid gap-5 lg:grid-cols-[1fr_auto] lg:items-start">
               <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
                 <div>
-                  <p className="flex items-center gap-2 text-xs font-black uppercase tracking-[0.18em] text-zinc-500">
+                  <p className="flex items-center gap-2 text-xs font-bold uppercase tracking-[0.18em] text-zinc-500">
                     <UserRound size={15} /> Student
                   </p>
-                  <p className="mt-2 font-black">{enrollment.student_name ?? "Guest checkout"}</p>
+                  <p className="mt-2 font-bold">{enrollment.student_name ?? "Guest checkout"}</p>
                   <p className="mt-1 flex items-center gap-1 text-sm text-zinc-500">
                     <Mail size={13} /> {enrollment.email ?? "—"}
                   </p>
                 </div>
                 <div>
-                  <p className="flex items-center gap-2 text-xs font-black uppercase tracking-[0.18em] text-zinc-500">
+                  <p className="flex items-center gap-2 text-xs font-bold uppercase tracking-[0.18em] text-zinc-500">
                     <BookOpen size={15} /> Course
                   </p>
-                  <p className="mt-2 font-black">{enrollment.course_title}</p>
+                  <p className="mt-2 font-bold">{enrollment.course_title}</p>
                   <Link href={`/courses/${enrollment.course_slug}`} className="mt-1 text-sm font-bold text-violet-600 dark:text-violet-300">
                     View course →
                   </Link>
                 </div>
                 <div>
-                  <p className="flex items-center gap-2 text-xs font-black uppercase tracking-[0.18em] text-zinc-500">
+                  <p className="flex items-center gap-2 text-xs font-bold uppercase tracking-[0.18em] text-zinc-500">
                     <CreditCard size={15} /> Payment
                   </p>
-                  <p className="mt-2 text-xl font-black">{formatAmount(enrollment.amount_paise, enrollment.currency)}</p>
+                  <p className="mt-2 text-xl font-bold">{formatAmount(enrollment.amount_paise, enrollment.currency)}</p>
                   <p className="mt-1 text-xs text-zinc-500">{formatDate(enrollment.created_at)}</p>
                 </div>
                 <div>
-                  <p className="text-xs font-black uppercase tracking-[0.18em] text-zinc-500">Status</p>
+                  <p className="text-xs font-bold uppercase tracking-[0.18em] text-zinc-500">Status</p>
                   <span
-                    className={`mt-2 inline-flex rounded-full px-3 py-2 text-xs font-black ${
+                    className={`mt-2 inline-flex rounded-full px-3 py-2 text-xs font-bold ${
                       enrollment.status === "refunded"
                         ? "bg-red-50 text-red-700 dark:bg-red-400/10 dark:text-red-300"
                         : "bg-emerald-50 text-emerald-700 dark:bg-emerald-400/10 dark:text-emerald-300"
@@ -155,7 +155,7 @@ export default function EnrollmentsAdminPanel({
                   type="button"
                   disabled={isPending || enrollment.status === "refunded"}
                   onClick={() => runAction("receipt", enrollment.id)}
-                  className="rounded-xl border border-zinc-200 px-4 py-2 text-sm font-black disabled:opacity-60 dark:border-white/15"
+                  className="rounded-xl border border-zinc-200 px-4 py-2 text-sm font-bold disabled:opacity-60 dark:border-white/15"
                 >
                   Resend receipt
                 </button>
@@ -163,7 +163,7 @@ export default function EnrollmentsAdminPanel({
                   type="button"
                   disabled={isPending || enrollment.status === "refunded"}
                   onClick={() => runAction("refund", enrollment.id)}
-                  className="rounded-xl bg-red-600 px-4 py-2 text-sm font-black text-white disabled:opacity-60"
+                  className="rounded-xl bg-red-600 px-4 py-2 text-sm font-bold text-white disabled:opacity-60"
                 >
                   Mark refunded
                 </button>
@@ -173,7 +173,7 @@ export default function EnrollmentsAdminPanel({
               <div className="mt-4 border-t border-zinc-100 pt-4 dark:border-white/10">
                 <div className="flex flex-wrap items-center justify-between gap-3">
                   <div className="min-w-[140px] flex-1">
-                    <p className="text-xs font-black uppercase tracking-[0.18em] text-zinc-500">Course progress</p>
+                    <p className="text-xs font-bold uppercase tracking-[0.18em] text-zinc-500">Course progress</p>
                     <div className="mt-2 flex items-center gap-3">
                       <div className="h-2 flex-1 overflow-hidden rounded-full bg-zinc-200 dark:bg-zinc-800">
                         <div
@@ -181,7 +181,7 @@ export default function EnrollmentsAdminPanel({
                           style={{ width: `${percent}%` }}
                         />
                       </div>
-                      <span className="text-xs font-black text-zinc-600 dark:text-zinc-400">{percent}%</span>
+                      <span className="text-xs font-bold text-zinc-600 dark:text-zinc-400">{percent}%</span>
                     </div>
                   </div>
                   <EnrollmentCompleteButton

@@ -20,11 +20,13 @@ export default function CourseProgressTracker({
   weeks,
   completedWeeks: initialCompleted,
   lastActivityAt,
+  verificationStatus = null,
 }: {
   courseSlug: string;
   weeks: WeekItem[];
   completedWeeks: number[];
   lastActivityAt?: string | null;
+  verificationStatus?: "pending" | "approved" | "rejected" | null;
 }) {
   const router = useRouter();
   const [completed, setCompleted] = useState(new Set(initialCompleted));
@@ -58,26 +60,45 @@ export default function CourseProgressTracker({
   return (
     <div>
       {isComplete ? (
-        <div className="mb-6 rounded-2xl border border-emerald-200 bg-emerald-50 p-5 dark:border-emerald-400/20 dark:bg-emerald-400/10">
-          <p className="flex items-center gap-2 text-sm font-black text-emerald-800 dark:text-emerald-200">
+        <div
+          className={`mb-6 rounded-2xl border p-5 ${
+            verificationStatus === "approved"
+              ? "border-emerald-200 bg-emerald-50 dark:border-emerald-400/20 dark:bg-emerald-400/10"
+              : verificationStatus === "rejected"
+                ? "border-red-200 bg-red-50 dark:border-red-400/20 dark:bg-red-400/10"
+                : "border-amber-200 bg-amber-50 dark:border-amber-400/20 dark:bg-amber-400/10"
+          }`}
+        >
+          <p className="flex items-center gap-2 text-sm font-bold text-zinc-800 dark:text-zinc-200">
             <Award size={18} />
-            All milestones complete — certificate review pending
+            {verificationStatus === "approved"
+              ? "Certificate approved — ready to download"
+              : verificationStatus === "rejected"
+                ? "Certificate review — more work needed"
+                : "All milestones complete — mentor review in progress"}
+          </p>
+          <p className="mt-2 text-sm leading-6 text-zinc-600 dark:text-zinc-400">
+            {verificationStatus === "approved"
+              ? "Your certificate is issued. Download the PDF or share your verify link."
+              : verificationStatus === "rejected"
+                ? "Check your email for mentor notes, complete any gaps, and reach out if you need help."
+                : "A mentor typically reviews within 1–2 business days. You'll get an email when your certificate is ready."}
           </p>
           <Link
             href={`/dashboard/my-courses/${courseSlug}/certificate`}
-            className="mt-3 inline-flex rounded-xl bg-emerald-600 px-4 py-2.5 text-sm font-black text-white transition hover:bg-emerald-700"
+            className="mt-3 inline-flex rounded-xl bg-emerald-600 px-4 py-2.5 text-sm font-bold text-white transition hover:bg-emerald-700"
           >
-            View certificate status
+            {verificationStatus === "approved" ? "View & download certificate" : "View certificate status"}
           </Link>
         </div>
       ) : null}
 
       <div className="mb-6">
         <div className="flex items-center justify-between gap-4">
-          <p className="text-sm font-black text-zinc-700 dark:text-zinc-300">
+          <p className="text-sm font-bold text-zinc-700 dark:text-zinc-300">
             {done} of {total} weeks complete
           </p>
-          <p className="text-2xl font-black text-violet-600 dark:text-violet-300">{percent}%</p>
+          <p className="text-2xl font-bold text-violet-600 dark:text-violet-300">{percent}%</p>
         </div>
         {lastActivityAt ? (
           <p className="mt-1 text-xs font-bold text-zinc-500">
@@ -134,7 +155,7 @@ export default function CourseProgressTracker({
                 )}
               </span>
               <span className="min-w-0 flex-1">
-                <span className="font-black">{week.label}</span>
+                <span className="font-bold">{week.label}</span>
                 <span className="mt-1 block text-sm text-zinc-600 dark:text-zinc-400">
                   {week.topics.join(" · ")}
                 </span>

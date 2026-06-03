@@ -73,7 +73,7 @@ export default function AdminContentPanel({
             key={id}
             type="button"
             onClick={() => setTab(id)}
-            className={`rounded-xl px-4 py-2 text-sm font-black ${
+            className={`rounded-xl px-4 py-2 text-sm font-bold ${
               tab === id ? "bg-violet-600 text-white" : "border border-zinc-200 dark:border-white/10"
             }`}
           >
@@ -84,7 +84,7 @@ export default function AdminContentPanel({
 
       {tab === "spotlight" ? (
         <section className="rounded-3xl border border-zinc-200 bg-white p-6 shadow-sm dark:border-white/10 dark:bg-white/5">
-          <p className="flex items-center gap-2 text-xs font-black uppercase tracking-[0.18em] text-violet-600">
+          <p className="flex items-center gap-2 text-xs font-bold uppercase tracking-[0.18em] text-violet-600">
             <BookOpen size={14} />
             Course spotlight
           </p>
@@ -99,7 +99,7 @@ export default function AdminContentPanel({
               const p = courseOverrides[c.slug] ?? {};
               return (
                 <div key={c.slug} className="rounded-2xl border border-zinc-200 p-4 dark:border-white/10">
-                  <p className="font-black">{p.title ?? c.title}</p>
+                  <p className="font-bold">{p.title ?? c.title}</p>
                   <label className="mt-3 block">
                     <span className={labelClass}>Short description</span>
                     <textarea
@@ -134,7 +134,7 @@ export default function AdminContentPanel({
             <button
               type="submit"
               disabled={!tableReady || isPending}
-              className="rounded-xl bg-zinc-950 px-5 py-3 text-sm font-black text-white disabled:opacity-60 dark:bg-white dark:text-zinc-950"
+              className="rounded-xl bg-zinc-950 px-5 py-3 text-sm font-bold text-white disabled:opacity-60 dark:bg-white dark:text-zinc-950"
             >
               {isPending ? "Saving…" : "Save course overrides"}
             </button>
@@ -145,7 +145,7 @@ export default function AdminContentPanel({
       {tab === "courses" && mergedCourse ? (
         <section className="rounded-3xl border border-zinc-200 bg-white p-6 shadow-sm dark:border-white/10 dark:bg-white/5">
           <div className="flex flex-wrap items-center justify-between gap-3">
-            <p className="text-xs font-black uppercase tracking-[0.18em] text-violet-600">Full course editor</p>
+            <p className="text-xs font-bold uppercase tracking-[0.18em] text-violet-600">Full course editor</p>
             <select
               value={selectedCourse}
               onChange={(e) => setSelectedCourse(e.target.value)}
@@ -216,7 +216,7 @@ export default function AdminContentPanel({
               Featured on homepage
             </label>
             <div className="flex flex-wrap gap-3 sm:col-span-2">
-              <button type="submit" disabled={!tableReady || isPending} className="rounded-xl bg-violet-600 px-5 py-3 text-sm font-black text-white disabled:opacity-60">
+              <button type="submit" disabled={!tableReady || isPending} className="rounded-xl bg-violet-600 px-5 py-3 text-sm font-bold text-white disabled:opacity-60">
                 {isPending ? "Saving…" : "Save full course"}
               </button>
               <button
@@ -226,7 +226,7 @@ export default function AdminContentPanel({
                   if (!window.confirm(`Hide ${mergedCourse.title} from the catalog?`)) return;
                   run(() => hideCourse(mergedCourse.slug), "Course hidden.");
                 }}
-                className="inline-flex items-center gap-2 rounded-xl border border-red-200 px-5 py-3 text-sm font-black text-red-600 disabled:opacity-60"
+                className="inline-flex items-center gap-2 rounded-xl border border-red-200 px-5 py-3 text-sm font-bold text-red-600 disabled:opacity-60"
               >
                 <Trash2 size={14} />
                 Hide course
@@ -238,7 +238,7 @@ export default function AdminContentPanel({
 
       {tab === "new-course" ? (
         <section className="rounded-3xl border border-zinc-200 bg-white p-6 shadow-sm dark:border-white/10 dark:bg-white/5">
-          <p className="flex items-center gap-2 text-xs font-black uppercase tracking-[0.18em] text-violet-600">
+          <p className="flex items-center gap-2 text-xs font-bold uppercase tracking-[0.18em] text-violet-600">
             <Plus size={14} />
             Create course
           </p>
@@ -287,7 +287,7 @@ export default function AdminContentPanel({
                 className={`${inputClass} font-mono text-xs`}
               />
             </label>
-            <button type="submit" disabled={!tableReady || isPending} className="rounded-xl bg-violet-600 px-5 py-3 text-sm font-black text-white disabled:opacity-60 sm:col-span-2">
+            <button type="submit" disabled={!tableReady || isPending} className="rounded-xl bg-violet-600 px-5 py-3 text-sm font-bold text-white disabled:opacity-60 sm:col-span-2">
               {isPending ? "Creating…" : "Create course"}
             </button>
           </form>
@@ -296,7 +296,7 @@ export default function AdminContentPanel({
 
       {tab === "blog" && post ? (
         <section className="rounded-3xl border border-zinc-200 bg-white p-6 shadow-sm dark:border-white/10 dark:bg-white/5">
-          <p className="flex items-center gap-2 text-xs font-black uppercase tracking-[0.18em] text-violet-600">
+          <p className="flex items-center gap-2 text-xs font-bold uppercase tracking-[0.18em] text-violet-600">
             <FileText size={14} />
             Blog posts
           </p>
@@ -341,7 +341,7 @@ export default function AdminContentPanel({
               <textarea name="content" defaultValue={post.content} rows={10} disabled={!tableReady || isPending} className={`${inputClass} font-mono`} />
             </label>
             <div className="flex flex-wrap gap-3">
-              <button type="submit" disabled={!tableReady || isPending} className="rounded-xl bg-violet-600 px-5 py-3 text-sm font-black text-white disabled:opacity-60">
+              <button type="submit" disabled={!tableReady || isPending} className="rounded-xl bg-violet-600 px-5 py-3 text-sm font-bold text-white disabled:opacity-60">
                 {isPending ? "Saving…" : "Save blog post"}
               </button>
               <button
@@ -351,7 +351,7 @@ export default function AdminContentPanel({
                   if (!window.confirm(`Delete or hide ${post.title}?`)) return;
                   run(() => deleteBlogPost(post.slug), "Blog post removed.");
                 }}
-                className="inline-flex items-center gap-2 rounded-xl border border-red-200 px-5 py-3 text-sm font-black text-red-600"
+                className="inline-flex items-center gap-2 rounded-xl border border-red-200 px-5 py-3 text-sm font-bold text-red-600"
               >
                 <Trash2 size={14} />
                 Delete
@@ -363,7 +363,7 @@ export default function AdminContentPanel({
 
       {tab === "new-blog" ? (
         <section className="rounded-3xl border border-zinc-200 bg-white p-6 shadow-sm dark:border-white/10 dark:bg-white/5">
-          <p className="flex items-center gap-2 text-xs font-black uppercase tracking-[0.18em] text-violet-600">
+          <p className="flex items-center gap-2 text-xs font-bold uppercase tracking-[0.18em] text-violet-600">
             <Plus size={14} />
             New blog post
           </p>
@@ -390,7 +390,7 @@ export default function AdminContentPanel({
               <span className={labelClass}>Content</span>
               <textarea name="content" rows={10} required disabled={!tableReady || isPending} className={`${inputClass} font-mono`} />
             </label>
-            <button type="submit" disabled={!tableReady || isPending} className="rounded-xl bg-violet-600 px-5 py-3 text-sm font-black text-white disabled:opacity-60">
+            <button type="submit" disabled={!tableReady || isPending} className="rounded-xl bg-violet-600 px-5 py-3 text-sm font-bold text-white disabled:opacity-60">
               {isPending ? "Creating…" : "Create blog post"}
             </button>
           </form>

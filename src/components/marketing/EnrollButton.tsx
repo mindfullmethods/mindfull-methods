@@ -1,6 +1,7 @@
 "use client";
 
 import Script from "next/script";
+import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { CreditCard } from "lucide-react";
 
@@ -54,7 +55,14 @@ export default function EnrollButton({
   const [sessionEmail, setSessionEmail] = useState<string | null>(null);
   const [guestEmail, setGuestEmail] = useState("");
   const [promoCode, setPromoCode] = useState("");
+  const [referralCode, setReferralCode] = useState("");
   const [checkingSession, setCheckingSession] = useState(true);
+  const searchParams = useSearchParams();
+
+  useEffect(() => {
+    const ref = searchParams.get("ref")?.trim().toUpperCase();
+    if (ref) setReferralCode(ref);
+  }, [searchParams]);
 
   useEffect(() => {
     async function loadSession() {
@@ -87,7 +95,8 @@ export default function EnrollButton({
         body: JSON.stringify({
           courseSlug,
           customerEmail: checkoutEmail,
-          promoCode: promoCode.trim() || undefined,
+          promoCode: referralCode.trim() ? undefined : promoCode.trim() || undefined,
+          referralCode: referralCode.trim() || undefined,
         }),
       });
 
@@ -180,16 +189,38 @@ export default function EnrollButton({
         </label>
       ) : null}
       {!checkingSession ? (
-        <label className="block">
-          <span className="text-xs font-black uppercase tracking-[0.18em] text-zinc-500">Promo code (optional)</span>
-          <input
-            type="text"
-            value={promoCode}
-            onChange={(e) => setPromoCode(e.target.value.toUpperCase())}
-            placeholder="LAUNCH10"
-            className="mt-2 w-full rounded-xl border border-zinc-200 bg-white px-4 py-3 text-sm font-semibold uppercase outline-none focus:border-violet-400 dark:border-white/10 dark:bg-white/5"
-          />
-        </label>
+        <>
+          <label className="block">
+            <span className="text-xs font-black uppercase tracking-[0.18em] text-zinc-500">Referral code (optional)</span>
+            <input
+              type="text"
+              value={referralCode}
+              onChange={(e) => {
+                setReferralCode(e.target.value.toUpperCase());
+                if (e.target.value.trim()) setPromoCode("");
+              }}
+              placeholder="PARTNER10"
+              className="mt-2 w-full rounded-xl border border-zinc-200 bg-white px-4 py-3 text-sm font-semibold uppercase outline-none focus:border-violet-400 dark:border-white/10 dark:bg-white/5"
+            />
+          </label>
+          <label className="block">
+            <span className="text-xs font-black uppercase tracking-[0.18em] text-zinc-500">Promo code (optional)</span>
+            <input
+              type="text"
+              value={promoCode}
+              onChange={(e) => {
+                setPromoCode(e.target.value.toUpperCase());
+                if (e.target.value.trim()) setReferralCode("");
+              }}
+              disabled={Boolean(referralCode.trim())}
+              placeholder="LAUNCH10"
+              className="mt-2 w-full rounded-xl border border-zinc-200 bg-white px-4 py-3 text-sm font-semibold uppercase outline-none focus:border-violet-400 disabled:opacity-50 dark:border-white/10 dark:bg-white/5"
+            />
+            {referralCode.trim() ? (
+              <p className="mt-1 text-xs text-zinc-500">Referral code applied — promo disabled for this checkout.</p>
+            ) : null}
+          </label>
+        </>
       ) : null}
       <button
         type="button"

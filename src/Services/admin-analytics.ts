@@ -5,7 +5,7 @@ import { getContactInquiries } from "@/Services/contact-inquiries";
 import { getPendingCompletionVerifications } from "@/Services/completion-verifications";
 import { getCourseBySlug } from "@/lib/courses";
 
-export type ChartPoint = { name: string; value: number };
+export type ChartPoint = { name: string; value: number; key: string };
 
 export type AdminAnalytics = {
   totals: {
@@ -21,7 +21,11 @@ export type AdminAnalytics = {
     certificatesIssued: number;
     pendingCertificateReviews: number;
     inquiryToEnrollmentRate: number;
+    applicationApprovalRate: number;
+    avgOrderValuePaise: number;
+    complimentaryEnrollments: number;
   };
+  funnel: { label: string; value: number; hint: string }[];
   applicationsByDay: ChartPoint[];
   enrollmentsByDay: ChartPoint[];
   revenueByDay: ChartPoint[];
@@ -42,7 +46,10 @@ function lastNDays(n: number) {
     date.setHours(0, 0, 0, 0);
     date.setDate(date.getDate() - (n - 1 - i));
     const key = date.toISOString().slice(0, 10);
-    const name = date.toLocaleDateString("en-IN", { weekday: "short" });
+    const name =
+      n <= 7
+        ? date.toLocaleDateString("en-IN", { weekday: "short" })
+        : date.toLocaleDateString("en-IN", { day: "numeric", month: "numeric" });
     return { key, name };
   });
 }
@@ -63,7 +70,7 @@ function bucketByDay(
     }
   }
 
-  return labels.map((d) => ({ name: d.name, value: counts.get(d.key) ?? 0 }));
+  return labels.map((d) => ({ key: d.key, name: d.name, value: counts.get(d.key) ?? 0 }));
 }
 
 function countStatus(applications: { status?: string | null }[], status: string) {
@@ -123,6 +130,35 @@ export async function getAdminAnalytics(): Promise<AdminAnalytics> {
   const inquiryToEnrollmentRate =
     inquiries.length > 0 ? Math.round((enrolledInquiries / inquiries.length) * 100) : 0;
 
+  const approvedCount = statusCounts[1].value;
+  const applicationApprovalRate =
+    applications.length > 0 ? Math.round((approvedCount / applications.length) * 100) : 0;
+  const avgOrderValuePaise = paid.length > 0 ? Math.round(revenuePaise / paid.length) : 0;
+  const complimentaryEnrollments = enrollments.filter((e) => e.status !== "paid").length;
+
+  const funnel = [
+    {
+      label: "Contact inquiries",
+      value: inquiries.length,
+      hint: `${newInquiries} new · ${inquiryToEnrollmentRate}% marked enrolled`,
+    },
+    {
+      label: "Paid enrollments",
+      value: paid.length,
+      hint: `${complimentaryEnrollments} complimentary / manual`,
+    },
+    {
+      label: "Internship applications",
+      value: applications.length,
+      hint: `${applicationApprovalRate}% approved · ${statusCounts[0].value} pending`,
+    },
+    {
+      label: "Certificates issued",
+      value: certificatesIssued,
+      hint: `${pendingReviews.length} awaiting mentor review`,
+    },
+  ];
+
   return {
     totals: {
       applications: applications.length,
@@ -137,12 +173,16 @@ export async function getAdminAnalytics(): Promise<AdminAnalytics> {
       certificatesIssued,
       pendingCertificateReviews: pendingReviews.length,
       inquiryToEnrollmentRate,
+      applicationApprovalRate,
+      avgOrderValuePaise,
+      complimentaryEnrollments,
     },
-    applicationsByDay: bucketByDay(applications),
-    enrollmentsByDay: bucketByDay(enrollments),
+    funnel,
+    applicationsByDay: bucketByDay(applications, 14),
+    enrollmentsByDay: bucketByDay(enrollments, 14),
     revenueByDay: bucketByDay(
       paid.map((e) => ({ created_at: e.created_at, amount_paise: e.amount_paise })),
-      7,
+      14,
       (item) => Math.round(((item as { amount_paise?: number }).amount_paise ?? 0) / 100)
     ),
     applicationStatuses: statusCounts,

@@ -12,6 +12,10 @@
 
 # testing
 /coverage
+/test-results/
+/playwright-report/
+/blob-report/
+/playwright/.cache/
 
 # next.js
 /.next/
@@ -23,6 +27,12 @@
 # misc
 .DS_Store
 *.pem
+~$*
+
+# Investor pitch (local only — not in repo)
+docs/INVESTOR_PITCH_REPORT.md
+docs/Mindfull_Methods_Investor_Deck*.pptx
+scripts/generate-investor-deck.py
 
 # debug
 npm-debug.log*

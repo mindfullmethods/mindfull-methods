@@ -38,7 +38,7 @@ export default function AdminStudentEnrollmentActions({
         type="button"
         disabled={isPending}
         onClick={() => runAction("receipt")}
-        className="inline-flex items-center gap-1.5 rounded-xl border border-zinc-200 px-3 py-2 text-xs font-black disabled:opacity-60 dark:border-white/15"
+        className="inline-flex items-center gap-1.5 rounded-xl border border-zinc-200 px-3 py-2 text-xs font-bold disabled:opacity-60 dark:border-white/15"
       >
         <Mail size={12} />
         Receipt
@@ -47,7 +47,7 @@ export default function AdminStudentEnrollmentActions({
         type="button"
         disabled={isPending}
         onClick={() => runAction("refund")}
-        className="inline-flex items-center gap-1.5 rounded-xl bg-red-600 px-3 py-2 text-xs font-black text-white disabled:opacity-60"
+        className="inline-flex items-center gap-1.5 rounded-xl bg-red-600 px-3 py-2 text-xs font-bold text-white disabled:opacity-60"
       >
         <CreditCard size={12} />
         Refund

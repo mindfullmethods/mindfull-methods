@@ -24,7 +24,7 @@ export default function ThemedBrandLogo({
         variant="full"
         theme="dark"
         size={size}
-        className={cn(className, "hidden dark:inline-flex")}
+        className={cn(className, "hidden dark:block")}
       />
     </>
   );

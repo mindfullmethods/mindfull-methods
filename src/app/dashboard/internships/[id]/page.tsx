@@ -10,6 +10,7 @@ import {
 } from "lucide-react";
 
 import ApplyButton from "@/components/components/dashboard/ApplyButton";
+import DashboardPageHeader from "@/components/components/dashboard/DashboardPageHeader";
 import { getInternshipById } from "@/Services/internship-details";
 import { marketingImages } from "@/lib/images";
 
@@ -30,13 +31,13 @@ export default async function InternshipDetailsPage({ params }: { params: Promis
     <main className="min-h-screen px-5 py-8 sm:px-8 xl:px-10">
       <Link
         href="/dashboard/internships"
-        className="inline-flex items-center gap-2 text-sm font-black text-zinc-500 hover:text-zinc-950 dark:hover:text-white"
+        className="inline-flex items-center gap-2 text-sm font-semibold mm-subtle transition hover:text-zinc-950 dark:hover:text-white"
       >
         <ArrowLeft size={16} />
         Back to internships
       </Link>
 
-      <section className="mt-6 overflow-hidden rounded-3xl border border-zinc-200 bg-white shadow-sm dark:border-white/10 dark:bg-white/5">
+      <section className="mt-6 overflow-hidden rounded-3xl border mm-border">
         <div className="relative">
           <img
             src={internship.image_url || marketingImages.internshipFallback}
@@ -46,16 +47,16 @@ export default async function InternshipDetailsPage({ params }: { params: Promis
           <div className="absolute inset-0 bg-gradient-to-t from-zinc-950 via-zinc-950/40 to-transparent" />
           <div className="absolute bottom-0 left-0 p-6 sm:p-8">
             <div className="flex flex-wrap items-center gap-3">
-              <span className="inline-flex items-center gap-1.5 rounded-full bg-white/90 px-3 py-1.5 text-xs font-black text-zinc-950">
+              <span className="inline-flex items-center gap-1.5 rounded-full bg-white/90 px-3 py-1.5 text-xs font-bold text-zinc-950">
                 <Building2 size={12} />
                 {internship.company}
               </span>
-              <span className="rounded-full bg-white/20 px-3 py-1.5 text-xs font-black text-white backdrop-blur">
+              <span className="rounded-full bg-white/20 px-3 py-1.5 text-xs font-bold text-white backdrop-blur">
                 <Clock3 size={12} className="mr-1 inline" />
                 {internship.duration}
               </span>
             </div>
-            <h1 className="mt-4 max-w-3xl text-3xl font-black tracking-tight text-white sm:text-5xl">
+            <h1 className="mt-4 max-w-3xl text-3xl font-bold tracking-tight text-white sm:text-5xl">
               {internship.title}
             </h1>
           </div>
@@ -63,13 +64,11 @@ export default async function InternshipDetailsPage({ params }: { params: Promis
 
         <div className="grid gap-8 p-6 sm:p-8 lg:grid-cols-[1.25fr_0.75fr]">
           <div>
-            <p className="flex items-center gap-2 text-xs font-black uppercase tracking-[0.18em] text-violet-600 dark:text-violet-300">
+            <p className="flex items-center gap-2 text-xs font-bold uppercase tracking-[0.18em] text-violet-600 dark:text-violet-300">
               <BriefcaseBusiness size={14} />
               About this role
             </p>
-            <p className="mt-4 whitespace-pre-wrap text-sm leading-7 text-zinc-600 dark:text-zinc-400">
-              {internship.description}
-            </p>
+            <p className="mt-4 whitespace-pre-wrap text-sm leading-7 mm-muted">{internship.description}</p>
 
             {tags.length > 0 ? (
               <div className="mt-6 flex flex-wrap gap-2">
@@ -90,11 +89,8 @@ export default async function InternshipDetailsPage({ params }: { params: Promis
                 "Portfolio-ready deliverables",
                 "Weekly milestone check-ins",
               ].map((item) => (
-                <div
-                  key={item}
-                  className="rounded-2xl border border-zinc-200 bg-[#f7f8f5] p-4 dark:border-white/10 dark:bg-zinc-950"
-                >
-                  <p className="flex items-center gap-2 text-sm font-bold text-zinc-700 dark:text-zinc-300">
+                <div key={item} className="rounded-2xl border mm-border bg-[#f7f8f5] p-4 dark:bg-zinc-950">
+                  <p className="flex items-center gap-2 text-sm font-bold mm-heading">
                     <Sparkles size={16} className="text-violet-500" />
                     {item}
                   </p>
@@ -104,25 +100,42 @@ export default async function InternshipDetailsPage({ params }: { params: Promis
           </div>
 
           <aside className="lg:sticky lg:top-24">
-            <div className="rounded-3xl border border-zinc-200 bg-[#f7f8f5] p-5 dark:border-white/10 dark:bg-zinc-950">
-              <p className="flex items-center gap-2 text-xs font-black uppercase tracking-[0.18em] text-zinc-500">
+            <div className="mm-section-panel">
+              <p className="flex items-center gap-2 text-xs font-bold uppercase tracking-[0.18em] mm-subtle">
                 <IndianRupee size={14} />
                 Stipend
               </p>
-              <p className="mt-2 text-3xl font-black">{internship.stipend}</p>
-              <p className="mt-2 text-sm text-zinc-500">{internship.duration} · {internship.company}</p>
+              <p className="mt-2 text-3xl font-bold mm-heading">{internship.stipend}</p>
+              <p className="mt-2 text-sm mm-muted">
+                {internship.duration} · {internship.company}
+              </p>
 
               <div className="mt-6">
                 <ApplyButton internshipId={internship.id} />
               </div>
 
-              <p className="mt-4 text-xs leading-5 text-zinc-500">
+              <Link
+                href={`/dashboard/apply/${internship.id}`}
+                className="mt-4 block text-center text-sm font-bold text-violet-600 hover:underline dark:text-violet-300"
+              >
+                Apply with resume link →
+              </Link>
+
+              <p className="mt-4 text-xs leading-5 mm-muted">
                 Applications are reviewed in your dashboard. You&apos;ll get email updates when status changes.
               </p>
             </div>
           </aside>
         </div>
       </section>
+
+      <div className="mt-8">
+        <DashboardPageHeader
+          eyebrow="Next step"
+          title="Ready to apply?"
+          description="Quick apply uses your account details, or open the full form to attach a resume link."
+        />
+      </div>
     </main>
   );
 }

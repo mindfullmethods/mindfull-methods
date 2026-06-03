@@ -1,9 +1,10 @@
-import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { CheckCircle2, Download, Sparkles } from "lucide-react";
 
-import EnrollButton from "@/components/marketing/EnrollButton";
+import CourseCardImage from "@/components/marketing/CourseCardImage";
+import CourseWaitlistForm from "@/components/marketing/CourseWaitlistForm";
+import EnrollCheckoutSection from "@/components/marketing/EnrollCheckoutSection";
 import Button from "@/components/marketing/Button";
 import Badge from "@/components/marketing/Badge";
 import FAQAccordion from "@/components/marketing/FAQAccordion";
@@ -15,6 +16,7 @@ import { getCourseSlugs } from "@/lib/courses";
 import { getResolvedCourseBySlug, getResolvedCourseSlugs } from "@/lib/platform-content";
 import { isRazorpayConfigured } from "@/lib/razorpay";
 import { absoluteUrl, courseJsonLd } from "@/lib/seo";
+import { getBookingUrl } from "@/lib/booking-url";
 import { contactUrl, pageTitle, signupUrl, syllabusPdfUrl, syllabusPrintUrl, syllabusUrl } from "@/lib/site";
 import { hasSyllabusPdf } from "@/lib/syllabus-files";
 import type { Metadata } from "next";
@@ -78,6 +80,7 @@ export default async function CourseDetailsPage({
   const pdfAvailable = hasSyllabusPdf(course.slug);
   const enrolled = await isEnrolledInCourse(course.slug);
   const progress = enrolled ? await getCourseProgress(course.slug) : null;
+  const bookingUrl = getBookingUrl();
   const percent = progress?.percent ?? 0;
 
   return (
@@ -85,13 +88,11 @@ export default async function CourseDetailsPage({
       <JsonLd data={courseJsonLd(course)} />
       <div className="mx-auto max-w-7xl px-5 py-14 sm:px-8 lg:px-10">
       <div className="relative mb-8 overflow-hidden rounded-[2rem] border mm-border">
-        <Image
+        <CourseCardImage
           src={course.imageUrl}
+          slug={course.slug}
           alt={course.title}
-          width={1200}
-          height={480}
           className="aspect-[5/2] w-full object-cover"
-          priority
         />
         <div className="absolute inset-0 bg-gradient-to-t from-zinc-950 via-zinc-950/40 to-transparent" />
         <div className="absolute bottom-0 left-0 p-6 sm:p-8">
@@ -167,7 +168,7 @@ export default async function CourseDetailsPage({
                     </Link>
                   </>
                 ) : paymentsEnabled ? (
-                  <EnrollButton
+                  <EnrollCheckoutSection
                     courseSlug={course.slug}
                     courseTitle={course.title}
                     amountInPaise={course.priceInPaise}
@@ -178,9 +179,13 @@ export default async function CourseDetailsPage({
                     Apply now
                   </Button>
                 )}
-                <Button href={contactUrl(course.slug)} variant="secondary" size="lg">
+                <Button href={bookingUrl} variant="secondary" size="lg">
                   Book a call
                 </Button>
+
+                {!enrolled ? (
+                  <CourseWaitlistForm courseSlug={course.slug} courseTitle={course.title} />
+                ) : null}
 
                 <div className="rounded-2xl border mm-border bg-zinc-50/80 p-4 dark:bg-white/[0.02]">
                   <div className="flex items-center gap-2">

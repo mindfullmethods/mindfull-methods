@@ -2,10 +2,11 @@
 
 import { revalidatePath } from "next/cache";
 
+import { adminActorEmail, recordAdminAudit } from "@/lib/audit-log";
 import { requireAdmin } from "@/lib/auth";
 import { formatCertificateId } from "@/lib/certificates";
 import { getCourseBySlug } from "@/lib/courses";
-import { notifyCourseCompleted } from "@/lib/email";
+import { notifyCertificateRejected, notifyCourseCompleted } from "@/lib/email";
 import { absoluteUrl } from "@/lib/seo";
 import { issueCertificateIfComplete } from "@/Services/certificates";
 import {
@@ -41,7 +42,7 @@ async function getStudentContact(userId: string) {
 }
 
 export async function approveCompletionVerification(userId: string, courseSlug: string, notes?: string) {
-  await requireAdmin();
+  const adminUser = await requireAdmin();
 
   const verification = await getCompletionVerification(userId, courseSlug);
   if (!verification || verification.status !== "pending") {
@@ -53,15 +54,15 @@ export async function approveCompletionVerification(userId: string, courseSlug: 
     return { ok: false as const, error: "Course not found." };
   }
 
-  let admin;
+  let supabase;
   try {
-    admin = createAdminClient();
+    supabase = createAdminClient();
   } catch (err) {
     const message = err instanceof Error ? err.message : "Admin client not configured.";
     return { ok: false as const, error: message };
   }
 
-  const { data: rows } = await admin
+  const { data: rows } = await supabase
     .from("course_progress")
     .select("course_slug, week_index, completed_at")
     .eq("user_id", userId)
@@ -102,7 +103,15 @@ export async function approveCompletionVerification(userId: string, courseSlug: 
     }).catch((err) => console.error("[approveCompletionVerification] email", err));
   }
 
+  void recordAdminAudit({
+    actorEmail: adminActorEmail(adminUser),
+    action: "certificate.approved",
+    entityType: "completion_verification",
+    entityId: `${userId}:${courseSlug}`,
+  });
+
   revalidatePath("/dashboard/analytics");
+  revalidatePath("/dashboard/admin-home");
   revalidatePath("/dashboard/users");
   revalidatePath(`/dashboard/users/${userId}`);
   revalidatePath("/dashboard/my-courses");
@@ -114,7 +123,7 @@ export async function approveCompletionVerification(userId: string, courseSlug: 
 }
 
 export async function rejectCompletionVerification(userId: string, courseSlug: string, notes?: string) {
-  await requireAdmin();
+  const adminUser = await requireAdmin();
 
   const verification = await getCompletionVerification(userId, courseSlug);
   if (!verification || verification.status !== "pending") {
@@ -128,7 +137,28 @@ export async function rejectCompletionVerification(userId: string, courseSlug: s
     reviewerNotes: notes?.trim() || null,
   });
 
-  revalidatePath("/dashboard/users");
+  const course = getCourseBySlug(courseSlug);
+  const { name: studentName, email: studentEmail } = await getStudentContact(userId);
+
+  if (studentEmail && course) {
+    void notifyCertificateRejected({
+      studentName,
+      studentEmail,
+      courseTitle: course.title,
+      courseSlug,
+      notes: notes?.trim() || null,
+    }).catch((err) => console.error("[rejectCompletionVerification] email", err));
+  }
+
+  void recordAdminAudit({
+    actorEmail: adminActorEmail(adminUser),
+    action: "certificate.rejected",
+    entityType: "completion_verification",
+    entityId: `${userId}:${courseSlug}`,
+  });
+
+  revalidatePath("/dashboard/analytics");
+  revalidatePath("/dashboard/admin-home");
   revalidatePath(`/dashboard/users/${userId}`);
   revalidatePath(`/dashboard/my-courses/${courseSlug}`);
 

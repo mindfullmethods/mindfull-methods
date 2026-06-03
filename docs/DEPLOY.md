@@ -70,7 +70,7 @@ Recommended size: **1200×800** JPG or WebP.
 
 - **Printable page:** `/courses/[slug]/syllabus` → browser **Print → Save as PDF**
 - **Text download:** `/api/syllabus/[slug]`
-- **Real PDFs:** drop files in `public/syllabi/[slug].pdf` (e.g. `frontend-engineering.pdf`) — a **Download PDF** button appears automatically on course pages
+- **Real PDFs:** drop files in `public/syllabi/[slug].pdf` (e.g. `generative-ai-llms.pdf`) or run `npm run syllabi:generate` — **Download PDF** appears on course pages
 
 ---
 
@@ -109,7 +109,17 @@ Ensure Supabase `applications` table has RLS allowing users to read their own ro
 
 ---
 
-## 7. Admin & Supabase
+## 7. Password reset (Supabase Auth)
+
+1. Supabase → **Authentication** → **URL configuration**
+2. Add redirect URLs:
+   - `https://mindfullmethods.com/auth/callback`
+   - `http://localhost:3000/auth/callback` (for local testing)
+3. Users use **Forgot password?** on `/login` → email link → `/reset-password`
+
+---
+
+## 8. Admin & Supabase
 
 ```
 ADMIN_EMAILS=your@email.com

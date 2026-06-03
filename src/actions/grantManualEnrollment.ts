@@ -2,16 +2,17 @@
 
 import { revalidatePath } from "next/cache";
 
+import { adminActorEmail, recordAdminAudit } from "@/lib/audit-log";
 import { requireAdmin } from "@/lib/auth";
 import { getCourseBySlug } from "@/lib/courses";
 import { notifyEnrollmentCompleted } from "@/lib/email";
 import { createAdminClient } from "@/lib/supabase/admin";
 
 export async function grantManualEnrollment(formData: FormData) {
-  await requireAdmin();
+  const adminUser = await requireAdmin();
 
   const email = String(formData.get("email") ?? "").trim().toLowerCase();
-  const courseSlug = String(formData.get("courseSlug") ?? "").trim();
+  const courseSlug = String(formData.get("courseSlug") ?? formData.get("course_slug") ?? "").trim();
 
   if (!email || !courseSlug) {
     return { ok: false as const, error: "Email and course are required." };
@@ -22,24 +23,24 @@ export async function grantManualEnrollment(formData: FormData) {
     return { ok: false as const, error: "Course not found." };
   }
 
-  let admin;
+  let supabase;
   try {
-    admin = createAdminClient();
+    supabase = createAdminClient();
   } catch (err) {
     const message = err instanceof Error ? err.message : "Admin client not configured.";
     return { ok: false as const, error: message };
   }
 
-  const { data: profile } = await admin.from("profiles").select("id, full_name").eq("email", email).maybeSingle();
+  const { data: profile } = await supabase.from("profiles").select("id, full_name").eq("email", email).maybeSingle();
 
   let userId = profile?.id as string | undefined;
   if (!userId) {
-    const { data: usersData } = await admin.auth.admin.listUsers({ page: 1, perPage: 1000 });
+    const { data: usersData } = await supabase.auth.admin.listUsers({ page: 1, perPage: 1000 });
     const match = usersData.users.find((u) => u.email?.toLowerCase() === email);
     userId = match?.id;
   }
 
-  const { data: existing } = await admin
+  const { data: existing } = await supabase
     .from("enrollments")
     .select("id")
     .eq("course_slug", courseSlug)
@@ -53,7 +54,7 @@ export async function grantManualEnrollment(formData: FormData) {
 
   const orderId = `manual_${crypto.randomUUID()}`;
 
-  const { error } = await admin.from("enrollments").insert({
+  const { error } = await supabase.from("enrollments").insert({
     user_id: userId ?? null,
     course_slug: courseSlug,
     course_title: course.title,
@@ -74,7 +75,16 @@ export async function grantManualEnrollment(formData: FormData) {
     courseTitle: course.title,
     courseSlug,
     amountLabel: "Complimentary access",
+    razorpayOrderId: orderId,
   }).catch((err) => console.error("[grantManualEnrollment] email", err));
+
+  void recordAdminAudit({
+    actorEmail: adminActorEmail(adminUser),
+    action: "enrollment.grant_manual",
+    entityType: "enrollment",
+    entityId: orderId,
+    detail: { email, courseSlug },
+  });
 
   revalidatePath("/dashboard/enrollments");
   revalidatePath("/dashboard/my-courses");

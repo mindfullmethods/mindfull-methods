@@ -1,6 +1,8 @@
 import DashboardPageHeader from "@/components/components/dashboard/DashboardPageHeader";
 import SettingsForm from "@/components/components/dashboard/SettingsForm";
+import SettingsNotificationPrefs from "@/components/components/dashboard/SettingsNotificationPrefs";
 import { getSessionUser, requireUser } from "@/lib/auth";
+import { parseNotificationPrefs } from "@/lib/notification-prefs";
 
 export default async function SettingsPage() {
   await requireUser("/dashboard/settings");
@@ -16,10 +18,13 @@ export default async function SettingsPage() {
       <DashboardPageHeader
         eyebrow="Account"
         title="Settings"
-        description="Update your display name for certificates and change your password."
+        description="Profile, password, and which transactional emails you receive."
       />
 
-      <SettingsForm email={user?.email ?? ""} initialName={fullName} />
+      <div className="mt-8 grid gap-6">
+        <SettingsForm email={user?.email ?? ""} initialName={fullName} />
+        <SettingsNotificationPrefs initial={parseNotificationPrefs(user?.user_metadata)} />
+      </div>
     </main>
   );
 }

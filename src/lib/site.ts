@@ -1,7 +1,7 @@
 export const siteConfig = {
   name: "Mindfull Methods",
   description:
-    "Online certification courses and live mentorship training. Build career-ready skills with structured programs and expert guidance.",
+    "AI certification courses with live mentorship—Generative AI, agents, prompt engineering, and automation. Build job-ready skills with structured programs.",
   url: process.env.NEXT_PUBLIC_SITE_URL ?? "https://mindfull-methods.vercel.app",
   supportEmail: "rajivshekar@mindfullmethods.com",
   ogImage: "/brand-assets/logo-full.png",

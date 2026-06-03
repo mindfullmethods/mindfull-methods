@@ -1,5 +1,11 @@
-import { getInternshipById } from "@/Services/internship-details";
+import Link from "next/link";
+import { ArrowLeft, Edit3 } from "lucide-react";
+
 import { updateInternship } from "@/actions/updateInternship";
+import ImageUploadField from "@/components/components/dashboard/ImageUploadField";
+import DashboardPageHeader from "@/components/components/dashboard/DashboardPageHeader";
+import SectionHeader from "@/components/marketing/SectionHeader";
+import { getInternshipById } from "@/Services/internship-details";
 import { requireAdmin } from "@/lib/auth";
 
 export default async function EditInternshipPage({
@@ -8,118 +14,102 @@ export default async function EditInternshipPage({
   params: Promise<{ id: string }>;
 }) {
   await requireAdmin();
-
   const { id } = await params;
-
-  const internship =
-    await getInternshipById(id);
+  const internship = await getInternshipById(id);
 
   if (!internship) {
     return (
-      <main className="p-10">
-        Internship not found.
+      <main className="min-h-screen px-5 py-8 sm:px-8 xl:px-10">
+        <p className="text-sm font-semibold mm-muted">Internship not found.</p>
+        <Link href="/dashboard/admin" className="mt-4 inline-flex text-sm font-bold text-violet-600 dark:text-violet-300">
+          Back to Admin Studio
+        </Link>
       </main>
     );
   }
 
   return (
-    <main className="min-h-screen px-5 py-8 sm:px-8 xl:px-12">
+    <main className="min-h-screen px-5 py-8 sm:px-8 xl:px-10">
+      <Link
+        href="/dashboard/admin"
+        className="inline-flex items-center gap-2 text-sm font-semibold mm-subtle transition hover:text-zinc-950 dark:hover:text-white"
+      >
+        <ArrowLeft size={16} />
+        Back to Admin Studio
+      </Link>
 
-      <div className="mb-12">
-
-        <p className="text-sm font-semibold uppercase tracking-[0.3em] text-gray-400">
-          Edit Internship
-        </p>
-
-        <h1 className="mt-4 text-4xl font-black text-black dark:text-white sm:text-5xl">
-          Update Internship
-        </h1>
-
+      <div className="mt-6">
+        <DashboardPageHeader
+          eyebrow="Admin Studio"
+          title="Update internship"
+          description={`Editing ${internship.title} at ${internship.company}.`}
+        />
       </div>
 
-      <div className="rounded-[32px] border border-white/20 bg-white/80 p-6 shadow-2xl backdrop-blur-xl transition duration-500 dark:border-white/10 dark:bg-white/5 sm:p-8">
+      <form
+        action={async (formData) => {
+          "use server";
+          await updateInternship(internship.id, formData);
+        }}
+        className="mt-8 mm-section-panel"
+      >
+        <div className="relative flex items-center gap-3">
+          <span className="flex h-11 w-11 items-center justify-center rounded-xl bg-zinc-950 text-white dark:bg-white dark:text-zinc-950">
+            <Edit3 size={20} />
+          </span>
+          <SectionHeader eyebrow="Program" title="Internship details" />
+        </div>
 
-        <form
-          action={async (formData) => {
-            "use server";
+        <div className="relative mt-8 grid gap-5">
+          {[
+            { label: "Internship title", name: "title", defaultValue: internship.title },
+            { label: "Company name", name: "company", defaultValue: internship.company },
+            { label: "Duration", name: "duration", defaultValue: internship.duration },
+            { label: "Stipend", name: "stipend", defaultValue: internship.stipend },
+            { label: "Tags (comma-separated)", name: "tags", defaultValue: internship.tags ?? "" },
+          ].map((field) => (
+            <label key={field.name} className="block">
+              <span className="text-sm font-semibold mm-heading">{field.label}</span>
+              <input
+                type="text"
+                name={field.name}
+                defaultValue={field.defaultValue}
+                className="mt-2 mm-input w-full"
+              />
+            </label>
+          ))}
 
-            await updateInternship(
-              internship.id,
-              formData
-            );
-          }}
-          className="grid gap-6"
-        >
+          <ImageUploadField defaultValue={internship.image_url} placeholder="/images/marketing/internship-fallback.jpg" />
 
-          <input
-            name="title"
-            defaultValue={internship.title}
-            className="w-full rounded-3xl border border-black/10 bg-white/70 px-5 py-5 outline-none transition dark:border-white/10 dark:bg-black/20 dark:text-white"
-          />
-
-          <input
-            name="company"
-            defaultValue={internship.company}
-            className="w-full rounded-3xl border border-black/10 bg-white/70 px-5 py-5 outline-none transition dark:border-white/10 dark:bg-black/20 dark:text-white"
-          />
-
-          <textarea
-            name="description"
-            rows={6}
-            defaultValue={internship.description}
-            className="w-full rounded-3xl border border-black/10 bg-white/70 px-5 py-5 outline-none transition dark:border-white/10 dark:bg-black/20 dark:text-white"
-          />
-
-          <div className="grid gap-6 sm:grid-cols-2">
-
-            <input
-              name="duration"
-              defaultValue={internship.duration}
-              className="w-full rounded-3xl border border-black/10 bg-white/70 px-5 py-5 outline-none transition dark:border-white/10 dark:bg-black/20 dark:text-white"
+          <label className="block">
+            <span className="text-sm font-semibold mm-heading">Description</span>
+            <textarea
+              rows={6}
+              name="description"
+              defaultValue={internship.description}
+              className="mt-2 mm-input w-full resize-none"
             />
+          </label>
 
-            <input
-              name="stipend"
-              defaultValue={internship.stipend}
-              className="w-full rounded-3xl border border-black/10 bg-white/70 px-5 py-5 outline-none transition dark:border-white/10 dark:bg-black/20 dark:text-white"
-            />
-
-          </div>
-
-          <input
-            name="image_url"
-            defaultValue={internship.image_url}
-            className="w-full rounded-3xl border border-black/10 bg-white/70 px-5 py-5 outline-none transition dark:border-white/10 dark:bg-black/20 dark:text-white"
-          />
-
-          <input
-            name="tags"
-            defaultValue={internship.tags ?? ""}
-            placeholder="Tags (comma-separated)"
-            className="w-full rounded-3xl border border-black/10 bg-white/70 px-5 py-5 outline-none transition dark:border-white/10 dark:bg-black/20 dark:text-white"
-          />
-
-          <label className="flex items-center gap-3 rounded-3xl border border-black/10 bg-white/70 px-5 py-5 dark:border-white/10 dark:bg-black/20">
+          <label className="flex items-center gap-3 rounded-xl border mm-border bg-zinc-50/80 px-4 py-3 dark:bg-white/[0.02]">
             <input
               type="checkbox"
               name="is_published"
               defaultChecked={internship.is_published !== false}
               className="h-4 w-4 rounded"
             />
-            <span className="text-sm font-black dark:text-white">Published (visible to students)</span>
+            <span className="text-sm font-semibold mm-heading">Published (visible to students)</span>
           </label>
+        </div>
 
-          <button
-            type="submit"
-            className="mt-6 rounded-3xl bg-black px-8 py-5 text-lg font-semibold text-white shadow-2xl transition duration-300 hover:scale-[1.02] dark:bg-white dark:text-black"
-          >
-            Update Internship
-          </button>
-
-        </form>
-
-      </div>
-
+        <button
+          type="submit"
+          className="relative mt-7 inline-flex w-full items-center justify-center gap-2 rounded-xl bg-zinc-950 px-5 py-4 text-sm font-bold text-white transition hover:scale-[1.01] dark:bg-white dark:text-zinc-950"
+        >
+          <Edit3 size={18} />
+          Update internship
+        </button>
+      </form>
     </main>
   );
 }

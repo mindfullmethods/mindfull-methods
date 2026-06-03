@@ -3,11 +3,12 @@
 import Link from "next/link";
 import { Suspense, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
-import { ArrowRight, BriefcaseBusiness, LockKeyhole, Mail } from "lucide-react";
+import { ArrowRight, GraduationCap, LockKeyhole, Mail } from "lucide-react";
 import { supabase } from "@/lib/supabase";
 import { linkEnrollmentAction } from "@/actions/linkEnrollment";
 import BrandLogo from "@/components/marketing/BrandLogo";
 import ThemedBrandLogo from "@/components/marketing/ThemedBrandLogo";
+import AuthOAuthButtons from "@/components/marketing/AuthOAuthButtons";
 import ThemeToggle from "@/components/ThemeToggle";
 import { marketingImages } from "@/lib/images";
 
@@ -83,14 +84,14 @@ function LoginPageContent() {
 
           <div className="max-w-xl">
             <div className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/10 px-4 py-2 text-sm font-bold backdrop-blur-md">
-              <BriefcaseBusiness size={16} />
-              Student career workspace
+              <GraduationCap size={16} />
+              Student learning workspace
             </div>
             <h1 className="mt-6 text-6xl font-black leading-tight tracking-tight">
-              Welcome back to your internship command center.
+              Welcome back to your course dashboard.
             </h1>
             <p className="mt-6 text-lg leading-8 text-white/75">
-              Continue applications, explore programs, and manage your progress from a focused dashboard.
+              Pick up where you left off — weekly lessons, mentor feedback, and certificates in one place.
             </p>
           </div>
 
@@ -108,8 +109,10 @@ function LoginPageContent() {
             <p className="text-sm font-black uppercase tracking-[0.28em] text-zinc-500">Login</p>
             <h1 className="mt-4 text-4xl font-black tracking-tight">Continue your journey</h1>
             <p className="mt-3 text-sm leading-6 text-zinc-600 dark:text-zinc-400">
-              Access your internship dashboard and manage your applications.
+              Sign in to access your enrolled courses, track progress, and download certificates.
             </p>
+
+            <AuthOAuthButtons />
 
             <form onSubmit={handleLogin} className="mt-8 space-y-5">
               <label className="block">
@@ -128,7 +131,15 @@ function LoginPageContent() {
               </label>
 
               <label className="block">
-                <span className="text-sm font-black">Password</span>
+                <span className="flex items-center justify-between gap-2 text-sm font-black">
+                  Password
+                  <Link
+                    href="/forgot-password"
+                    className="text-xs font-bold text-violet-600 hover:underline dark:text-violet-400"
+                  >
+                    Forgot password?
+                  </Link>
+                </span>
                 <span className="mt-2 flex items-center gap-3 rounded-xl border border-zinc-200 bg-[#f7f8f5] px-4 py-3 dark:border-white/10 dark:bg-zinc-950">
                   <LockKeyhole size={18} className="text-zinc-500" />
                   <input

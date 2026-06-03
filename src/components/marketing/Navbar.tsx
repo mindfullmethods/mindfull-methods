@@ -8,6 +8,7 @@ import { Menu, X } from "lucide-react";
 import ThemeToggle from "@/components/ThemeToggle";
 import NavAuth from "@/components/marketing/NavAuth";
 import ThemedBrandLogo from "@/components/marketing/ThemedBrandLogo";
+import { getBookingUrl, isExternalBooking } from "@/lib/booking-url";
 
 type NavItem = {
   href: string;
@@ -30,6 +31,8 @@ function isActive(pathname: string, href: string) {
 export default function Navbar() {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
+  const bookingUrl = getBookingUrl();
+  const bookingExternal = isExternalBooking();
 
   const activeLabel = useMemo(() => {
     const match = navItems.find((item) => isActive(pathname, item.href));
@@ -71,12 +74,13 @@ export default function Navbar() {
         <div className="hidden items-center gap-2 md:flex">
           <ThemeToggle size="sm" />
           <NavAuth />
-          <Link
-            href="/contact"
+          <a
+            href={bookingUrl}
+            {...(bookingExternal ? { target: "_blank", rel: "noopener noreferrer" } : {})}
             className="mm-btn-glow inline-flex items-center justify-center rounded-lg px-5 py-2.5 text-sm font-semibold"
           >
             Book Free Call
-          </Link>
+          </a>
         </div>
 
         <div className="flex items-center gap-2 md:hidden">
@@ -135,13 +139,14 @@ export default function Navbar() {
               Dashboard
             </Link>
 
-            <Link
-              href="/contact"
+            <a
+              href={bookingUrl}
+              {...(bookingExternal ? { target: "_blank", rel: "noopener noreferrer" } : {})}
               onClick={() => setOpen(false)}
               className="mt-2 inline-flex items-center justify-center rounded-xl mm-btn-glow px-4 py-3 text-sm font-black"
             >
               Book Free Call
-            </Link>
+            </a>
           </div>
         </div>
       ) : null}

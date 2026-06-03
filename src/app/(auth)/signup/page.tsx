@@ -8,6 +8,7 @@ import { supabase } from "@/lib/supabase";
 import { getCourseBySlug } from "@/lib/courses";
 import { linkEnrollmentAction } from "@/actions/linkEnrollment";
 import ThemedBrandLogo from "@/components/marketing/ThemedBrandLogo";
+import AuthOAuthButtons from "@/components/marketing/AuthOAuthButtons";
 import ThemeToggle from "@/components/ThemeToggle";
 import { marketingImages } from "@/lib/images";
 
@@ -85,7 +86,11 @@ function SignupPageContent() {
         return;
       }
 
-      router.replace(paid ? "/dashboard/my-courses?enrolled=1" : "/dashboard/internships");
+      router.replace(
+        paid || courseSlug
+          ? `/dashboard/my-courses${paid ? "?enrolled=1" : ""}`
+          : "/dashboard/courses"
+      );
       return;
     }
 
@@ -103,12 +108,12 @@ function SignupPageContent() {
             <ThemedBrandLogo size="md" />
           </Link>
 
-          <p className="text-sm font-black uppercase tracking-[0.28em] text-zinc-500">Apply</p>
+          <p className="text-sm font-black uppercase tracking-[0.28em] text-zinc-500">Sign up</p>
           <h1 className="mt-4 text-4xl font-black tracking-tight">Create your student workspace</h1>
           <p className="mt-3 text-sm leading-6 text-zinc-600 dark:text-zinc-400">
             {selectedCourse
-              ? `You're applying for ${selectedCourse.title}. Create an account to browse internships and track applications.`
-              : "Start applying to structured programs and build proof of work."}
+              ? `You're enrolling in ${selectedCourse.title}. Create an account to access lessons, track progress, and earn your certificate.`
+              : "Enroll in mentor-led courses, complete weekly milestones, and build proof of work."}
           </p>
 
           {paid ? (
@@ -122,6 +127,8 @@ function SignupPageContent() {
               Selected track: {selectedCourse.title}
             </div>
           ) : null}
+
+          <AuthOAuthButtons />
 
           <form onSubmit={handleSignup} className="mt-8 space-y-5">
             {[
@@ -184,7 +191,11 @@ function SignupPageContent() {
           <p className="mt-7 text-center text-sm font-semibold text-zinc-500">
             Already registered?{" "}
             <Link
-              href={courseSlug ? `/login?next=${encodeURIComponent("/dashboard/internships")}` : "/login"}
+              href={
+                courseSlug
+                  ? `/login?next=${encodeURIComponent("/dashboard/my-courses")}`
+                  : "/login"
+              }
               className="font-black text-zinc-950 dark:text-white"
             >
               Sign in
@@ -202,9 +213,9 @@ function SignupPageContent() {
         <div className="absolute inset-0 bg-zinc-950/65" />
         <div className="relative z-10 flex h-full flex-col justify-end p-10 text-white">
           <div className="max-w-xl">
-            <h2 className="text-6xl font-black leading-tight tracking-tight">Internships that feel like real work.</h2>
+            <h2 className="text-6xl font-black leading-tight tracking-tight">Courses built for real-world skills.</h2>
             <div className="mt-8 grid gap-3">
-              {["Curated tracks", "Guided project work", "Application tracking"].map((item) => (
+              {["Structured weekly curriculum", "Mentor-reviewed progress", "Shareable certificates"].map((item) => (
                 <div key={item} className="flex items-center gap-3 rounded-xl bg-white/10 px-4 py-3 font-bold backdrop-blur">
                   <CheckCircle2 size={18} />
                   {item}

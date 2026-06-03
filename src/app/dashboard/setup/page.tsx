@@ -39,20 +39,20 @@ export default async function LaunchSetupPage() {
         {checks.map((check) => (
           <article
             key={check.id}
-            className={`rounded-3xl border p-5 sm:p-6 ${
+            className={`mm-section-panel ${
               check.ready
-                ? "border-emerald-200 bg-emerald-50 dark:border-emerald-400/20 dark:bg-emerald-400/10"
-                : "border-zinc-200 bg-white dark:border-white/10 dark:bg-white/5"
+                ? "border-emerald-200 bg-emerald-50/80 dark:border-emerald-400/20 dark:bg-emerald-400/10"
+                : ""
             }`}
           >
-            <div className="flex items-start gap-4">
+            <div className="relative flex items-start gap-4">
               {check.ready ? (
                 <CheckCircle2 className="mt-0.5 shrink-0 text-emerald-600" size={22} />
               ) : (
                 <Circle className="mt-0.5 shrink-0 text-zinc-400" size={22} />
               )}
               <div className="min-w-0 flex-1">
-                <h2 className="text-lg font-black">{check.label}</h2>
+                <h2 className="text-lg font-bold mm-heading">{check.label}</h2>
                 <p className="mt-2 text-sm leading-6 text-zinc-600 dark:text-zinc-400">{check.detail}</p>
                 {check.action && !check.ready ? (
                   <p className="mt-3 text-sm font-bold text-violet-700 dark:text-violet-300">→ {check.action}</p>
@@ -63,22 +63,60 @@ export default async function LaunchSetupPage() {
         ))}
       </section>
 
-      <section className="mt-8 rounded-3xl border border-zinc-200 bg-white p-6 dark:border-white/10 dark:bg-white/5 sm:p-8">
-        <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
-          <div>
-            <p className="flex items-center gap-2 text-xs font-black uppercase tracking-[0.2em] text-zinc-500">
-              <Rocket size={14} />
-              When all checks are green
-            </p>
-            <p className="mt-2 text-sm leading-6 text-zinc-600 dark:text-zinc-400">
-              Connect your domain, set production env vars on Vercel, run a smoke test, then push to deploy.
-            </p>
-          </div>
+      <section className="mt-8 mm-section-panel">
+        <p className="text-xs font-bold uppercase tracking-[0.2em] mm-subtle">Supabase SQL (local dev)</p>
+        <p className="mt-2 text-sm leading-6 mm-muted">
+          Run migrations in order in the Supabase SQL Editor. From your project root:{" "}
+          <code className="rounded bg-zinc-100 px-1.5 py-0.5 text-xs dark:bg-white/10">npm run setup:check</code>
+        </p>
+        <ol className="mt-4 list-decimal space-y-1 pl-5 text-sm font-semibold mm-heading">
+          {[
+            "enrollments-schema.sql",
+            "applications-status-only.sql",
+            "course-progress-schema.sql",
+            "contact-inquiries-schema.sql",
+            "contact-inquiries-status.sql",
+            "admin-dashboard-extensions.sql",
+            "contact-inquiries-linked-enrollment.sql",
+            "certificates-schema.sql",
+            "completion-verifications-schema.sql",
+            "content-cms-schema.sql",
+            "storage-marketing-uploads.sql",
+            "storage-resumes.sql",
+          ].map((file) => (
+            <li key={file}>
+              <span className="font-mono text-xs text-violet-700 dark:text-violet-300">supabase/{file}</span>
+            </li>
+          ))}
+        </ol>
+        <p className="mt-4 text-xs mm-muted">
+          Full guide: <span className="font-mono">docs/LOCAL_MIGRATIONS.md</span>
+        </p>
+      </section>
+
+      <section className="mt-6 mm-section-panel flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+        <div className="relative">
+          <p className="flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.2em] mm-subtle">
+            <Rocket size={14} />
+            When all checks are green
+          </p>
+          <p className="mt-2 text-sm leading-6 mm-muted">
+            Run <code className="rounded bg-zinc-100 px-1 dark:bg-white/10">npm run smoke</code> locally, then connect
+            domain and production env when you are ready to launch.
+          </p>
+        </div>
+        <div className="flex flex-wrap gap-3">
+          <Link
+            href="/dashboard/admin/site"
+            className="inline-flex items-center gap-2 rounded-xl border mm-border px-5 py-3 text-sm font-bold mm-heading"
+          >
+            Site & promos
+          </Link>
           <Link
             href="/dashboard/inquiries"
-            className="inline-flex items-center gap-2 rounded-xl bg-zinc-950 px-5 py-3 text-sm font-black text-white dark:bg-white dark:text-zinc-950"
+            className="inline-flex items-center gap-2 rounded-xl bg-zinc-950 px-5 py-3 text-sm font-bold text-white dark:bg-white dark:text-zinc-950"
           >
-            View contact inquiries
+            Contact inquiries
             <ArrowRight size={16} />
           </Link>
         </div>

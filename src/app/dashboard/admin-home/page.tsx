@@ -1,17 +1,21 @@
 import Link from "next/link";
 import {
   ArrowRight,
+  Award,
   BarChart3,
   ClipboardList,
   CreditCard,
+  History,
   Mail,
   Rocket,
   ShieldCheck,
+  TrendingUp,
   Users,
 } from "lucide-react";
 
 import SendDigestButton from "@/components/components/dashboard/SendDigestButton";
 import DashboardPageHeader from "@/components/components/dashboard/DashboardPageHeader";
+import { getRecentAuditLog } from "@/Services/admin-audit-log";
 import { getAdminHomeSummary } from "@/Services/admin-home";
 import { requireAdmin } from "@/lib/auth";
 
@@ -34,13 +38,16 @@ function formatDate(value: string) {
 
 export default async function AdminHomePage() {
   await requireAdmin();
-  const summary = await getAdminHomeSummary();
+  const [summary, auditLog] = await Promise.all([getAdminHomeSummary(), getRecentAuditLog(10)]);
   const { analytics, setup } = summary;
 
   const quickLinks = [
     { href: "/dashboard/applications", label: "Applications", icon: ClipboardList, badge: summary.pendingApplicationsCount },
     { href: "/dashboard/inquiries", label: "Inquiries", icon: Mail, badge: summary.newInquiriesCount },
+    { href: "/dashboard/analytics", label: "Analytics & reviews", icon: BarChart3, badge: summary.pendingCertificateReviews.length },
+    { href: "/dashboard/growth", label: "Growth", icon: TrendingUp, badge: null },
     { href: "/dashboard/enrollments", label: "Enrollments", icon: CreditCard, badge: analytics.totals.paidEnrollments },
+    { href: "/dashboard/admin/audit", label: "Audit log", icon: History, badge: null },
     { href: "/dashboard/users", label: "Students", icon: Users, badge: null },
     { href: "/dashboard/admin", label: "Admin Studio", icon: ShieldCheck, badge: null },
     { href: "/dashboard/setup", label: "Launch setup", icon: Rocket, badge: setup.total - setup.ready },
@@ -68,9 +75,9 @@ export default async function AdminHomePage() {
       <section className="mt-8 grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
         {[
           { label: "Pending applications", value: summary.pendingApplicationsCount },
+          { label: "Certificate reviews", value: summary.pendingCertificateReviews.length },
           { label: "New inquiries", value: summary.newInquiriesCount },
           { label: "Paid enrollments", value: analytics.totals.paidEnrollments },
-          { label: "Revenue", value: formatAmount(analytics.totals.revenuePaise) },
         ].map((stat) => (
           <div key={stat.label} className="mm-metric-glow p-5">
             <p className="text-xs font-semibold uppercase tracking-[0.18em] mm-subtle">{stat.label}</p>
@@ -78,6 +85,38 @@ export default async function AdminHomePage() {
           </div>
         ))}
       </section>
+
+      {summary.pendingCertificateReviews.length > 0 ? (
+        <section className="mt-8 mm-section-panel border-amber-200 bg-amber-50/80 dark:border-amber-400/20 dark:bg-amber-400/10">
+          <div className="relative flex items-center justify-between gap-4">
+            <h2 className="flex items-center gap-2 text-lg font-bold mm-heading">
+              <Award size={18} className="text-amber-600" />
+              Pending certificate reviews
+            </h2>
+            <Link href="/dashboard/analytics" className="text-sm font-bold text-violet-600 dark:text-violet-300">
+              View all →
+            </Link>
+          </div>
+          <ul className="relative mt-4 space-y-3">
+            {summary.pendingCertificateReviews.slice(0, 5).map((review) => (
+              <li key={`${review.userId}-${review.courseSlug}`}>
+                <Link
+                  href={`/dashboard/users/${review.userId}`}
+                  className="flex flex-col gap-1 rounded-xl border mm-border bg-white/80 p-4 transition hover:border-violet-300 dark:bg-white/[0.03] sm:flex-row sm:items-center sm:justify-between"
+                >
+                  <div>
+                    <p className="font-bold mm-heading">{review.courseTitle}</p>
+                    <p className="text-sm mm-muted">Student profile · review & approve</p>
+                  </div>
+                  <p className="text-xs font-semibold mm-subtle">
+                    Requested {formatDate(review.requestedAt)}
+                  </p>
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </section>
+      ) : null}
 
       <section className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {quickLinks.map((link) => (
@@ -141,6 +180,39 @@ export default async function AdminHomePage() {
           </ul>
         </div>
       </section>
+
+      {auditLog.length > 0 ? (
+        <section className="mt-8 mm-section-panel">
+          <div className="flex flex-wrap items-center justify-between gap-3">
+            <h2 className="text-lg font-bold mm-heading">Recent admin activity</h2>
+            <Link
+              href="/dashboard/admin/audit"
+              className="text-sm font-bold text-violet-600 dark:text-violet-300"
+            >
+              View all →
+            </Link>
+          </div>
+          <ul className="mt-4 space-y-3">
+            {auditLog.map((row) => (
+              <li key={row.id} className="flex flex-wrap items-baseline justify-between gap-2 text-sm">
+                <span>
+                  <span className="font-bold">{row.action}</span>
+                  {row.entity_id ? (
+                    <span className="text-zinc-500">
+                      {" "}
+                      · {row.entity_type ?? "item"} {row.entity_id.slice(0, 24)}
+                      {row.entity_id.length > 24 ? "…" : ""}
+                    </span>
+                  ) : null}
+                </span>
+                <span className="text-zinc-500">
+                  {row.actor_email} · {formatDate(row.created_at)}
+                </span>
+              </li>
+            ))}
+          </ul>
+        </section>
+      ) : null}
 
       <section className="mt-8 mm-section-panel flex flex-col gap-6 sm:flex-row sm:items-center sm:justify-between">
         <div>

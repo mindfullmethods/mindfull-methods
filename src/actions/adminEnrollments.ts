@@ -2,13 +2,14 @@
 
 import { revalidatePath } from "next/cache";
 
+import { adminActorEmail, recordAdminAudit } from "@/lib/audit-log";
 import { requireAdmin } from "@/lib/auth";
 import { notifyEnrollmentCompleted } from "@/lib/email";
 import { getCourseBySlug } from "@/lib/courses";
 import { createAdminClient } from "@/lib/supabase/admin";
 
 export async function markEnrollmentRefunded(enrollmentId: string) {
-  await requireAdmin();
+  const admin = await requireAdmin();
 
   let supabase;
   try {
@@ -28,6 +29,13 @@ export async function markEnrollmentRefunded(enrollmentId: string) {
     return { ok: false as const, error: error.message };
   }
 
+  void recordAdminAudit({
+    actorEmail: adminActorEmail(admin),
+    action: "enrollment.refunded",
+    entityType: "enrollment",
+    entityId: enrollmentId,
+  });
+
   revalidatePath("/dashboard/enrollments");
   revalidatePath("/dashboard/admin-home");
 
@@ -35,7 +43,7 @@ export async function markEnrollmentRefunded(enrollmentId: string) {
 }
 
 export async function resendEnrollmentReceipt(enrollmentId: string) {
-  await requireAdmin();
+  const admin = await requireAdmin();
 
   let supabase;
   try {
@@ -85,11 +93,19 @@ export async function resendEnrollmentReceipt(enrollmentId: string) {
       courseTitle: course?.title ?? enrollment.course_title,
       courseSlug: enrollment.course_slug,
       amountLabel,
+      razorpayOrderId: enrollment.razorpay_order_id ?? undefined,
     });
   } catch (err) {
     const message = err instanceof Error ? err.message : "Failed to send email.";
     return { ok: false as const, error: message };
   }
+
+  void recordAdminAudit({
+    actorEmail: adminActorEmail(admin),
+    action: "enrollment.resend_receipt",
+    entityType: "enrollment",
+    entityId: enrollmentId,
+  });
 
   return { ok: true as const };
 }

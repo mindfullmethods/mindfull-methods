@@ -2,7 +2,8 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ArrowLeft, CheckCircle2, Download, Sparkles } from "lucide-react";
 
-import EnrollButton from "@/components/marketing/EnrollButton";
+import DashboardPageHeader from "@/components/components/dashboard/DashboardPageHeader";
+import EnrollCheckoutSection from "@/components/marketing/EnrollCheckoutSection";
 import FAQAccordion from "@/components/marketing/FAQAccordion";
 import { isEnrolledInCourse } from "@/Services/course-progress";
 import { requireUser } from "@/lib/auth";
@@ -25,36 +26,36 @@ export default async function DashboardCourseDetailPage({ params }: { params: Pr
     <main className="min-h-screen px-5 py-8 sm:px-8 xl:px-10">
       <Link
         href="/dashboard/courses"
-        className="inline-flex items-center gap-2 text-sm font-black text-zinc-500 hover:text-zinc-950 dark:hover:text-white"
+        className="inline-flex items-center gap-2 text-sm font-semibold mm-subtle transition hover:text-zinc-950 dark:hover:text-white"
       >
         <ArrowLeft size={16} />
         Back to courses
       </Link>
 
-      <section className="mt-6 overflow-hidden rounded-3xl border border-zinc-200 bg-white shadow-sm dark:border-white/10 dark:bg-white/5">
+      <section className="mt-6 overflow-hidden rounded-3xl border mm-border">
         <div className="relative">
           <img src={course.imageUrl} alt={course.title} className="aspect-[5/2] w-full object-cover" />
           <div className="absolute inset-0 bg-gradient-to-t from-zinc-950 via-zinc-950/40 to-transparent" />
           <div className="absolute bottom-0 left-0 p-6 sm:p-8">
             <div className="flex flex-wrap items-center gap-3">
-              <span className="rounded-full bg-white/90 px-3 py-1 text-xs font-black text-zinc-950">{course.mode}</span>
-              <span className="rounded-full bg-white/20 px-3 py-1 text-xs font-black text-white backdrop-blur">
+              <span className="rounded-full bg-white/90 px-3 py-1 text-xs font-bold text-zinc-950">{course.mode}</span>
+              <span className="rounded-full bg-white/20 px-3 py-1 text-xs font-bold text-white backdrop-blur">
                 {course.duration}
               </span>
-              <span className="rounded-full bg-white/20 px-3 py-1 text-xs font-black text-white backdrop-blur">
+              <span className="rounded-full bg-white/20 px-3 py-1 text-xs font-bold text-white backdrop-blur">
                 {course.level}
               </span>
               {enrolled ? (
-                <span className="rounded-full bg-emerald-500 px-3 py-1 text-xs font-black text-white">Enrolled</span>
+                <span className="rounded-full bg-emerald-500 px-3 py-1 text-xs font-bold text-white">Enrolled</span>
               ) : null}
             </div>
-            <h1 className="mt-4 max-w-3xl text-3xl font-black tracking-tight text-white sm:text-5xl">{course.title}</h1>
+            <h1 className="mt-4 max-w-3xl text-3xl font-bold tracking-tight text-white sm:text-5xl">{course.title}</h1>
           </div>
         </div>
 
         <div className="grid gap-8 p-6 sm:p-8 lg:grid-cols-[1.25fr_0.75fr]">
           <div>
-            <p className="text-sm leading-7 text-zinc-600 dark:text-zinc-400">{course.longDescription}</p>
+            <p className="text-sm leading-7 mm-muted">{course.longDescription}</p>
 
             <div className="mt-6 flex flex-wrap gap-2">
               {course.tags.map((tag) => (
@@ -69,32 +70,29 @@ export default async function DashboardCourseDetailPage({ params }: { params: Pr
 
             <div className="mt-8 grid gap-4 sm:grid-cols-2">
               {course.learnOutcomes.slice(0, 4).map((outcome) => (
-                <div
-                  key={outcome}
-                  className="flex items-start gap-3 rounded-2xl border border-zinc-200 bg-[#f7f8f5] p-4 dark:border-white/10 dark:bg-zinc-950"
-                >
+                <div key={outcome} className="flex items-start gap-3 rounded-2xl border mm-border bg-[#f7f8f5] p-4 dark:bg-zinc-950">
                   <CheckCircle2 size={18} className="mt-0.5 text-emerald-600" />
-                  <p className="text-sm font-bold text-zinc-700 dark:text-zinc-300">{outcome}</p>
+                  <p className="text-sm font-bold mm-heading">{outcome}</p>
                 </div>
               ))}
             </div>
           </div>
 
           <aside className="lg:sticky lg:top-24">
-            <div className="rounded-3xl border border-zinc-200 bg-[#f7f8f5] p-5 dark:border-white/10 dark:bg-zinc-950">
-              <p className="text-sm font-black text-zinc-500">Enroll</p>
-              <p className="mt-2 text-2xl font-black">{course.priceLabel}</p>
+            <div className="mm-section-panel">
+              <p className="text-sm font-bold mm-subtle">Enroll</p>
+              <p className="mt-2 text-2xl font-bold mm-heading">{course.priceLabel}</p>
 
               <div className="mt-5 flex flex-col gap-3">
                 {enrolled ? (
                   <Link
                     href={`/dashboard/my-courses/${course.slug}`}
-                    className="inline-flex items-center justify-center rounded-xl bg-emerald-600 px-5 py-4 text-sm font-black text-white transition hover:bg-emerald-700"
+                    className="inline-flex items-center justify-center rounded-xl bg-emerald-600 px-5 py-4 text-sm font-bold text-white transition hover:bg-emerald-700"
                   >
                     Track progress
                   </Link>
                 ) : paymentsEnabled ? (
-                  <EnrollButton
+                  <EnrollCheckoutSection
                     courseSlug={course.slug}
                     courseTitle={course.title}
                     amountInPaise={course.priceInPaise}
@@ -103,7 +101,7 @@ export default async function DashboardCourseDetailPage({ params }: { params: Pr
                 ) : (
                   <Link
                     href="/contact"
-                    className="inline-flex items-center justify-center rounded-xl bg-zinc-950 px-5 py-4 text-sm font-black text-white dark:bg-white dark:text-zinc-950"
+                    className="inline-flex items-center justify-center rounded-xl bg-zinc-950 px-5 py-4 text-sm font-bold text-white dark:bg-white dark:text-zinc-950"
                   >
                     Contact to enroll
                   </Link>
@@ -111,15 +109,15 @@ export default async function DashboardCourseDetailPage({ params }: { params: Pr
 
                 <Link
                   href={contactUrl(course.slug)}
-                  className="inline-flex items-center justify-center rounded-xl border border-zinc-200 bg-white px-5 py-4 text-sm font-black dark:border-white/10 dark:bg-white/5"
+                  className="inline-flex items-center justify-center rounded-xl border mm-border px-5 py-4 text-sm font-bold mm-heading"
                 >
                   Book a call
                 </Link>
 
-                <div className="rounded-2xl border border-zinc-200 bg-white p-4 dark:border-white/10 dark:bg-white/5">
+                <div className="rounded-2xl border mm-border p-4">
                   <div className="flex items-center gap-2">
-                    <Download size={16} className="text-zinc-500" />
-                    <p className="text-sm font-bold">Course syllabus</p>
+                    <Download size={16} className="mm-subtle" />
+                    <p className="text-sm font-bold mm-heading">Course syllabus</p>
                   </div>
                   <div className="mt-3 flex flex-wrap gap-2">
                     {pdfAvailable ? (
@@ -127,7 +125,7 @@ export default async function DashboardCourseDetailPage({ params }: { params: Pr
                         href={syllabusPdfUrl(course.slug)}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="inline-flex items-center gap-2 rounded-xl border border-zinc-200 px-4 py-2.5 text-sm font-black dark:border-white/10"
+                        className="inline-flex items-center gap-2 rounded-xl border mm-border px-4 py-2.5 text-sm font-bold mm-heading"
                       >
                         <Download size={14} />
                         Download PDF
@@ -135,19 +133,19 @@ export default async function DashboardCourseDetailPage({ params }: { params: Pr
                     ) : null}
                     <a
                       href={syllabusPrintUrl(course.slug)}
-                      className="inline-flex items-center gap-2 rounded-xl border border-zinc-200 px-4 py-2.5 text-sm font-black dark:border-white/10"
+                      className="inline-flex items-center gap-2 rounded-xl border mm-border px-4 py-2.5 text-sm font-bold mm-heading"
                     >
                       View & print
                     </a>
                     <a
                       href={syllabusUrl(course.slug)}
                       download
-                      className="inline-flex items-center gap-2 rounded-xl border border-zinc-200 px-4 py-2.5 text-sm font-black dark:border-white/10"
+                      className="inline-flex items-center gap-2 rounded-xl border mm-border px-4 py-2.5 text-sm font-bold mm-heading"
                     >
                       .txt
                     </a>
                   </div>
-                  <div className="mt-3 flex items-center gap-2 text-xs font-bold text-zinc-500">
+                  <div className="mt-3 flex items-center gap-2 text-xs font-bold mm-subtle">
                     <Sparkles size={14} />
                     Weekly mentorship included
                   </div>
@@ -158,17 +156,22 @@ export default async function DashboardCourseDetailPage({ params }: { params: Pr
         </div>
       </section>
 
-      <section className="mt-8 grid gap-8 lg:grid-cols-2">
-        <div className="rounded-3xl border border-zinc-200 bg-white p-6 shadow-sm dark:border-white/10 dark:bg-white/5 sm:p-8">
-          <p className="text-xs font-black uppercase tracking-[0.2em] text-zinc-500">Curriculum</p>
-          <h2 className="mt-2 text-2xl font-black">Weekly milestones</h2>
+      <div className="mt-8">
+        <DashboardPageHeader
+          eyebrow="Program details"
+          title="Curriculum & FAQs"
+          description="Weekly milestones and answers before you enroll."
+        />
+      </div>
+
+      <section className="mt-6 grid gap-6 lg:grid-cols-2">
+        <div className="mm-section-panel">
+          <p className="text-xs font-bold uppercase tracking-[0.2em] mm-subtle">Curriculum</p>
+          <h2 className="mt-2 text-2xl font-bold mm-heading">Weekly milestones</h2>
           <div className="mt-6 space-y-4">
             {course.curriculum.map((item) => (
-              <div
-                key={item.week}
-                className="rounded-2xl border border-zinc-200 bg-[#f7f8f5] p-4 dark:border-white/10 dark:bg-zinc-950"
-              >
-                <p className="text-sm font-black text-violet-600 dark:text-violet-300">{item.week}</p>
+              <div key={item.week} className="rounded-2xl border mm-border bg-[#f7f8f5] p-4 dark:bg-zinc-950">
+                <p className="text-sm font-bold text-violet-600 dark:text-violet-300">{item.week}</p>
                 <div className="mt-3 flex flex-wrap gap-2">
                   {item.topics.map((topic) => (
                     <span
@@ -184,9 +187,9 @@ export default async function DashboardCourseDetailPage({ params }: { params: Pr
           </div>
         </div>
 
-        <div className="rounded-3xl border border-zinc-200 bg-white p-6 shadow-sm dark:border-white/10 dark:bg-white/5 sm:p-8">
-          <p className="text-xs font-black uppercase tracking-[0.2em] text-zinc-500">FAQs</p>
-          <h2 className="mt-2 text-2xl font-black">Common questions</h2>
+        <div className="mm-section-panel">
+          <p className="text-xs font-bold uppercase tracking-[0.2em] mm-subtle">FAQs</p>
+          <h2 className="mt-2 text-2xl font-bold mm-heading">Common questions</h2>
           <div className="mt-6">
             <FAQAccordion items={course.faqs} />
           </div>

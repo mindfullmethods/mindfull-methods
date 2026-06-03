@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { Award, CheckCircle2, XCircle } from "lucide-react";
 
-import BrandWordmark from "@/components/marketing/BrandWordmark";
+import ThemedBrandLogo from "@/components/marketing/ThemedBrandLogo";
 import { getCertificateById } from "@/Services/certificates";
 import { formatCertificateDate } from "@/lib/certificates";
 import { siteConfig } from "@/lib/site";
@@ -15,13 +15,13 @@ export default async function VerifyCertificatePage({
   const certificate = await getCertificateById(id.toUpperCase());
 
   return (
-    <main className="min-h-screen bg-[#f7f8f5] px-5 py-16 dark:bg-zinc-950 sm:px-8">
-      <div className="mx-auto max-w-xl">
-        <div className="mb-8 text-center">
-          <BrandWordmark size="sm" className="mx-auto" />
+    <main className="min-h-screen bg-[#f7f8f5] px-4 py-12 dark:bg-zinc-950 sm:px-8 sm:py-16">
+      <div className="mx-auto w-full max-w-xl">
+        <div className="mb-8 flex justify-center">
+          <ThemedBrandLogo size="lg" className="max-w-[min(260px,85vw)]" />
         </div>
 
-        <article className="rounded-3xl border border-zinc-200 bg-white p-8 shadow-sm dark:border-white/10 dark:bg-white/5">
+        <article className="rounded-3xl border border-zinc-200 bg-white p-6 shadow-sm dark:border-white/10 dark:bg-white/5 sm:p-8">
           {certificate ? (
             <>
               <p className="flex items-center justify-center gap-2 text-sm font-black text-emerald-600">
@@ -33,9 +33,9 @@ export default async function VerifyCertificatePage({
                 Completed <strong>{certificate.course_title}</strong>
               </p>
               <dl className="mt-8 space-y-3 border-t border-zinc-200 pt-6 text-sm dark:border-white/10">
-                <div className="flex justify-between gap-4">
+                <div className="flex flex-col gap-1 sm:flex-row sm:justify-between sm:gap-4">
                   <dt className="font-black text-zinc-500">Certificate ID</dt>
-                  <dd className="font-bold">{certificate.id}</dd>
+                  <dd className="break-all font-bold">{certificate.id}</dd>
                 </div>
                 <div className="flex justify-between gap-4">
                   <dt className="font-black text-zinc-500">Issued</dt>

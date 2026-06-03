@@ -31,262 +31,212 @@ export type Course = {
 
 const courses: Course[] = [
   {
-    id: "fe-frontend",
-    slug: "frontend-engineering",
-    title: "Frontend Engineering",
-    shortDescription: "Build portfolio-grade UI with React, Next.js, and modern best practices.",
+    id: "pe-prompt",
+    slug: "prompt-engineering",
+    title: "Prompt Engineering",
+    shortDescription: "Design reliable prompts, evaluate outputs, and ship AI workflows mentors can review.",
     longDescription:
-      "A mentorship-led course designed to take you from fundamentals to polished, production-ready frontends. You’ll ship guided projects, get code reviews, and learn how to think like a UI engineer.",
-    level: "Beginner Friendly",
-    duration: "8 weeks",
-    mode: "Online",
-    priceLabel: "₹12,999 · Cohort-based",
-    priceInPaise: 1299900,
-    tags: ["React", "Next.js", "Tailwind", "Projects"],
-    imageUrl: getCourseImage("frontend-engineering"),
-    featured: true,
-    learnOutcomes: [
-      "Build reusable UI components with accessibility in mind",
-      "Create performant pages with Next.js routing and data patterns",
-      "Design consistent styles using tokens and component variants",
-      "Ship a capstone project with a polished demo-ready README",
-    ],
-    curriculum: [
-      { week: "Week 1", topics: ["JS + React refresh", "Component patterns", "State & effects"] },
-      { week: "Week 2", topics: ["Styling systems", "Responsive layouts", "Tailwind component design"] },
-      { week: "Week 3", topics: ["Next.js fundamentals", "Routing basics", "Forms & validation UX"] },
-      { week: "Week 4", topics: ["Reusable UI patterns", "Modals & composition", "Performance basics"] },
-      { week: "Week 5", topics: ["Capstone planning", "Project architecture", "Designing user flows"] },
-      { week: "Week 6", topics: ["Capstone build", "Milestone feedback", "Iterate & refactor"] },
-      { week: "Week 7", topics: ["Polish phase", "Accessibility improvements", "Testing strategy"] },
-      { week: "Week 8", topics: ["Final demo", "Portfolio packaging", "Next steps mentorship"] },
-    ],
-    faqs: [
-      {
-        question: "Do I need previous React experience?",
-        answer:
-          "No. This track is designed for beginner-friendly learners. If you’ve written basic JavaScript, you’ll be fine—mentors will help you ramp up quickly.",
-      },
-      {
-        question: "How mentorship works during the course?",
-        answer:
-          "You’ll get weekly mentor sessions plus code-review style feedback on your project milestones. You’ll also receive targeted guidance when you get stuck.",
-      },
-      {
-        question: "Will there be a final project?",
-        answer:
-          "Yes. You’ll complete a capstone project and package it into a portfolio-ready demo.",
-      },
-    ],
-  },
-  {
-    id: "pd-product",
-    slug: "product-design",
-    title: "Product Design",
-    shortDescription: "Learn research, visual systems, and product storytelling with mentorship.",
-    longDescription:
-      "A structured design track that helps you move beyond theory. You’ll practice research, create wireframes, develop a coherent visual system, and present polished case studies—with feedback at every step.",
-    level: "Portfolio Track",
-    duration: "6 weeks",
-    mode: "Online",
-    priceLabel: "₹12,999 · Cohort-based",
-    priceInPaise: 1299900,
-    tags: ["Research", "Figma", "Design systems", "Case studies"],
-    imageUrl: getCourseImage("product-design"),
-    featured: true,
-    learnOutcomes: [
-      "Conduct lightweight UX research and translate findings into design decisions",
-      "Build wireframes and iterate with feedback loops",
-      "Develop a simple design system with consistent components",
-      "Create a case-study narrative that recruiters understand",
-    ],
-    curriculum: [
-      { week: "Week 1", topics: ["Problem framing", "User needs", "Research plan"] },
-      { week: "Week 2", topics: ["Wireframing", "User flows", "Rapid iteration"] },
-      { week: "Week 3", topics: ["Visual design", "Typography & layout", "Component thinking"] },
-      { week: "Week 4", topics: ["Design system", "Tokens & variants", "Consistency checks"] },
-      { week: "Week 5", topics: ["Case study draft", "Story structure", "Review & revise"] },
-      { week: "Week 6", topics: ["Final polish", "Portfolio packaging", "Mentor Q&A"] },
-    ],
-    faqs: [
-      {
-        question: "Do I need to be an expert in Figma?",
-        answer:
-          "No. You’ll learn the workflow we use in the course. If you already know Figma basics, you’ll progress faster, but both paths work.",
-      },
-      {
-        question: "What will I have at the end?",
-        answer:
-          "A portfolio-ready case study with a documented process, plus a small design system you can reuse.",
-      },
-    ],
-  },
-  {
-    id: "da-analytics",
-    slug: "data-analytics",
-    title: "Data Analytics",
-    shortDescription: "Turn datasets into dashboards and clear business insights.",
-    longDescription:
-      "This track focuses on practical analysis: from cleaning and interpreting data to communicating results. You’ll learn how to build dashboards that stakeholders actually use—and you’ll iterate with mentor feedback.",
-    level: "Project Based",
-    duration: "7 weeks",
-    mode: "Online",
-    priceLabel: "₹12,999 · Cohort-based",
-    priceInPaise: 1299900,
-    tags: ["Dashboards", "SQL", "Storytelling", "Projects"],
-    imageUrl: getCourseImage("data-analytics"),
-    featured: true,
-    learnOutcomes: [
-      "Ask better questions and define metrics that matter",
-      "Clean and transform data for analysis",
-      "Build stakeholder-friendly dashboards",
-      "Communicate insights with clarity and confidence",
-    ],
-    curriculum: [
-      { week: "Week 1", topics: ["Analytics mindset", "Metric design", "Data overview"] },
-      { week: "Week 2", topics: ["Data cleaning", "Transform steps", "Quality checks"] },
-      { week: "Week 3", topics: ["SQL fundamentals", "Query patterns", "Aggregations"] },
-      { week: "Week 4", topics: ["Dashboard design", "Chart selection", "Narrative building"] },
-      { week: "Week 5", topics: ["Insight iteration", "Mentor feedback", "Refine metrics"] },
-      { week: "Week 6", topics: ["Final dashboard", "Packaging", "Stakeholder walkthrough"] },
-      { week: "Week 7", topics: ["Capstone presentation", "Portfolio outputs", "Next steps"] },
-    ],
-    faqs: [
-      {
-        question: "Will I write SQL from day one?",
-        answer:
-          "You’ll start with the fundamentals and build upward. Mentors will provide structured guidance so you can ramp safely.",
-      },
-      {
-        question: "Do we work with real datasets?",
-        answer:
-          "Yes. You’ll use realistic datasets and practice turning messy data into usable insights.",
-      },
-    ],
-  },
-  {
-    id: "fs-fullstack",
-    slug: "full-stack-development",
-    title: "Full Stack Development",
-    shortDescription: "Ship end-to-end apps with React, Node.js, databases, and deployment workflows.",
-    longDescription:
-      "Learn how modern full stack products are built—from UI to API to database. You’ll follow a milestone-driven path with mentor reviews on architecture, security basics, and deployment readiness.",
-    level: "Intermediate",
-    duration: "10 weeks",
-    mode: "Hybrid",
-    priceLabel: "₹14,999 · Cohort-based",
-    priceInPaise: 1499900,
-    tags: ["React", "Node.js", "PostgreSQL", "APIs"],
-    imageUrl: getCourseImage("full-stack-development"),
-    featured: true,
-    learnOutcomes: [
-      "Design RESTful APIs and connect them to a React frontend",
-      "Model data with PostgreSQL and write safe queries",
-      "Implement authentication and protected routes",
-      "Deploy a full stack capstone to production",
-    ],
-    curriculum: [
-      { week: "Week 1", topics: ["Full stack overview", "Project setup", "Git workflow"] },
-      { week: "Week 2", topics: ["React patterns", "Forms & state", "API integration"] },
-      { week: "Week 3", topics: ["Node.js basics", "Express routing", "Middleware"] },
-      { week: "Week 4", topics: ["Database design", "PostgreSQL", "Migrations"] },
-      { week: "Week 5", topics: ["Auth flows", "Sessions & tokens", "Security basics"] },
-      { week: "Week 6", topics: ["Capstone planning", "Architecture review", "Milestone 1"] },
-      { week: "Week 7", topics: ["Capstone build", "Code review", "Refactoring"] },
-      { week: "Week 8", topics: ["Testing basics", "Error handling", "Logging"] },
-      { week: "Week 9", topics: ["Deployment", "Environment config", "Monitoring intro"] },
-      { week: "Week 10", topics: ["Final demo", "Portfolio write-up", "Career next steps"] },
-    ],
-    faqs: [
-      {
-        question: "Do I need backend experience?",
-        answer: "Basic JavaScript knowledge is enough. Mentors will guide you through backend concepts step by step.",
-      },
-      {
-        question: "What will I deploy?",
-        answer: "A capstone app with a React frontend, API layer, and database—hosted on a modern platform.",
-      },
-    ],
-  },
-  {
-    id: "dm-marketing",
-    slug: "digital-marketing",
-    title: "Digital Marketing",
-    shortDescription: "Learn SEO, content, ads, and analytics with campaign-based mentorship.",
-    longDescription:
-      "Build practical marketing skills through guided campaigns. You’ll learn how to plan, execute, measure, and present results—the way real growth teams work.",
+      "Master the craft of working with large language models: clear instructions, few-shot patterns, structured outputs, guardrails, and evaluation loops. You will build reusable prompt libraries and small automations each week—with mentor feedback until your capstone demonstrates production-grade prompt design, not random trial and error.",
     level: "Beginner Friendly",
     duration: "6 weeks",
     mode: "Online",
     priceLabel: "₹9,999 · Cohort-based",
     priceInPaise: 999900,
-    tags: ["SEO", "Content", "Ads", "Analytics"],
-    imageUrl: getCourseImage("digital-marketing"),
-    featured: false,
+    tags: ["LLMs", "Prompts", "Evaluation", "Workflows"],
+    imageUrl: getCourseImage("prompt-engineering"),
+    featured: true,
     learnOutcomes: [
-      "Plan a multi-channel campaign with clear goals and KPIs",
-      "Write content optimized for search and conversion",
-      "Set up and read basic ad and analytics dashboards",
-      "Present a campaign case study with measurable outcomes",
+      "Write system and user prompts that behave consistently across models",
+      "Use few-shot examples, JSON schema outputs, and chain-of-thought responsibly",
+      "Build evaluation sets and score outputs before shipping to users",
+      "Package a capstone prompt playbook for a real use case",
     ],
     curriculum: [
-      { week: "Week 1", topics: ["Marketing fundamentals", "Audience & positioning", "KPI design"] },
-      { week: "Week 2", topics: ["SEO basics", "Keyword research", "On-page optimization"] },
-      { week: "Week 3", topics: ["Content strategy", "Copy frameworks", "Publishing cadence"] },
-      { week: "Week 4", topics: ["Paid ads intro", "Budgeting", "Creative testing"] },
-      { week: "Week 5", topics: ["Analytics", "Reporting", "Iteration loops"] },
-      { week: "Week 6", topics: ["Campaign capstone", "Presentation", "Mentor review"] },
+      { week: "Week 1", topics: ["LLM basics", "Tokens & context", "Instruction design"] },
+      { week: "Week 2", topics: ["Few-shot patterns", "Role prompts", "Output formatting"] },
+      { week: "Week 3", topics: ["Structured outputs", "JSON mode", "Validation loops"] },
+      { week: "Week 4", topics: ["RAG overview", "Grounding prompts", "Citation habits"] },
+      { week: "Week 5", topics: ["Eval harnesses", "Regression tests", "Cost & latency"] },
+      { week: "Week 6", topics: ["Capstone playbook", "Mentor review", "Portfolio demo"] },
     ],
     faqs: [
       {
-        question: "Is this for complete beginners?",
-        answer: "Yes. We start with fundamentals and build toward a portfolio-ready campaign case study.",
+        question: "Do I need to code?",
+        answer:
+          "Light scripting helps but is not required week one. We focus on prompt design first; optional Python snippets are provided for evaluations.",
       },
       {
-        question: "Will I run real ads?",
-        answer: "You’ll learn campaign setup and measurement. Optional small-budget exercises can be done with mentor guidance.",
+        question: "Which models are covered?",
+        answer:
+          "Concepts apply across OpenAI, Anthropic, Google, and open models. Weekly work uses APIs or chat tools your mentor recommends.",
+      },
+      {
+        question: "Is this only for ChatGPT users?",
+        answer:
+          "No. You will learn transferable patterns for any major LLM provider and how to compare behavior across models.",
+      },
+      {
+        question: "How much time per week?",
+        answer: "Plan 5–7 hours including exercises, mentor feedback, and capstone prep.",
       },
     ],
   },
   {
-    id: "ml-basics",
-    slug: "machine-learning",
-    title: "Machine Learning Foundations",
-    shortDescription: "Build intuition for ML models, Python workflows, and real-world project delivery.",
+    id: "gai-llms",
+    slug: "generative-ai-llms",
+    title: "Generative AI & LLMs",
+    shortDescription: "Build with APIs, embeddings, RAG, and fine-tuning basics—mentor-reviewed capstone included.",
     longDescription:
-      "A project-first introduction to machine learning. You’ll work with Python, explore common algorithms, and finish with a mentor-reviewed capstone you can explain to technical and non-technical audiences.",
+      "Go beyond chatting with models. Learn how generative AI systems are built: API integration, embeddings, retrieval-augmented generation, safety guardrails, and light fine-tuning concepts. Weekly milestones culminate in a mentor-reviewed capstone app that retrieves, generates, and explains its answers.",
     level: "Intermediate",
     duration: "8 weeks",
     mode: "Online",
-    priceLabel: "₹16,999 · Cohort-based",
-    priceInPaise: 1699900,
-    tags: ["Python", "Scikit-learn", "Models", "Projects"],
-    imageUrl: getCourseImage("machine-learning"),
+    priceLabel: "₹12,999 · Cohort-based",
+    priceInPaise: 1299900,
+    tags: ["RAG", "Embeddings", "APIs", "GenAI"],
+    imageUrl: getCourseImage("generative-ai-llms"),
     featured: true,
     learnOutcomes: [
-      "Prepare datasets and evaluate model performance responsibly",
-      "Train and compare common ML algorithms for tabular data",
-      "Explain model results to stakeholders in plain language",
-      "Deliver a capstone notebook and presentation",
+      "Integrate LLM APIs into a small application with error handling",
+      "Chunk documents, embed text, and run retrieval-augmented queries",
+      "Apply safety, moderation, and observability basics",
+      "Deliver a capstone GenAI feature with documented evaluation results",
     ],
     curriculum: [
-      { week: "Week 1", topics: ["ML landscape", "Python refresh", "Data exploration"] },
-      { week: "Week 2", topics: ["Feature engineering", "Train/test splits", "Baselines"] },
-      { week: "Week 3", topics: ["Regression models", "Evaluation metrics", "Error analysis"] },
-      { week: "Week 4", topics: ["Classification", "Confusion matrix", "Threshold tuning"] },
-      { week: "Week 5", topics: ["Model selection", "Cross-validation", "Overfitting"] },
-      { week: "Week 6", topics: ["Capstone scoping", "Milestone review", "Ethics basics"] },
-      { week: "Week 7", topics: ["Capstone build", "Mentor feedback", "Iteration"] },
-      { week: "Week 8", topics: ["Final presentation", "Portfolio packaging", "Next steps"] },
+      { week: "Week 1", topics: ["GenAI landscape", "API setup", "Message patterns"] },
+      { week: "Week 2", topics: ["Embeddings", "Similarity search", "Vector stores intro"] },
+      { week: "Week 3", topics: ["RAG pipeline", "Chunking strategies", "Source attribution"] },
+      { week: "Week 4", topics: ["Tool use overview", "Function calling", "Agent preview"] },
+      { week: "Week 5", topics: ["Guardrails", "PII & policy", "Human-in-the-loop"] },
+      { week: "Week 6", topics: ["Fine-tuning concepts", "When not to fine-tune", "Cost controls"] },
+      { week: "Week 7", topics: ["Capstone build", "Mentor code review", "Iteration"] },
+      { week: "Week 8", topics: ["Eval report", "Demo day", "Production checklist"] },
     ],
     faqs: [
       {
-        question: "What math background do I need?",
-        answer: "High-school algebra and comfort with numbers is enough. We focus on intuition and application first.",
+        question: "What programming background do I need?",
+        answer:
+          "Comfort with Python or JavaScript is recommended. Mentors provide starter repos so you can focus on GenAI concepts.",
       },
       {
-        question: "Do I need a GPU?",
-        answer: "No. The course uses lightweight datasets and tools that run on a standard laptop.",
+        question: "Will I train models from scratch?",
+        answer:
+          "No. We focus on practical API, RAG, and light adaptation patterns used in industry today.",
+      },
+      {
+        question: "Do I need a paid API key?",
+        answer:
+          "You will need access to an LLM API for projects. Mentors share cost-saving tips and small-budget exercise options.",
+      },
+      {
+        question: "What does the capstone look like?",
+        answer:
+          "A small Q&A or assistant-style app over your own documents with retrieval, citations, and an evaluation summary.",
+      },
+    ],
+  },
+  {
+    id: "aa-agents",
+    slug: "ai-agents",
+    title: "AI Agents (Agentic AI)",
+    shortDescription: "Design multi-step agents with tools, memory, and orchestration—ship an agent capstone.",
+    longDescription:
+      "Learn agentic AI the way teams ship it: planners, tool routers, memory, human approvals, and observability. Practice with popular frameworks and patterns, then deliver a mentor-reviewed capstone agent that completes a real multi-step workflow—not a single prompt that hallucinates a plan.",
+    level: "Intermediate",
+    duration: "8 weeks",
+    mode: "Online",
+    priceLabel: "₹14,999 · Cohort-based",
+    priceInPaise: 1499900,
+    tags: ["Agents", "Tools", "Orchestration", "LangGraph"],
+    imageUrl: getCourseImage("ai-agents"),
+    featured: true,
+    learnOutcomes: [
+      "Model agent loops: plan → act → observe → reflect",
+      "Connect tools (search, APIs, code) with permission boundaries",
+      "Add memory, checkpoints, and human-in-the-loop approvals",
+      "Ship a capstone agent with traces and failure handling",
+    ],
+    curriculum: [
+      { week: "Week 1", topics: ["Agent vs chatbot", "ReAct pattern", "Tool contracts"] },
+      { week: "Week 2", topics: ["Planner prompts", "Sub-tasks", "State machines"] },
+      { week: "Week 3", topics: ["Tool routing", "API tools", "Error recovery"] },
+      { week: "Week 4", topics: ["Memory layers", "Session vs long-term", "Summarization"] },
+      { week: "Week 5", topics: ["Multi-agent patterns", "Handoffs", "Supervisor agents"] },
+      { week: "Week 6", topics: ["Observability", "Traces", "Evaluating agents"] },
+      { week: "Week 7", topics: ["Capstone scoping", "Build sprint", "Mentor review"] },
+      { week: "Week 8", topics: ["Safety review", "Demo", "Deployment notes"] },
+    ],
+    faqs: [
+      {
+        question: "Should I complete Generative AI & LLMs first?",
+        answer:
+          "Prompt Engineering or equivalent LLM experience is enough. The GenAI track helps but is not strictly required.",
+      },
+      {
+        question: "Which frameworks are used?",
+        answer:
+          "Concepts map to LangChain, LangGraph, and similar orchestration tools. Weekly materials reference current industry patterns.",
+      },
+      {
+        question: "Are agents safe to run in production?",
+        answer:
+          "We teach guardrails, approval steps, and scoped tools. Your capstone includes a risk and mitigation write-up.",
+      },
+      {
+        question: "How much time per week?",
+        answer: "Expect 8–10 hours—agent projects are iteration-heavy and mentor feedback is async + live.",
+      },
+    ],
+  },
+  {
+    id: "aia-automation",
+    slug: "ai-automation",
+    title: "AI Automation (n8n, Make, Zapier AI)",
+    shortDescription: "Wire no-code/low-code AI workflows across n8n, Make, and Zapier—with measurable ops outcomes.",
+    longDescription:
+      "Connect the tools businesses already use. Build AI-powered automations with n8n, Make (Integromat), and Zapier AI: triggers, transforms, LLM steps, human approvals, and monitoring. Finish with a mentor-reviewed capstone workflow that saves real hours—not a diagram that never runs in production.",
+    level: "Beginner Friendly",
+    duration: "6 weeks",
+    mode: "Online",
+    priceLabel: "₹12,999 · Cohort-based",
+    priceInPaise: 1299900,
+    tags: ["n8n", "Make", "Zapier", "Automation"],
+    imageUrl: getCourseImage("ai-automation"),
+    featured: true,
+    learnOutcomes: [
+      "Map business processes into trigger → action automation flows",
+      "Add LLM steps with guardrails in n8n, Make, and Zapier",
+      "Handle errors, retries, and human approval branches",
+      "Deliver a documented capstone automation with ROI estimates",
+    ],
+    curriculum: [
+      { week: "Week 1", topics: ["Automation mindset", "Triggers & actions", "Data mapping"] },
+      { week: "Week 2", topics: ["Zapier AI basics", "Zaps + AI steps", "Testing"] },
+      { week: "Week 3", topics: ["Make scenarios", "Routers & filters", "LLM modules"] },
+      { week: "Week 4", topics: ["n8n workflows", "Self-host option", "Credentials"] },
+      { week: "Week 5", topics: ["Approvals", "Logging", "Failure alerts"] },
+      { week: "Week 6", topics: ["Capstone workflow", "ROI doc", "Mentor sign-off"] },
+    ],
+    faqs: [
+      {
+        question: "Do I need coding experience?",
+        answer:
+          "No. This track is no-code/low-code first. Optional JSON and webhook concepts are explained when needed.",
+      },
+      {
+        question: "Do I need paid accounts?",
+        answer:
+          "Free tiers of Zapier/Make/n8n are enough for coursework. Mentors note limits before you scale flows.",
+      },
+      {
+        question: "Which platform should I specialize in?",
+        answer:
+          "You will touch all three so you can choose the best fit per client. Your capstone can focus on one primary tool.",
+      },
+      {
+        question: "Who is this for?",
+        answer:
+          "Operators, founders, marketers, and builders who want practical AI automations without building a full app first.",
       },
     ],
   },
@@ -317,4 +267,3 @@ export function getCourseBySlug(slug: string) {
 export function getCourseSlugs() {
   return courses.map((c) => c.slug);
 }
-

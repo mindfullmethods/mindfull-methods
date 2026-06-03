@@ -49,7 +49,7 @@ export default function ApplyButton({ internshipId }: { internshipId: string }) 
           </p>
           <Link
             href="/dashboard/my-applications"
-            className="mt-2 inline-flex items-center gap-1 text-sm font-black text-emerald-700 hover:underline dark:text-emerald-300"
+            className="mt-2 inline-flex items-center gap-1 text-sm font-bold text-emerald-700 hover:underline dark:text-emerald-300"
           >
             View my applications
             <ArrowRight size={14} />
@@ -66,7 +66,7 @@ export default function ApplyButton({ internshipId }: { internshipId: string }) 
           {feedback.message.includes("sign in") ? (
             <Link
               href={`/login?next=${encodeURIComponent(`/dashboard/internships/${internshipId}`)}`}
-              className="mt-2 inline-flex items-center gap-1 text-sm font-black text-red-700 hover:underline dark:text-red-300"
+              className="mt-2 inline-flex items-center gap-1 text-sm font-bold text-red-700 hover:underline dark:text-red-300"
             >
               Sign in to apply
               <ArrowRight size={14} />

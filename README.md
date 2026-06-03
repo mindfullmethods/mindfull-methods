@@ -52,7 +52,7 @@ Fill `.env.local` — see `.env.example` for all variables.
 
 ## Supabase SQL (run in order)
 
-Run each file in the [Supabase SQL Editor](https://supabase.com/dashboard). Verify readiness at `/dashboard/setup`.
+Run each file in the [Supabase SQL Editor](https://supabase.com/dashboard). Full order: **`docs/LOCAL_MIGRATIONS.md`**. Verify at `/dashboard/setup` or `npm run setup:check`.
 
 | File | Purpose |
 |------|---------|
@@ -90,10 +90,14 @@ npm run dev      # Development server
 npm run build    # Production build
 npm run lint     # ESLint
 npm run smoke    # Quick route health check
+npm run qa       # setup:check + smoke (local gate)
+npm run setup:check        # Supabase / env readiness (CLI)
 npm run syllabi:generate   # Regenerate public/syllabi/*.pdf
+npm run test:e2e           # Playwright E2E (see e2e/README.md)
+npm run test:e2e:build     # E2E with production server on :3456
 ```
 
-See `docs/SMOKE_TEST.md` for full manual QA checklist.
+See `docs/SMOKE_TEST.md` and `docs/QA_MANUAL.md` for manual QA. Optional features: `docs/OPTIONAL_IMPROVEMENTS.md`.
 
 ---
 

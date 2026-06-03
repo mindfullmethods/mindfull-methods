@@ -83,7 +83,7 @@ export default function ApplicationsAdminPanel({
 
   return (
     <>
-      <div className="mt-8 flex flex-col gap-4 rounded-3xl border border-zinc-200 bg-white p-4 dark:border-white/10 dark:bg-white/5 sm:p-5">
+      <div className="mm-section-panel flex flex-col gap-4">
         <div className="relative">
           <Search size={18} className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-zinc-400" />
           <input
@@ -102,8 +102,8 @@ export default function ApplicationsAdminPanel({
               onClick={() => setStatusFilter(s)}
               className={
                 statusFilter === s
-                  ? "rounded-xl bg-zinc-950 px-4 py-2 text-sm font-black text-white dark:bg-white dark:text-zinc-950"
-                  : "rounded-xl border border-zinc-200 px-4 py-2 text-sm font-black text-zinc-600 dark:border-white/15 dark:text-white/70"
+                  ? "rounded-xl bg-zinc-950 px-4 py-2 text-sm font-bold text-white dark:bg-white dark:text-zinc-950"
+                  : "rounded-xl border border-zinc-200 px-4 py-2 text-sm font-bold text-zinc-600 dark:border-white/15 dark:text-white/70"
               }
             >
               {s}
@@ -113,14 +113,14 @@ export default function ApplicationsAdminPanel({
         </div>
         {selected.size > 0 ? (
           <div className="flex flex-wrap items-center gap-2 border-t border-zinc-200 pt-4 dark:border-white/10">
-            <span className="text-sm font-black">{selected.size} selected</span>
+            <span className="text-sm font-bold">{selected.size} selected</span>
             {(["Approved", "Rejected", "Pending"] as ApplicationStatus[]).map((s) => (
               <button
                 key={s}
                 type="button"
                 disabled={disabled || isPending}
                 onClick={() => runBulk(s)}
-                className="rounded-xl bg-violet-600 px-4 py-2 text-sm font-black text-white disabled:opacity-60"
+                className="rounded-xl bg-violet-600 px-4 py-2 text-sm font-bold text-white disabled:opacity-60"
               >
                 Mark {s}
               </button>
@@ -150,7 +150,7 @@ export default function ApplicationsAdminPanel({
           {filtered.map((application) => (
             <article
               key={application.id}
-              className="rounded-3xl border border-zinc-200 bg-white p-5 shadow-sm dark:border-white/10 dark:bg-white/5 sm:p-6"
+              className="rounded-2xl border mm-border bg-zinc-50/80 p-5 dark:bg-white/[0.02] sm:p-6"
             >
               <div className="grid gap-6 lg:grid-cols-[auto_1fr_auto] lg:items-start">
                 <input
@@ -161,21 +161,21 @@ export default function ApplicationsAdminPanel({
                 />
                 <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-4">
                   <div>
-                    <p className="flex items-center gap-2 text-xs font-black uppercase tracking-[0.18em] text-zinc-500">
+                    <p className="flex items-center gap-2 text-xs font-bold uppercase tracking-[0.18em] text-zinc-500">
                       <UserRound size={15} />
                       Student
                     </p>
-                    <h2 className="mt-2 text-xl font-black">{application.student_name || "Dashboard applicant"}</h2>
+                    <h2 className="mt-2 text-xl font-bold">{application.student_name || "Dashboard applicant"}</h2>
                   </div>
                   <div>
-                    <p className="flex items-center gap-2 text-xs font-black uppercase tracking-[0.18em] text-zinc-500">
+                    <p className="flex items-center gap-2 text-xs font-bold uppercase tracking-[0.18em] text-zinc-500">
                       <Mail size={15} />
                       Email
                     </p>
                     <p className="mt-2 text-sm font-bold text-zinc-600 dark:text-zinc-300">{application.email || "—"}</p>
                   </div>
                   <div>
-                    <p className="flex items-center gap-2 text-xs font-black uppercase tracking-[0.18em] text-zinc-500">
+                    <p className="flex items-center gap-2 text-xs font-bold uppercase tracking-[0.18em] text-zinc-500">
                       <BriefcaseBusiness size={15} />
                       Internship
                     </p>
@@ -184,8 +184,8 @@ export default function ApplicationsAdminPanel({
                     </p>
                   </div>
                   <div>
-                    <p className="text-xs font-black uppercase tracking-[0.18em] text-zinc-500">Current status</p>
-                    <span className={`mt-2 inline-flex rounded-full px-3 py-2 text-xs font-black ${statusClass(application.status)}`}>
+                    <p className="text-xs font-bold uppercase tracking-[0.18em] text-zinc-500">Current status</p>
+                    <span className={`mt-2 inline-flex rounded-full px-3 py-2 text-xs font-bold ${statusClass(application.status)}`}>
                       {application.status || "Pending"}
                     </span>
                   </div>
@@ -196,7 +196,7 @@ export default function ApplicationsAdminPanel({
                       href={application.resume}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="inline-flex items-center justify-center gap-2 rounded-xl bg-zinc-950 px-5 py-3 text-sm font-black text-white dark:bg-white dark:text-zinc-950"
+                      className="inline-flex items-center justify-center gap-2 rounded-xl bg-zinc-950 px-5 py-3 text-sm font-bold text-white dark:bg-white dark:text-zinc-950"
                     >
                       View Resume <ExternalLink size={16} />
                     </a>

@@ -6,6 +6,7 @@ import { usePathname } from "next/navigation";
 import {
   Award,
   BarChart3,
+  Bell,
   BookOpen,
   BriefcaseBusiness,
   ClipboardList,
@@ -20,7 +21,10 @@ import {
   Settings,
   ShieldCheck,
   FileText,
+  History,
   Sparkles,
+  Tag,
+  TrendingUp,
   Users,
 } from "lucide-react";
 import { supabase } from "@/lib/supabase";
@@ -31,6 +35,7 @@ const studentLinks = [
   { label: "Overview", href: "/dashboard", icon: LayoutDashboard },
   { label: "Courses", href: "/dashboard/courses", icon: BookOpen },
   { label: "My courses", href: "/dashboard/my-courses", icon: GraduationCap },
+  { label: "My waitlist", href: "/dashboard/my-waitlist", icon: Bell },
   { label: "Certificates", href: "/dashboard/certificates", icon: Award },
   { label: "Internships", href: "/dashboard/internships", icon: BriefcaseBusiness },
   { label: "My applications", href: "/dashboard/my-applications", icon: ClipboardList },
@@ -40,20 +45,53 @@ const studentLinks = [
 const adminLinks = [
   { label: "Admin home", href: "/dashboard/admin-home", icon: LayoutDashboard },
   { label: "Launch setup", href: "/dashboard/setup", icon: Rocket },
+  { label: "Site & promos", href: "/dashboard/admin/site", icon: Tag },
+  { label: "Growth", href: "/dashboard/growth", icon: TrendingUp },
+  { label: "Content studio", href: "/dashboard/admin/content", icon: FileText },
   { label: "Analytics", href: "/dashboard/analytics", icon: BarChart3 },
+  { label: "Audit log", href: "/dashboard/admin/audit", icon: History },
   { label: "Students", href: "/dashboard/users", icon: Users },
   { label: "All applications", href: "/dashboard/applications", icon: ClipboardList },
   { label: "All enrollments", href: "/dashboard/enrollments", icon: CreditCard },
   { label: "Contact inquiries", href: "/dashboard/inquiries", icon: Mail },
   { label: "Admin Studio", href: "/dashboard/admin", icon: ShieldCheck },
-  { label: "Content studio", href: "/dashboard/admin/content", icon: FileText },
 ];
+
+type NavLink = (typeof studentLinks)[number];
+
+function SidebarLink({
+  link,
+  pathname,
+  onNavigate,
+}: {
+  link: NavLink;
+  pathname: string;
+  onNavigate: () => void;
+}) {
+  const Icon = link.icon;
+  const active =
+    pathname === link.href || (link.href !== "/dashboard" && pathname.startsWith(`${link.href}/`));
+
+  return (
+    <Link
+      href={link.href}
+      onClick={onNavigate}
+      className={`relative flex items-center gap-3 rounded-xl px-4 py-3 text-sm font-semibold transition ${
+        active
+          ? "mm-nav-link-active"
+          : "text-zinc-600 hover:bg-white/80 hover:text-zinc-950 dark:text-zinc-400 dark:hover:bg-white/[0.06] dark:hover:text-white"
+      }`}
+    >
+      <Icon size={18} className={active ? "relative z-[1]" : ""} />
+      <span className={active ? "relative z-[1]" : ""}>{link.label}</span>
+    </Link>
+  );
+}
 
 export default function Sidebar({ isAdmin = false }: { isAdmin?: boolean }) {
   const [userEmail, setUserEmail] = useState("");
   const [open, setOpen] = useState(false);
   const pathname = usePathname();
-  const links = isAdmin ? [...studentLinks, ...adminLinks] : studentLinks;
 
   useEffect(() => {
     async function getUser() {
@@ -87,7 +125,7 @@ export default function Sidebar({ isAdmin = false }: { isAdmin?: boolean }) {
         <button
           onClick={() => setOpen(true)}
           aria-label="Open navigation"
-          className="fixed left-4 top-4 z-50 flex h-11 w-11 items-center justify-center rounded-xl bg-gradient-to-br from-violet-600 to-violet-500 text-white shadow-lg shadow-violet-500/30 lg:hidden"
+          className="fixed left-4 top-[max(1rem,env(safe-area-inset-top,0px))] z-50 flex h-11 w-11 items-center justify-center rounded-xl bg-gradient-to-br from-violet-600 to-violet-500 text-white shadow-lg shadow-violet-500/30 lg:hidden"
         >
           <Menu size={20} />
         </button>
@@ -134,30 +172,37 @@ export default function Sidebar({ isAdmin = false }: { isAdmin?: boolean }) {
             Navigation
           </p>
           <nav className="flex flex-col gap-1.5">
-            {links.map((link) => {
-              const Icon = link.icon;
-              const active =
-                pathname === link.href ||
-                (link.href !== "/dashboard" && pathname.startsWith(`${link.href}/`));
+            <p className="mb-1 px-2 text-[10px] font-semibold uppercase tracking-[0.24em] text-zinc-400 dark:text-white/35">
+              Learning
+            </p>
+            {studentLinks.map((link) => (
+              <SidebarLink
+                key={link.href}
+                link={link}
+                pathname={pathname}
+                onNavigate={() => {
+                  if (window.innerWidth < 1024) setOpen(false);
+                }}
+              />
+            ))}
 
-              return (
-                <Link
-                  key={link.href}
-                  href={link.href}
-                  onClick={() => {
-                    if (window.innerWidth < 1024) setOpen(false);
-                  }}
-                  className={`relative flex items-center gap-3 rounded-xl px-4 py-3 text-sm font-semibold transition ${
-                    active
-                      ? "mm-nav-link-active"
-                      : "text-zinc-600 hover:bg-white/80 hover:text-zinc-950 dark:text-zinc-400 dark:hover:bg-white/[0.06] dark:hover:text-white"
-                  }`}
-                >
-                  <Icon size={18} className={active ? "relative z-[1]" : ""} />
-                  <span className={active ? "relative z-[1]" : ""}>{link.label}</span>
-                </Link>
-              );
-            })}
+            {isAdmin ? (
+              <>
+                <p className="mb-1 mt-6 px-2 text-[10px] font-semibold uppercase tracking-[0.24em] text-violet-600 dark:text-violet-300">
+                  Admin
+                </p>
+                {adminLinks.map((link) => (
+                  <SidebarLink
+                    key={link.href}
+                    link={link}
+                    pathname={pathname}
+                    onNavigate={() => {
+                      if (window.innerWidth < 1024) setOpen(false);
+                    }}
+                  />
+                ))}
+              </>
+            ) : null}
           </nav>
 
           {isAdmin ? (

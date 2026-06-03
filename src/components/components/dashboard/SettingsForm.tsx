@@ -40,7 +40,7 @@ export default function SettingsForm({
   }
 
   return (
-    <div className="mt-8 grid gap-6 lg:grid-cols-2">
+    <div className="grid gap-6 lg:col-span-2 lg:grid-cols-2">
       <section className="mm-section-panel">
         <SectionHeader
           title="Profile"

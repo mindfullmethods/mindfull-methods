@@ -8,44 +8,30 @@ export type Testimonial = {
 export const testimonials: Testimonial[] = [
   {
     quote:
-      "The mentor feedback was the difference. I stopped guessing and started building with confidence.",
+      "Prompt structure finally clicked. My capstone playbook is something I reuse at work every week.",
     name: "Aarav S.",
-    role: "Frontend track student",
+    role: "Prompt Engineering",
     rating: 5,
   },
   {
     quote:
-      "The curriculum felt structured but not rigid. I always knew what to do next—and why it mattered.",
+      "RAG week was the turning point—I built a doc Q&A demo I could actually show in interviews.",
     name: "Meera K.",
-    role: "Product design learner",
+    role: "Generative AI & LLMs",
     rating: 5,
   },
   {
     quote:
-      "My final dashboard and presentation were exactly what my internship team needed. Clear, practical, and polished.",
+      "Agent traces and tool boundaries made our internal pilot safe enough to ship to the team.",
     name: "Jordan P.",
-    role: "Analytics cohort",
+    role: "AI Agents cohort",
     rating: 5,
   },
   {
     quote:
-      "I enjoyed the weekly rhythm. Submitting work early helped me improve faster than I expected.",
+      "I automated lead routing with n8n + an LLM step. Mentor review caught edge cases I would have missed.",
     name: "Samira R.",
-    role: "Mentorship program participant",
-    rating: 5,
-  },
-  {
-    quote:
-      "The full-stack track connected everything I learned in isolation. Having a mentor review my architecture decisions was invaluable.",
-    name: "Rohan M.",
-    role: "Full stack cohort",
-    rating: 5,
-  },
-  {
-    quote:
-      "Digital marketing felt practical from day one. I left with campaign assets I could show in interviews, not just theory.",
-    name: "Priya N.",
-    role: "Marketing track learner",
+    role: "AI Automation",
     rating: 5,
   },
 ];
@@ -53,4 +39,3 @@ export const testimonials: Testimonial[] = [
 export function getTestimonials() {
   return testimonials;
 }
-

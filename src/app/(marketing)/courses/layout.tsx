@@ -6,7 +6,7 @@ export const metadata: Metadata = marketingPageMetadata({
   path: "/courses",
   title: "Courses",
   description:
-    "Browse Mindfull Methods mentorship tracks — frontend, design, analytics, full stack, and more. Filter by format and find your next program.",
+    "Browse Mindfull Methods AI mentorship tracks — Generative AI, agents, prompt engineering, and automation. Find your next cohort.",
 });
 
 export default function CoursesLayout({ children }: { children: React.ReactNode }) {

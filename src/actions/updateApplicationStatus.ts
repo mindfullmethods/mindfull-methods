@@ -2,6 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 
+import { adminActorEmail, recordAdminAudit } from "@/lib/audit-log";
 import { requireAdmin } from "@/lib/auth";
 import { notifyApplicationStatusChange } from "@/lib/email";
 import { createAdminClient } from "@/lib/supabase/admin";
@@ -11,7 +12,7 @@ const ALLOWED_STATUSES = ["Pending", "Approved", "Rejected", "Submitted"] as con
 export type ApplicationStatus = (typeof ALLOWED_STATUSES)[number];
 
 export async function updateApplicationStatus(applicationId: string, status: ApplicationStatus) {
-  await requireAdmin();
+  const admin = await requireAdmin();
 
   if (!ALLOWED_STATUSES.includes(status)) {
     return { ok: false as const, error: "Invalid status." };
@@ -60,6 +61,14 @@ export async function updateApplicationStatus(applicationId: string, status: App
   revalidatePath("/dashboard/applications");
   revalidatePath("/dashboard/my-applications");
   revalidatePath("/dashboard");
+
+  void recordAdminAudit({
+    actorEmail: adminActorEmail(admin),
+    action: `application.status.${status.toLowerCase()}`,
+    entityType: "application",
+    entityId: applicationId,
+    detail: { previousStatus: existing.status },
+  });
 
   const shouldNotify =
     (status === "Approved" || status === "Rejected") &&

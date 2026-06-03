@@ -2,6 +2,8 @@ import { isApplicationsStatusReady } from "@/lib/applications-schema";
 import { isCertificatesTableReady } from "@/lib/certificates-schema";
 import { isCompletionVerificationTableReady } from "@/Services/completion-verifications";
 import { isPlatformSettingsReady } from "@/lib/platform-content";
+import { isV2PlatformReady } from "@/lib/v2-platform-schema";
+import { isV3GrowthReady } from "@/lib/v3-platform-schema";
 import {
   isContactInquiriesTableReady,
   isContactInquiryAdminNotesReady,
@@ -45,6 +47,8 @@ export async function getPlatformSetupChecks(): Promise<SetupCheck[]> {
     certificatesReady,
     completionVerificationReady,
     platformSettingsReady,
+    v2PlatformReady,
+    v3GrowthReady,
   ] = await Promise.all([
     isEnrollmentsTableReady(),
     isApplicationsStatusReady(),
@@ -56,6 +60,8 @@ export async function getPlatformSetupChecks(): Promise<SetupCheck[]> {
     isCertificatesTableReady(),
     isCompletionVerificationTableReady(),
     isPlatformSettingsReady(),
+    isV2PlatformReady(),
+    isV3GrowthReady(),
   ]);
 
   return [
@@ -190,8 +196,24 @@ export async function getPlatformSetupChecks(): Promise<SetupCheck[]> {
       label: "Content CMS (platform_settings)",
       ready: platformSettingsReady,
       detail: platformSettingsReady
-        ? "Admin can edit courses and blog posts without redeploying"
-        : "Run supabase/content-cms-schema.sql",
+        ? "CMS courses/blog, Site & promos (marketing copy + promo codes)"
+        : "Run supabase/content-cms-schema.sql — see docs/LOCAL_MIGRATIONS.md",
+    },
+    {
+      id: "v2-platform",
+      label: "V2 growth tables (waitlist, newsletter, audit, checkout)",
+      ready: v2PlatformReady,
+      detail: v2PlatformReady
+        ? "Waitlist, newsletter, admin audit log, abandoned checkout tracking"
+        : "Run supabase/v2-platform-extensions.sql — see docs/V2_FEATURES.md",
+    },
+    {
+      id: "v3-growth",
+      label: "V3 promo tracking & referrals",
+      ready: v3GrowthReady,
+      detail: v3GrowthReady
+        ? "Promo codes on checkout intents, referral program events"
+        : "Run supabase/v3-growth-and-referrals.sql",
     },
   ];
 }

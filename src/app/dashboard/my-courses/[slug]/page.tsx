@@ -1,17 +1,20 @@
 import Link from "next/link";
-import { ArrowLeft, Award, BookOpen } from "lucide-react";
 import { notFound, redirect } from "next/navigation";
+import { Award, BookOpen } from "lucide-react";
 
 import CourseProgressTracker from "@/components/components/dashboard/CourseProgressTracker";
 import CourseProgressSchemaBanner from "@/components/components/dashboard/CourseProgressSchemaBanner";
+import DashboardPageHeader from "@/components/components/dashboard/DashboardPageHeader";
+import { getCompletionVerification } from "@/Services/completion-verifications";
 import { getCourseProgress, isEnrolledInCourse } from "@/Services/course-progress";
 import { getWeekResources } from "@/lib/course-resources";
 import { getCourseBySlug } from "@/lib/courses";
-import { requireUser } from "@/lib/auth";
+import { getSessionUser, requireUser } from "@/lib/auth";
 import { isCourseProgressTableReady } from "@/lib/course-progress-schema";
 
 export default async function CourseProgressPage({ params }: { params: Promise<{ slug: string }> }) {
   await requireUser("/dashboard/my-courses");
+  const user = await getSessionUser();
   const { slug } = await params;
 
   const course = getCourseBySlug(slug);
@@ -24,6 +27,9 @@ export default async function CourseProgressPage({ params }: { params: Promise<{
 
   const tableReady = await isCourseProgressTableReady();
   const progress = tableReady ? await getCourseProgress(slug) : null;
+  const verification =
+    user?.id && tableReady ? await getCompletionVerification(user.id, slug) : null;
+  const verificationStatus = verification?.status ?? null;
 
   const weeks = course.curriculum.map((item, index) => ({
     index,
@@ -39,44 +45,45 @@ export default async function CourseProgressPage({ params }: { params: Promise<{
     <main className="min-h-screen px-5 py-8 sm:px-8 xl:px-10">
       <Link
         href="/dashboard/my-courses"
-        className="inline-flex items-center gap-2 text-sm font-black text-zinc-500 hover:text-zinc-950 dark:hover:text-white"
+        className="inline-flex items-center gap-2 text-sm font-semibold mm-subtle transition hover:text-zinc-950 dark:hover:text-white"
       >
-        <ArrowLeft size={16} />
-        Back to my courses
+        ← Back to my courses
       </Link>
 
-      <section className="mt-6 rounded-3xl border border-zinc-200 bg-white p-6 shadow-sm dark:border-white/10 dark:bg-white/5 sm:p-8">
-        <p className="flex items-center gap-2 text-xs font-black uppercase tracking-[0.18em] text-violet-600 dark:text-violet-300">
-          <BookOpen size={14} />
-          Course progress
-        </p>
-        <h1 className="mt-3 text-3xl font-black sm:text-4xl">{course.title}</h1>
-        <p className="mt-2 text-sm text-zinc-600 dark:text-zinc-400">{course.duration} · {course.level}</p>
-        <p className="mt-4 max-w-2xl text-sm leading-7 text-zinc-600 dark:text-zinc-400">
-          Check off each week as you complete milestones. Your progress saves automatically.
-        </p>
-        {isComplete ? (
-          <Link
-            href={`/dashboard/my-courses/${slug}/certificate`}
-            className="mt-6 inline-flex items-center gap-2 rounded-xl bg-emerald-600 px-5 py-3 text-sm font-black text-white transition hover:bg-emerald-700"
-          >
-            <Award size={16} />
-            View completion certificate
-          </Link>
-        ) : null}
-      </section>
+      <div className="mt-6">
+        <DashboardPageHeader
+          eyebrow="Course progress"
+          title={course.title}
+          description={`${course.duration} · ${course.level}. Check off each week as you complete milestones — progress saves automatically.`}
+        >
+          {isComplete ? (
+            <Link
+              href={`/dashboard/my-courses/${slug}/certificate`}
+              className="mt-6 inline-flex items-center gap-2 rounded-xl bg-emerald-600 px-5 py-3 text-sm font-bold text-white transition hover:bg-emerald-700"
+            >
+              <Award size={16} />
+              View completion certificate
+            </Link>
+          ) : null}
+        </DashboardPageHeader>
+      </div>
 
       {!tableReady ? (
         <div className="mt-8">
           <CourseProgressSchemaBanner />
         </div>
       ) : (
-        <section className="mt-8 rounded-3xl border border-zinc-200 bg-white p-6 shadow-sm dark:border-white/10 dark:bg-white/5 sm:p-8">
+        <section className="mt-8 mm-section-panel">
+          <div className="relative mb-6 flex items-center gap-2">
+            <BookOpen size={18} className="text-violet-600" />
+            <p className="text-sm font-bold mm-heading">Weekly milestones</p>
+          </div>
           <CourseProgressTracker
             courseSlug={slug}
             weeks={weeks}
             completedWeeks={progress?.completedWeeks ?? []}
             lastActivityAt={progress?.lastActivityAt}
+            verificationStatus={verificationStatus}
           />
         </section>
       )}
