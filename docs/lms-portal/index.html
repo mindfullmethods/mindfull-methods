@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Mindful Methods LMS</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <aside class="sidebar">
+        <a class="brand" href="#dashboard" aria-label="Mindful Methods dashboard">
+          <span class="brand-mark">MM</span>
+          <span>
+            <strong>Mindful Methods</strong>
+            <small>AI Learning Portal</small>
+          </span>
+        </a>
+        <nav class="nav-list" aria-label="Primary">
+          <a href="#dashboard" class="active" data-view-link="dashboard">Dashboard</a>
+          <a href="#courses" data-view-link="courses">Courses</a>
+          <a href="#learn" data-view-link="learn">Learn</a>
+          <a href="#quizzes" data-view-link="quizzes">Quizzes</a>
+          <a href="#assignments" data-view-link="assignments">Assignments</a>
+          <a href="#certificates" data-view-link="certificates">Certificates</a>
+          <a href="#admin" data-view-link="admin">Admin</a>
+          <a href="#instructor" data-view-link="instructor">Instructor</a>
+          <a href="#verify/MM-AI-2401" data-view-link="verify">Verify</a>
+        </nav>
+        <div class="sidebar-footer">
+          <span>Role</span>
+          <select id="roleSelect" aria-label="Switch role">
+            <option value="student">Student</option>
+            <option value="instructor">Instructor</option>
+            <option value="admin">Admin</option>
+          </select>
+        </div>
+      </aside>
+
+      <main>
+        <header class="topbar">
+          <div>
+            <p class="eyebrow">Production preview</p>
+            <h1 id="pageTitle">Student Dashboard</h1>
+          </div>
+          <div class="top-actions">
+            <button id="themeToggle" class="icon-button" type="button" aria-label="Toggle theme">◐</button>
+            <button class="ghost-button" type="button" data-open-auth>Login</button>
+            <button class="primary-button" type="button" data-view-button="courses">Explore courses</button>
+          </div>
+        </header>
+
+        <section id="authPanel" class="auth-panel" hidden>
+          <form class="auth-card" id="authForm">
+            <div>
+              <p class="eyebrow">Supabase Auth ready</p>
+              <h2>Email login</h2>
+            </div>
+            <label>
+              Email
+              <input type="email" name="email" value="student@mindfulmethods.ai" required />
+            </label>
+            <label>
+              Password
+              <input type="password" name="password" value="mindful-demo" required />
+            </label>
+            <div class="auth-actions">
+              <button class="primary-button" type="submit">Continue</button>
+              <button class="ghost-button" type="button" id="googleLogin">Google sign-in</button>
+            </div>
+            <button class="link-button" type="button" id="forgotPassword">Forgot password?</button>
+          </form>
+        </section>
+
+        <div id="toast" class="toast" role="status" aria-live="polite" hidden></div>
+
+        <section id="dashboard" class="view is-visible"></section>
+        <section id="courses" class="view"></section>
+        <section id="learn" class="view"></section>
+        <section id="quizzes" class="view"></section>
+        <section id="assignments" class="view"></section>
+        <section id="certificates" class="view"></section>
+        <section id="admin" class="view"></section>
+        <section id="instructor" class="view"></section>
+        <section id="verify" class="view"></section>
+      </main>
+    </div>
+
+    <script src="./app.js"></script>
+  </body>
+</html>

@@ -33,6 +33,8 @@
 docs/INVESTOR_PITCH_REPORT.md
 docs/Mindfull_Methods_Investor_Deck*.pptx
 scripts/generate-investor-deck.py
+docs/_deck.zip
+docs/_pptx_extract/
 
 # debug
 npm-debug.log*

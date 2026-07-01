@@ -22,6 +22,7 @@ npm run setup:check
 | 12 | `supabase/storage-resumes.sql` | Public **resumes** bucket for internship apply uploads |
 | 13 | `supabase/v2-platform-extensions.sql` | Waitlist, newsletter, admin audit log, checkout recovery |
 | 14 | `supabase/v3-growth-and-referrals.sql` | Promo on checkout intents, referral codes & conversion tracking |
+| 15 | `supabase/lms-portal-schema.sql` | LMS portal: lessons progress, quizzes, assignments (`/dashboard/lms`) |
 
 ## `platform_settings` keys (after #10)
 

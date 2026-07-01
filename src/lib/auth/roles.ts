@@ -37,6 +37,8 @@ export function isAdminPath(pathname: string) {
     pathname === "/dashboard/setup" ||
     pathname.startsWith("/dashboard/setup/") ||
     pathname === "/dashboard/analytics" ||
-    pathname.startsWith("/dashboard/analytics/")
+    pathname.startsWith("/dashboard/analytics/") ||
+    pathname === "/dashboard/lms/admin" ||
+    pathname.startsWith("/dashboard/lms/admin/")
   );
 }

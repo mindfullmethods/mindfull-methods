@@ -12,11 +12,20 @@ export default function NavAuth() {
   useEffect(() => {
     let mounted = true;
 
-    supabase.auth.getSession().then(({ data }) => {
-      if (!mounted) return;
-      setSignedIn(!!data.session);
-      setReady(true);
-    });
+    supabase.auth
+      .getSession()
+      .then(({ data }) => {
+        if (!mounted) return;
+        setSignedIn(!!data.session);
+        setReady(true);
+      })
+      .catch(() => {
+        // Supabase unreachable (e.g. paused project / offline) — treat as signed out
+        // instead of crashing the public marketing pages.
+        if (!mounted) return;
+        setSignedIn(false);
+        setReady(true);
+      });
 
     const { data: listener } = supabase.auth.onAuthStateChange((_event, session) => {
       setSignedIn(!!session);

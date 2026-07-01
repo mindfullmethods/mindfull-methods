@@ -26,7 +26,7 @@ export type SiteContent = {
 export const defaultSiteContent: SiteContent = {
   trustBadges: ["4 AI career tracks", "Weekly mentorship", "Hands-on capstones", "Verified certificates"],
   stats: [
-    { label: "Courses available", value: "6" },
+    { label: "Courses available", value: "4" },
     { label: "Mentor touchpoints", value: "Weekly" },
     { label: "Certificate verification", value: "Public" },
     { label: "Average rating", value: "4.9" },

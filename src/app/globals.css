@@ -900,4 +900,93 @@
     right: 12px;
     border-width: 0 2px 2px 0;
   }
+
+  /* —— Space-inspired landing (home only) —— */
+  body.mm-landing-active .mm-marketing-ambient {
+    @apply bg-black text-white;
+  }
+
+  body.mm-landing-active .mm-marketing-ambient::before {
+    background:
+      radial-gradient(ellipse 80% 55% at 50% -15%, rgb(109 40 217 / 0.22), transparent 58%),
+      radial-gradient(ellipse 45% 35% at 85% 15%, rgb(59 130 246 / 0.08), transparent 50%),
+      radial-gradient(ellipse 40% 30% at 10% 25%, rgb(168 85 247 / 0.1), transparent 45%);
+  }
+
+  body.mm-landing-active .mm-nav-glass {
+    @apply border-white/[0.06] bg-black/40;
+    box-shadow: 0 1px 0 0 rgb(139 92 246 / 0.12);
+  }
+
+  body.mm-landing-active footer {
+    @apply border-white/[0.08] bg-black text-white/70;
+  }
+
+  .mm-landing-page {
+    @apply relative isolate;
+  }
+
+  .mm-landing-hero-glow {
+    background:
+      radial-gradient(ellipse 60% 45% at 50% 0%, rgb(139 92 246 / 0.18), transparent 65%),
+      radial-gradient(ellipse 40% 30% at 50% 30%, rgb(59 130 246 / 0.06), transparent 55%);
+  }
+
+  .mm-landing-beam-vertical {
+    background: linear-gradient(
+      180deg,
+      rgb(139 92 246 / 0.5) 0%,
+      rgb(139 92 246 / 0.15) 35%,
+      transparent 100%
+    );
+    mask-image: linear-gradient(180deg, black 0%, transparent 100%);
+  }
+
+  .mm-landing-orb {
+    background: radial-gradient(circle, rgb(167 139 250 / 0.55) 0%, transparent 70%);
+    animation: mm-glow-pulse 4s ease-in-out infinite;
+  }
+
+  .mm-landing-eyebrow {
+    @apply rounded-full border border-white/15 bg-white/[0.04] px-4 py-1.5 text-[10px] font-bold uppercase tracking-[0.22em] text-white/55 sm:text-xs;
+  }
+
+  .mm-landing-tag {
+    @apply text-[10px] font-bold uppercase tracking-[0.2em] text-violet-400 sm:text-xs;
+  }
+
+  .mm-landing-glass {
+    @apply border border-white/[0.08] bg-white/[0.03] backdrop-blur-xl;
+    box-shadow:
+      0 0 0 1px rgb(255 255 255 / 0.02) inset,
+      0 24px 48px -24px rgb(0 0 0 / 0.5);
+  }
+
+  .mm-landing-code {
+    box-shadow: 0 0 48px -12px rgb(139 92 246 / 0.25);
+  }
+
+  .mm-landing-beam {
+    animation: mm-glow-pulse 3s ease-in-out infinite;
+  }
+
+  .mm-landing-orbit {
+    animation: mm-orbit-spin 24s linear infinite;
+  }
+
+  body.mm-landing-active .mm-btn-glow {
+    @apply rounded-full border-0 bg-gradient-to-r from-violet-600 to-violet-500 shadow-lg shadow-violet-900/40 hover:from-violet-500 hover:to-fuchsia-500;
+  }
+
+  .mm-landing-icon-badge {
+    background: linear-gradient(135deg, rgb(139 92 246) 0%, rgb(124 58 237) 100%);
+    box-shadow: 0 0 24px -6px rgb(139 92 246 / 0.7);
+  }
+
+  .mm-landing-cta-glow {
+    background:
+      radial-gradient(ellipse 70% 90% at 50% 0%, rgb(139 92 246 / 0.28), transparent 60%),
+      radial-gradient(ellipse 50% 70% at 80% 100%, rgb(217 70 239 / 0.12), transparent 55%),
+      linear-gradient(180deg, rgb(30 20 55 / 0.6), rgb(10 8 20 / 0.6));
+  }
 }

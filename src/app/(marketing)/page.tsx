@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 
+import HomeLandingWrapper from "@/components/marketing/home/HomeLandingWrapper";
 import HomePageContent from "@/components/marketing/HomePageContent";
 import { marketingPageMetadata } from "@/lib/seo";
 
@@ -10,5 +11,9 @@ export const metadata: Metadata = marketingPageMetadata({
 });
 
 export default function HomePage() {
-  return <HomePageContent />;
+  return (
+    <HomeLandingWrapper>
+      <HomePageContent />
+    </HomeLandingWrapper>
+  );
 }
